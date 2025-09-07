@@ -10,6 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
         form.classList.add("was-validated");
 
         localStorage.setItem("isLoggedIn", "true"); 
-        window.location.href = "../feed.html"; // צריכה להוסיף פיד
+        window.location.href = "../profiles.html"; // צריכה להוסיף פיד
     }, false);
 });
