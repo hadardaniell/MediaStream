@@ -1,15 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("login-form");
+  const form = document.getElementById("login-form");
 
-    form.addEventListener("submit", (event) => {
-        console.log('hi ')
-        if (!form.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        form.classList.add("was-validated");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault(); // always stop native submit
 
-        localStorage.setItem("isLoggedIn", "true"); 
-        window.location.href = "../profiles.html"; // צריכה להוסיף פיד
-    }, false);
+    if (!form.checkValidity()) {
+      form.classList.add("was-validated"); // show errors
+      return; // <-- do NOT continue to redirect
+    }
+
+    // valid → mark auth and go to Feed
+    localStorage.setItem("isAuthenticated", "true");
+    window.location.href = "../feed/feed.html";
+  });
 });
