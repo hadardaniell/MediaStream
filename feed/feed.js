@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   renderItems(ITEMS);
 
+  
+
   // לייקים
   document.getElementById('content').addEventListener('click', (e) => {
     const btn = e.target.closest('.like-btn');
@@ -23,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderItems(filtered);
   });
 });
+
 
 if (localStorage.getItem('isAuthenticated') !== 'true') {
   window.location.href = '../login/login.html';
@@ -155,4 +158,42 @@ function escapeHtml(s) {
     .replaceAll('&', '&amp;').replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;').replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderItems(ITEMS);
+
+  // חיפוש
+  const searchInput = document.getElementById('search');
+  searchInput.addEventListener('input', () => {
+    filterAndRender();
+  });
+
+  // מיון אלפביתי
+  const btnSort = document.getElementById('btnSort');
+  let sortAsc = true; // מתחלף בין א->ת לת->א
+  btnSort.addEventListener('click', () => {
+    sortAsc = !sortAsc;
+    btnSort.textContent = sortAsc ? 'מיין א-ת' : 'מיין ת-א';
+    filterAndRender(sortAsc);
+  });
+});
+
+function filterAndRender(sortAsc = true) {
+  const term = document.getElementById('search').value.trim().toLowerCase();
+  let filtered = ITEMS.filter(it =>
+    it.title.toLowerCase().includes(term) ||
+    it.genres.some(g => g.toLowerCase().includes(term)) ||
+    String(it.year).includes(term)
+  );
+
+  // מיון אלפביתי לפי שם
+  filtered.sort((a, b) => {
+    return sortAsc
+      ? a.title.localeCompare(b.title, 'he')   // א → ת
+      : b.title.localeCompare(a.title, 'he');  // ת → א
+  });
+
+  renderItems(filtered);
 }
