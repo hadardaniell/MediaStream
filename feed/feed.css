@@ -4,10 +4,14 @@
         letter-spacing: -0.4px;
         font-weight: 600;
 
-
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
 
         height: 100%;
-        width: 100%;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 2em !important;
         /* background: linear-gradient(#091734, rgb(13 21 36), rgb(15 16 20)); */
         background-color: #0f1014 !important;
         direction: rtl;
@@ -40,6 +44,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        padding: 1em !important;
     }
 
     .title {
@@ -62,6 +67,11 @@
         background: #e91e63;
         color: #fff;
         border-color: #e91e63;
+    }
+
+    .like-btn[aria-pressed="false"] {
+        border: 1px solid var(--primary);
+        color: var(--primary);
     }
 
     .poster {
@@ -135,4 +145,45 @@
     .search-icon {
         color: var(--primary);
         font-size: 22px;
+    }
+
+    .card {
+        background-color: var(--search) !important;
+        /* border: none; */
+    }
+
+    .card-body {
+        color: var(--primary);
+    }
+
+    .card-title {
+        font-weight: 700;
+    }
+
+    .media-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        /* כמות עמודות דינמית */
+        gap: 1rem;
+    }
+
+    .btn-watch {
+        background: linear-gradient(to right, rgb(8 87 225), rgb(6 43 154));
+        color: rgb(255, 255, 255);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        font-weight: 700 !important;
+    }
+
+    .btn-watch:hover {
+        background: linear-gradient(to right, rgb(6 43 154), rgb(8 87 225)) !important;
+    }
+
+    .sub-header-container {
+        gap: 0.5em;
+    }
+
+    .form-control:focus{
+        box-shadow: none !important;
     }

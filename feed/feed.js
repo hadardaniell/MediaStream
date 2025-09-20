@@ -44,7 +44,7 @@ const ITEMS = [
     year: 2019,
     genres: ['ריאליטי', 'דרמה'],
     likes: 85,
-    poster: '../assets/BigBrother.png'
+    poster: '../assets/big-brother.webp'
   },
   {
     id: 'm003',
@@ -52,7 +52,7 @@ const ITEMS = [
     year: 2020,
     genres: ['אקשן', 'מתח'],
     likes: 312,
-    poster: '../assets/Fauda.png'
+    poster: '../assets/fauda.jpg'
   }
 ];
 
@@ -74,15 +74,6 @@ let likedMap = loadJSON(LS_LIKED, {});
 
 document.addEventListener('DOMContentLoaded', () => {
   renderItems(ITEMS);
-
-  document.getElementById('content').addEventListener('click', (e) => {
-    const btn = e.target.closest('.like-btn');
-    if (!btn) return;
-    const card = btn.closest('.card');
-    const id = card.dataset.id;
-    toggleLike(id, btn);
-    burstAt(btn, likedMap[id] ? '❤️' : '💔');
-  });
 });
 
 function renderItems(items) {
@@ -115,7 +106,7 @@ function renderItems(items) {
           <div class="meta">ז'אנר: ${item.genres.map(escapeHtml).join(', ')}</div>
           <div class="actions">
             <button type="button" class="btn btn-sm like-btn" aria-pressed="${liked}" aria-label="Like ${escapeHtml(item.title)}">
-              ${liked ? '♥ נלחץ' : '♡ לייק'}
+              ${liked ? 'אהבתי' : 'סמן לייק'}
             </button>
             <span class="likes"><span class="count">${count}</span> לייקים</span>
           </div>
@@ -142,7 +133,7 @@ function toggleLike(id, btnEl) {
   const card = btnEl.closest('.card');
   card.querySelector('.count').textContent = likeCounts[id];
   btnEl.setAttribute('aria-pressed', String(nowLiked));
-  btnEl.textContent = nowLiked ? '♥ נלחץ' : '♡ לייק';
+  btnEl.textContent = nowLiked ? 'אהבתי' : 'סמן לייק';
 }
 
 function burstAt(el, glyph = '❤️') {
