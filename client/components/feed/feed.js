@@ -39,7 +39,7 @@ const ITEMS = [
     year: 2016,
     genres: ['אהבה', 'אימה'],
     likes: 124,
-    poster: '../assets/Danny.png'
+    poster: '../../assets/Danny.png'
   },
   {
     id: 'm002',
@@ -47,7 +47,7 @@ const ITEMS = [
     year: 2019,
     genres: ['ריאליטי', 'דרמה'],
     likes: 85,
-    poster: '../assets/big-brother.webp'
+    poster: '../../assets/big-brother.webp'
   },
   {
     id: 'm003',
@@ -55,7 +55,7 @@ const ITEMS = [
     year: 2020,
     genres: ['אקשן', 'מתח'],
     likes: 312,
-    poster: '../assets/fauda.jpg'
+    poster: '../../assets/fauda.jpg'
   }
 ];
 
