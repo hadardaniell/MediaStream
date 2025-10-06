@@ -14,4 +14,8 @@ router.get('/profiles', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/components/profiles/profiles.html'));
 });
 
+router.get('/feed', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/feed/feed.html'));
+});
+
 module.exports = router;
