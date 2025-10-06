@@ -11,6 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // valid → mark auth and go to Feed
     localStorage.setItem("isAuthenticated", "true");
-    window.location.href = "../feed/feed.html";
+    window.location.href = '/profiles';
   });
 });

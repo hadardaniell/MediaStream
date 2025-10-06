@@ -4,12 +4,11 @@ const app = express();
 const PORT = 3000;
 
 // הגשת קבצי הלקוח
-app.use(express.static(path.join(__dirname, '../client')));
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/index.html'));
-});
+app.use('/client', express.static(path.join(__dirname, '../client')));
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+const router = require('./router');
+app.use('/', router);
