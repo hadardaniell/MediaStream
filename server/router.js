@@ -11,11 +11,19 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/profiles', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/components/profiles/profiles.html'));
+  res.sendFile(path.join(__dirname, '../client/components/profiles-page/profiles-page.html'));
 });
 
 router.get('/feed', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/components/feed/feed.html'));
+});
+
+router.get('/watch', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/feed/feed.html'));
+});
+
+router.get('/search', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/search-media/search-media.html'));
 });
 
 module.exports = router;

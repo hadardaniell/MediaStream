@@ -1,0 +1,30 @@
+body {
+    height: 100vh;
+    width: 100%;
+    /* background: linear-gradient(#091734, rgb(13 21 36), rgb(15 16 20)); */
+    background-color: #0f1014 !important;
+    direction: rtl;
+    font-family: "Noto Sans Hebrew", "Inter", sans-serif;
+    padding: 1em;
+
+    --primary: #e1e6f0;
+    --secondary: rgb(143, 152, 178);
+    --link: rgb(53, 134, 240);
+    --light: rgba(59, 130, 246, .5)
+}
+
+h1 {
+    font-size: 24px !important;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+    color: var(--primary);
+    margin: 0;
+
+    display: flex;
+    justify-content: center;
+}
+
+media-stream-profiles-bar {
+    display: flex;
+    width: min-content !important;
+}
