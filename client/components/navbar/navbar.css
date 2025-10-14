@@ -59,3 +59,9 @@ nav {
 .item{
     text-align: right !important;
 }
+
+.logout-btn{
+    background-color: rgb(35 38 48) !important;
+    border-radius: 5px !important;
+    padding: 0.5em 1em !important;
+}

@@ -21,6 +21,13 @@ class Navbar extends HTMLElement {
             });
         }
 
+        const logout = this.shadowRoot.querySelector('#logout-btn');
+        if (logout) {
+            logout.addEventListener('click', () => {
+                window.location.href = '/login';
+            });
+        }
+
         const dropdownToggle = this.shadowRoot.querySelector('.dropdown-toggle');
         const dropdownMenu = this.shadowRoot.querySelector('.dropdown-menu');
 
