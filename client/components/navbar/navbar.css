@@ -1,0 +1,67 @@
+:host {
+    font-family: "Noto Sans Hebrew", "Inter", sans-serif !important;
+    letter-spacing: -0.4px !important;
+
+    --primary: #e1e6f0 !important;
+    --secondary: rgb(143, 152, 178) !important;
+
+}
+
+nav {
+    display: flex;
+    gap: 1em;
+    direction: rtl;
+    justify-content: flex-start !important;
+    /* background: linear-gradient(#091734, rgb(13 21 36), rgb(15 16 20)); */
+
+    background: inherit;
+
+    .navbar-nav {
+        display: flex;
+        flex-direction: row;
+        font-size: 15px;
+        gap: 2em;
+        padding-right: 1em !important;
+
+    }
+
+    .navbar-brand {
+        margin-right: 0px !important;
+    }
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-family: "Noto Sans Hebrew", "Inter", sans-serif;
+    letter-spacing: -0.4px;
+    color: var(--secondary) !important;
+    cursor: pointer;
+    flex-direction: row;
+
+    &:hover {
+        color: #e1e6f0 !important;
+        font-weight: 600;
+    }
+}
+
+.disney-plus-logo {
+    width: 50px;
+    height: 30px;
+}
+
+.menu {
+    position: absolute !important;
+    background-color: whitesmoke !important;
+}
+
+.item{
+    text-align: right !important;
+}
+
+.logout-btn{
+    background-color: rgb(35 38 48) !important;
+    border-radius: 5px !important;
+    padding: 0.5em 1em !important;
+}
