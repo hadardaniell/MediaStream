@@ -26,4 +26,15 @@ router.get('/search', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/components/search-media/search-media.html'));
 });
 
+// router.get("media-content/:id", (req, res) => {
+//   const { id } = req.params;
+//   // const content = contents.find(c => c.id === id);
+
+//   if (!content) {
+//     return res.status(404).json({ error: "Content not found" });
+//   }
+
+//   res.json(content);
+// });
+
 module.exports = router;
