@@ -29,7 +29,8 @@ h1 {
 }
 
 .profiles-container {
-    display: grid;
+    display: flex;
+    /* display: grid; */
     /* grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); */
     grid-template-columns: repeat(auto-fit, minmax(var(--profile-width), 1fr));
     gap: 1em;
