@@ -1,18 +1,69 @@
 <html>
 
 <head>
-    <title>Disney</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="client/components/media-content/media-content.css" rel="stylesheet">
-    <script defer src="client/components/media-content/media-content.js"></script>
+  <title>Disney</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="/client/components/media-content/media-content.css" rel="stylesheet">
+  <script defer src="/client/components/media-content/media-content.js"></script>
 
 </head>
 
 <body>
-  <div id="content-details">טוען...</div>
-  <script src="client/pages/media-content/media-content.js"></script>
+  <!-- <div id="content-details">טוען...</div> -->
+  <!-- <script src="client/components/media-content/media-content.js"></script> -->
+  <div class="content-container">
+    <div class="content-details">
+      <div class="info">
+        <h1>היפה והחיה</h1>
+        <div class="info-bar">
+          <b>1991</b> &middot;
+          <b>4.8</b>
+        </div>
+        <p>הסרט הכי טוב בפעררר.</p>
+        <div class="info-bar">
+          <b>רומנטיקה</b> &middot;
+          <b>קומדיה</b>
+        </div>
+        <div class="info-bar">
+          <b>שחקנים: </b>
+          <span>אמה ווטסון</span> |
+          <span>החיה המתוק</span> |
+          <span>גסטון השחצני</span> |
+          <span>לומייר וקוגסוורט</span>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="watch-btn">צפו כעת</button>
+        <button class="like-btn">
+          <i class="bi bi-hand-thumbs-up"></i>
+        </button>
+      </div>
+    </div>
+    <img src="/client/assets/beauty-and-the-beast-poster.jpg" class="poster" />
+  </div>
+
+  <div class="episodes-container">
+    <h2>פרקים</h2>
+    <div class="episode-list">
+      <div class="episode">
+        <div class="episode-info">
+          <h3>פרק 1: הקסם מתחיל</h3>
+          <p>היכרות עם הדמויות והקסם שמתחיל לפרוח.</p>
+        </div>
+      </div>
+      <div class="episode">
+        <img src="/client/assets/episode2-thumbnail.jpg" class="episode-thumbnail" />
+        <div class="episode-info">
+          <h3>פרק 2: הרפתקאות ביער</h3>
+          <p>הדמויות יוצאות להרפתקה ביער הקסום.</p>
+        </div>
+      </div>
+      <!-- הוסיפו פרקים נוספים לפי הצורך -->
+    </div>
+
+  </div>
 </body>
 
 </html>
