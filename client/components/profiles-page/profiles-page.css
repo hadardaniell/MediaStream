@@ -7,6 +7,11 @@ body {
     font-family: "Noto Sans Hebrew", "Inter", sans-serif;
     padding: 1em;
 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5em;
+
     --primary: #e1e6f0;
     --secondary: rgb(143, 152, 178);
     --link: rgb(53, 134, 240);
@@ -25,6 +30,7 @@ h1 {
 }
 
 media-stream-profiles-bar {
-    display: flex;
-    width: min-content !important;
+    display: flex !important;
+    /* width: min-content !important; */
+    width: 100% !important;
 }
