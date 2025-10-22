@@ -13,10 +13,13 @@ const PORT = 3000;
 
  // הגשת קבצי הלקוח
  app.use('/client', express.static(path.join(__dirname, '../client')));
+ app.use('/', router);
  
  app.listen(PORT, () => {
    console.log(`Server running on http://localhost:${PORT}`);
  });
+ 
+
 
 const testConnection = async () => {
   try {
