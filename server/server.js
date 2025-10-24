@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { getDb } from './db.js';
 import router from './router.js';
+import contentRoutes from  './routes/contentRoute.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,6 +15,7 @@ const PORT = 3000;
  // הגשת קבצי הלקוח
  app.use('/client', express.static(path.join(__dirname, '../client')));
  app.use('/', router);
+ app.use('/api/content',contentRoutes);
  
  app.listen(PORT, () => {
    console.log(`Server running on http://localhost:${PORT}`);
