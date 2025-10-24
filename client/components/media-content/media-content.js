@@ -67,3 +67,22 @@ function renderContent(content) {
     </ul>
   `;
 }
+
+document.getElementById('similar-content-btn').addEventListener('click', () => {
+  document.getElementById('similar-content-section').scrollIntoView({
+    behavior: 'smooth'
+  });
+});
+
+document.getElementById('episodes-btn').addEventListener('click', () => {
+  document.getElementById('episodes-nav').scrollIntoView({
+    behavior: 'smooth'
+  });
+});
+
+document.querySelectorAll('.similar-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const id = item.dataset.id; // לוקח את הערך מ-data-id
+    window.location.href = `/media-content/${id}`; // עובר ל-URL הרצוי
+  });
+});

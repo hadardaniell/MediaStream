@@ -4,6 +4,8 @@ body {
     flex-direction: column;
     padding: 1em;
     letter-spacing: -0.4px;
+    font-family: "Noto-Sans-Hebrew-Fonts", "Inter", sans-serif !important;
+
 
 
     --primary: #e1e6f0;
@@ -14,8 +16,30 @@ body {
 h1 {
     font-size: 35px;
     font-weight: 600;
-    letter-spacing: -0.4px;
+    letter-spacing: -0.8px !important;
     color: var(--primary);
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+h2 {
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.4px !important;
+    color: var(--secondary) !important;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+h3 {
+    font-size: 18px !important;
+    font-weight: 500;
+    letter-spacing: -0.4px !important;
+    color: var(--secondary) !important;
     margin: 0;
     display: flex;
     justify-content: flex-start;
@@ -100,4 +124,93 @@ info-bar {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.2em;
+}
+
+.media-nav {
+    padding: 2em 0 1.5em 0;
+    display: flex;
+    gap: 2em;
+    border-bottom: 1px solid rgb(143 152 178 / 57%);
+    margin-bottom: 1em;
+}
+
+.extra-content-container {
+    display: flex;
+    flex-direction: column;
+    direction: rtl;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.episode-list {
+    display: flex;
+    flex-direction: column;
+    direction: rtl;
+    color: var(--secondary);
+    align-items: flex-start;
+    gap: 1.5em;
+}
+
+.episode {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+
+}
+
+.episode-img {
+    height: 120px;
+    border-radius: 5px;
+}
+
+.episode-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    align-items: flex-start;
+
+    h2 {
+        font-weight: 500;
+    }
+}
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+
+    .navbar-nav {
+        padding: 1em 0;
+        display: flex;
+        flex-direction: row;
+        gap: 2em;
+    }
+
+    .nav-item {
+        cursor: pointer;
+    }
+}
+
+.similar-list{
+    display: flex;
+    gap: 1em;
+}
+
+.similar-header{
+    font-size: 20px;
+}
+
+.similar-content{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    margin-top: 1.5em;
+}
+
+.similar-img{
+    height: 200px;
+    border-radius: 5px;
 }
