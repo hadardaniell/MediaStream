@@ -45,4 +45,4 @@ router.get('/media-content/:id', (req, res) => {
    res.sendFile(path.join(__dirname, '../client/components/media-content/media-content.html'));
 });
 
-module.exports = router;
+export default router;
