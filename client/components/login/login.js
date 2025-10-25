@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // valid → mark auth and go to Feed
     localStorage.setItem("isAuthenticated", "true");
+    localStorage.setItem('userRole', 'admin');
     window.location.href = '/profiles';
   });
 });
