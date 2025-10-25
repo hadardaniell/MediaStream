@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -13,6 +14,9 @@ const app = express();
 const PORT = 3000;
 
  // הגשת קבצי הלקוח
+ app.use(cors());
+ app.use(express.json());
+ app.use(express.urlencoded( { extended: true}));
  app.use('/client', express.static(path.join(__dirname, '../client')));
  app.use('/', router);
  app.use('/api/content',contentRoutes);
