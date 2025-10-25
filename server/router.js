@@ -45,4 +45,8 @@ router.get('/media-content/:id', (req, res) => {
    res.sendFile(path.join(__dirname, '../client/components/media-content/media-content.html'));
 });
 
+router.get('/player', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/media-player/media-player.html'));
+});
+
 export default router;
