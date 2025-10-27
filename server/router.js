@@ -65,5 +65,9 @@ router.get('/player', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/components/settings/statistics/statistics.html'));
 });
 
+router.get('/player', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/genre/genre.html'));
+});
+
 
 export default router;
