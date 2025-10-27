@@ -1,0 +1,122 @@
+:root {
+  --primary: #e1e6f0;
+  --secondary: #8f98b2;
+  --accent: #53a6f2;
+  --bg-dark: #0f1014;
+  --card-bg: #1a1c29;
+  --danger: #dc3545;
+  --danger-hover: #b82d3a;
+  --page-gap: 7rem;
+  --side-padding: 3rem;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--primary);
+  font-family: "Noto Sans Hebrew", "Inter", sans-serif;
+  margin: 0;
+  direction: rtl;
+}
+
+.sidebar {
+  width: 240px;
+  background-color: #1a1c29;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 2em;
+  gap: 1.5em;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.4);
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  padding: 1em 1.5em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.menu-item:hover {
+  background-color: #252833;
+  transform: translateX(-3px);
+}
+
+.menu-item i {
+  font-size: 1.4rem;
+  color: var(--accent);
+}
+
+.menu-item span {
+  font-size: 1rem;
+  color: var(--primary);
+}
+
+.account-container {
+  margin-right: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+}
+
+.account-container h1 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.account-info {
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  padding: 2rem 3rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 0.5rem;
+}
+
+.label {
+  color: var(--secondary);
+}
+
+.value {
+  font-weight: bold;
+}
+
+button {
+  margin-top: 2rem;
+  background-color: var(--danger);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.8em 2em;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.25s;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+button:hover {
+  background-color: var(--danger-hover);
+  transform: scale(1.05);
+}

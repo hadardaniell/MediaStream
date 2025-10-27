@@ -49,4 +49,21 @@ router.get('/player', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/components/media-player/media-player.html'));
 });
 
+router.get('/player', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/settings/edit-profile/edit-profile.html'));
+});
+
+router.get('/player', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/settings/manage-account/manage-account.html'));
+});
+
+router.get('/player', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/settings/manage-profiles/manage-profiles.html'));
+});
+
+router.get('/player', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/settings/statistics/statistics.html'));
+});
+
+
 export default router;

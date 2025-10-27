@@ -1,0 +1,108 @@
+body {
+    background-color: #0f1014;
+    color: #e1e6f0;
+    font-family: "Noto Sans Hebrew", sans-serif;
+    text-align: center;
+    padding: 2em;
+}
+
+.edit-container {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #1a1c29;
+    border-radius: 15px;
+    padding: 2em;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5em;
+}
+
+.edit-container h1 {
+    margin-bottom: 1em;
+    font-weight: 600;
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 60px;
+    object-fit: cover;
+    border: 3px solid transparent;
+    transition: border 0.2s, transform 0.2s;
+}
+
+.profile-img:hover {
+    border-color: #53a6f2;
+    transform: scale(1.05);
+}
+
+input {
+    padding: 0.5em 1em;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    text-align: center;
+    width: 100%;
+    background-color: #252833;
+    color: #e1e6f0;
+}
+
+input::placeholder {
+    color: #888;
+}
+
+.avatars {
+    display: flex;
+    gap: 0.5em;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.avatar-option {
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    object-fit: cover;
+    transition: border 0.2s, transform 0.2s;
+}
+
+.avatar-option.selected,
+.avatar-option:hover {
+    border-color: #53a6f2;
+    transform: scale(1.1);
+}
+
+.buttons {
+    display: flex;
+    gap: 1em;
+    width: 100%;
+    justify-content: center;
+}
+
+button {
+    padding: 0.6em 1.2em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+#saveBtn {
+    background-color: #198754;
+    color: white;
+}
+
+#deleteBtn {
+    background-color: #dc3545;
+    color: white;
+}

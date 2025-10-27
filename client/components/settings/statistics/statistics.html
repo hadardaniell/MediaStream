@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>סטטיסטיקות צפייה</title>
+  <link rel="stylesheet" href="statistics.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="statistics.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+      <div class="menu-item" onclick="goTo('manage-account')">
+          <i class="bi bi-person-circle"></i>
+          <span>ניהול חשבון</span>
+      </div>
+
+      <div class="menu-item" onclick="goTo('manage-profiles')">
+          <i class="bi bi-people"></i>
+          <span>ניהול פרופילים</span>
+      </div>
+
+      <div class="menu-item" onclick="goTo('statistics')">
+          <i class="bi bi-bar-chart"></i>
+          <span>סטטיסטיקות</span>
+      </div>
+  </div>
+
+  <div class="stat-container">
+    <h1 class="page-title"><i class="bi bi-bar-chart-fill"></i> לוח סטטיסטיקות צפייה</h1>
+
+    <div class="stat-cards">
+      <div class="stat-card">
+        <h3>סה״כ צפיות</h3>
+        <p>1,240</p>
+      </div>
+      <div class="stat-card">
+        <h3>פרופילים פעילים</h3>
+        <p>3</p>
+      </div>
+      <div class="stat-card">
+        <h3>זמן צפייה ממוצע</h3>
+        <p>2.4 שעות</p>
+      </div>
+    </div>
+
+    <div class="charts">
+      <div class="chart-box">
+        <h3><i class="bi bi-calendar-week"></i> צפיות יומיות לפי פרופיל</h3>
+        <canvas id="dailyViewsChart"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <h3><i class="bi bi-pie-chart-fill"></i> התפלגות לפי ג׳אנר</h3>
+        <canvas id="genreChart"></canvas>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
