@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>הוספת תוכן חדש</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="client/components/add-media/add-media.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 class="mb-4 text-center"> הוספת תוכן חדש</h1>
+
+        <form id="contentForm" class="row g-3">
+
+            <div class="col-md-6">
+                <label class="form-label">שם</label>
+                <input type="text" id="name" class="form-control" required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">סוג</label>
+                <select id="type" class="form-select">
+                    <option value="movie">סרט</option>
+                    <option value="series">סדרה</option>
+                    <option value="documentary">דוקומנטרי</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">שנת הפצה</label>
+                <input type="number" id="year" class="form-control" min="1900" max="2025" value="2025">
+            </div>
+
+            <!-- Dropdown עם צ׳קבוקסים -->
+            <div class="col-8">
+                <label class="form-label">ז׳אנרים</label>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle w-100 btn-genres" type="button" id="genresDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        בחר ז׳אנרים
+                    </button>
+                    <ul class="dropdown-menu w-100 p-2">
+                        <li><input class="form-check-input me-2" type="checkbox" value="Action">Action</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Comedy">Comedy</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Drama">Drama</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Horror">Horror</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Sci-Fi">Sci-Fi</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Romance">Romance</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Thriller">Thriller</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label">תיאור</label>
+                <textarea id="description" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">דירוג (1–5)</label>
+                <input type="number" id="rating" class="form-control" min="0" max="5" step="0.1" value="4.8">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">במאי</label>
+                <input type="text" id="directorName" class="form-control" placeholder="Asaf Artsi">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">ויקיפדיה של הבמאי</label>
+                <input type="text" id="directorWiki" class="form-control"
+                    placeholder="https://en.wikipedia.org/wiki/Christopher_Nolan">
+            </div>
+
+            <!-- <div class="col-12">
+                <label class="form-label">שחקן ראשי</label>
+                <input type="text" id="actorName" class="form-control" placeholder="Leonardo DiCaprio">
+            </div> -->
+
+            <div class="col-12">
+                <label class="form-label">שחקנים</label>
+                <div class="input-group mb-2">
+                    <input type="text" id="actorName" class="form-control" placeholder="שם השחקן">
+                    <input type="text" id="actorWiki" class="form-control" placeholder="קישור לויקיפדיה (לא חובה)">
+                    <button type="button" class="btn add-actor-btn btn-secondary" id="addActor">
+                        <i class="bi bi-plus add-icon"></i>
+                        הוסף
+                    </button>
+                </div>
+                <ul id="castList" class="list-group"></ul>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">בחר.י תמונה</label>
+                <input type="file" id="photoFile" class="form-control" accept="image/*">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">בחר.י וידאו (MP4)</label>
+                <input type="file" id="videoFile" class="form-control" accept="video/mp4">
+            </div>
+
+            <div class="col-12 text-center">
+                <button type="submit" id="buildJSON" class="add-media">הוספת תוכן</button>
+            </div>
+
+            <!-- <div class="col-12 text-center">
+                <button type="submit" class="btn btn-primary mt-3 px-4" id="buildJSON">צור JSON</button>
+            </div> -->
+        </form>
+
+        <h4 class="mt-5"> JSON שנוצר:</h4>
+        <pre id="output">{}</pre>
+    </div>
+    <script src="client/components/add-media/add-media.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+</body>
