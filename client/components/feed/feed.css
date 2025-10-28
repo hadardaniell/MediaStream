@@ -59,6 +59,7 @@
         height: 270px !important;
         display: flex !important;
         flex-direction: column !important;
+        width: 200px !important;
 
 
     }
