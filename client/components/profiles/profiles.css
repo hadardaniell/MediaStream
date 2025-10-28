@@ -1,5 +1,5 @@
 :host {
-  --profile-width: 120px;
+    --profile-width: 120px;
 }
 
 body {
@@ -58,6 +58,10 @@ h1 {
     align-items: center;
     width: 100%;
     justify-content: center;
+
+    &:hover {
+        transform: translateY(-5px);
+    }
 }
 
 .input {
