@@ -12,7 +12,7 @@
         flex-direction: column;
         gap: 1em;
 
-        height: 100%;
+        height: 100vh;
         width: 100% !important;
         max-width: 100% !important;
         padding-top: 0 !important;
@@ -21,6 +21,10 @@
         /* background-color: #0f1014 !important; */
 
         background: linear-gradient(#091734, rgb(13 21 36), rgb(15 16 20));
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+
 
         direction: rtl;
         font-family: "Noto Sans Hebrew", "Inter", sans-serif !important;
@@ -33,15 +37,28 @@
         --search: #252833;
     }
 
+    h2 {
+        font-size: 17px !important;
+        color: var(--primary);
+        letter-spacing: -0.8px;
+        font-weight: 600 !important;
+        display: flex;
+    }
+
+
     .container {
         height: 100vh;
     }
 
     .card {
-        border: 1px solid #e5e5e5;
+        /* border: 1px solid #e5e5e5;
         border-radius: 10px;
         padding: 12px;
-        max-width: 200px;
+        max-width: 200px; */
+
+        height: 270px !important;
+        display: flex !important;
+        flex-direction: column !important;
 
 
     }
@@ -57,6 +74,7 @@
         flex-direction: column;
         align-items: flex-start;
         padding: 1em !important;
+        justify-content: space-between !important;
     }
 
     .title {
@@ -214,4 +232,44 @@
 
     media-stream-profiles-bar {
         max-width: 750px;
+    }
+
+
+    .content-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+        direction: rtl !important;
+    }
+
+    .genre {
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    .content-card {
+        height: 270px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .likes {
+        gap: 1em;
+    }
+
+    .description {
+        width: 100%;
+        font-size: 13px;
+        color: var(--secondary);
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        /* מספר השורות הרצוי */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .section-title{
+        font-weight: 500;
+        color: var(--secondary);
     }
