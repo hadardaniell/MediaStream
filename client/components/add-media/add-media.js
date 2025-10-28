@@ -73,12 +73,11 @@ document.addEventListener('DOMContentLoaded', () => {
             name: document.getElementById("name").value,
             type: document.getElementById("type").value,
             year: Number(document.getElementById("year").value),
-            photo: document.getElementById("photo").value,
             genres: getSelectedGenres(),
             description: document.getElementById("description").value,
             rating: Number(document.getElementById("rating").value),
-            photo: document.getElementById("photoFile").files[0]?.name,
-            video: document.getElementById("videoFile").files[0]?.name,
+            photo: '/client/assets/' + document.getElementById("photoFile").files[0]?.name,
+            video: '/client/assets/' + document.getElementById("videoFile").files[0]?.name,
             director: {
                 name: document.getElementById("directorName").value,
                 wikipedia: document.getElementById("directorWiki").value,
@@ -87,5 +86,25 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+
+        fetch("http://localhost:3000/api/content", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+        .then(res => {
+            if (!res.ok) throw new Error("שגיאה בבקשה");
+            return res.json();
+        })
+        .then(result => {
+            console.log("נשלח בהצלחה:", result);
+            alert("✅ התוכן נוסף בהצלחה!");
+        })
+        .catch(err => {
+            console.error("שגיאה בשליחה:", err);
+            alert("❌ שגיאה בשליחה לשרת");
+        });
     }
 });
