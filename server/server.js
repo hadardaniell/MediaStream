@@ -10,6 +10,7 @@ import session from 'express-session';
 import { UsersModel } from './models/usersModel.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import episodesRoutes from './routes/episodesRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -48,8 +49,9 @@ app.use(async (req, _res, next) => {
 app.use('/client', express.static(path.join(__dirname, '../client')));
 app.use('/', router);
 app.use('/api/content', contentRoutes);
+app.use('/api', episodesRoutes);
 app.use('/api/auth', authRoutes);
-// app.use('/api/users', userRoutes); // optional
+app.use('/api/users', userRoutes); // optional
 
 // Start Server
 app.listen(PORT, () => {
