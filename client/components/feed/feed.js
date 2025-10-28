@@ -71,36 +71,6 @@ function renderSection(containerId, data) {
   });
 }
 
-// function createCard(item) {
-//   const liked = !!likedMap[item.id];
-//   const count = likeCounts[item.id] || item.likes;
-
-//   const col = document.createElement("div");
-//   col.className = "col-6 col-md-3 col-lg-2 content-card";
-//   col.innerHTML = `
-//       <div class="card mb-3 content-card" data-id="${item.id}">
-//         ${item.poster ? `<img class="card-img-top" src="${escapeHtml(item.poster)}" alt="${escapeHtml(item.name)}">` : ''}
-//         <div class="card-body">
-//           <h5 class="card-title">${escapeHtml(item.name)} <small class="text-muted">(${item.year})</small></h5>
-//           <p class="card-text genre">${item.genres.map(genre => Genre[genre]).join(' · ')}</p>
-//           <div class="d-flex align-items-center justify-content-between likes">
-//             <button type="button" class="btn btn-sm ${liked ? "btn-danger" : "btn-outline-primary"} like-btn" aria-pressed="${liked}">
-//               ${liked ? "אהבתי" : "סמן לייק"}
-//             </button>
-//             <span><span class="count">${count}</span> לייקים</span>
-//           </div>
-//         </div>
-//       </div>
-//   `;
-
-//   // מאזין לכפתור הלייק
-//   col.querySelector(".like-btn").addEventListener("click", (e) => {
-//     toggleLike(item.id, e.target);
-//   });
-
-//   return col;
-// }
-
 function createCard(item) {
   const liked = !!likedMap[item.id];
   const count = likeCounts[item.id] ?? item.likes;
