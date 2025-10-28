@@ -16,7 +16,7 @@
     <div class="page-wrapper">
         <div class="login-wrapper">
             <div class="header">
-                <h1>התחברו כדי להמשיך</h1>
+                <h1 id="main-header" >התחברו כדי להמשיך</h1>
                 <h2>הזינו מייל וסיסמה להתחברות</h2>
             </div>
 
@@ -24,6 +24,7 @@
                 <div class="form-group row">
                     <div>
                         <input type="email" class="form-control input"
+                        id="email"
                          placeholder="הכנס מייל" required>
                          <div class="invalid-feedback">אנא הזן כתובת אימייל תקינה.</div>
                     </div>
@@ -31,17 +32,18 @@
                 <div class="form-group row">
                     <div>
                         <input type="password" class="form-control input" 
+                        id="password"
                         required minlength="6"
                         placeholder="הכנס סיסמה">
                         <div class="invalid-feedback">הסיסמה חייבת להכיל לפחות 6 תווים.</div>
                     </div>
                 </div>
                 <div class="form-submit-container">
-                    <button type="submit" class="btn login-btn">התחבר</button>
+                    <button type="submit" class="btn login-btn" id="login-btn">התחבר</button>
                     <span class="divider"></span>
                     <div class="form-footer">
-                        <span class="form-footer-title">מתקשים להתחבר?</span>
-                        <span class="form-footer-title link">קבלו עזרה</span>
+                        <span class="form-footer-title" id="question-login">משתמש חדש?</span>
+                        <span class="form-footer-title link" id="signin-mode">להרשמה לחצו</span>
                     </div>
                 </div>
             </form>
