@@ -6,7 +6,7 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 
 ---
 
-## 🔐 Auth Routes
+## Auth API
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -17,7 +17,7 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 
 ---
 
-## 🎬 Content Routes
+## Content API
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -35,7 +35,7 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 
 ---
 
-## 📺 Episodes Routes
+## Episodes API
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -48,7 +48,7 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 
 ---
 
-## 👤 Users Routes *(if implemented)*
+## Users API
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -56,6 +56,16 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 | **GET** | `/api/users/:id` | Get a user by ID *(self or admin)* |
 | **PATCH** | `/api/users/:id` | Update a user *(self or admin)* |
 | **DELETE** | `/api/users/:id` | Delete a user *(admin only)* |
+
+
+## Profiles API
+| Method     | Path                | Description                                                                                                         |
+| ---------- | ------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **GET**    | `/api/profiles`     | Get all profiles belonging to the logged-in user<br>→ Admins see **all profiles** (optionally `?userId=` to filter) |
+| **GET**    | `/api/profiles/:id` | Get a single profile by ID<br>→ Allowed for the profile’s **owner** or an **admin**                                 |
+| **POST**   | `/api/profiles`     | Create a new profile for the current user<br>→ Admins may specify `{ userId }` to create for another user           |
+| **PATCH**  | `/api/profiles/:id` | Update a profile’s `name` or `photo`<br>→ Allowed for the profile’s **owner** or an **admin**                       |
+| **DELETE** | `/api/profiles/:id` | Delete a profile<br>→ Allowed for the profile’s **owner** or an **admin**                                           |
 
 ---
 

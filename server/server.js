@@ -5,12 +5,13 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { getDb } from './db.js';
 import router from './router.js';
-import contentRoutes from './routes/contentRoute.js';
+import contentRoutes from './routes/contentRoutes.js';
 import session from 'express-session';
 import { UsersModel } from './models/usersModel.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import episodesRoutes from './routes/episodesRoutes.js';
+import profileRoutes from './routes/profilesRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -51,7 +52,8 @@ app.use('/', router);
 app.use('/api/content', contentRoutes);
 app.use('/api', episodesRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes); // optional
+app.use('/api/users', userRoutes);
+app.use('/api/profiles', profileRoutes);
 
 // Start Server
 app.listen(PORT, () => {
