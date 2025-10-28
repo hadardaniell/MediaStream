@@ -23,8 +23,17 @@ class Navbar extends HTMLElement {
 
         const logout = this.shadowRoot.querySelector('#logout-btn');
         if (logout) {
-            logout.addEventListener('click', () => {
-                window.location.href = '/login';
+            logout.addEventListener('click', async () => {
+                await fetch("http://localhost:3000/api/auth/logout", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                }).then(res => {
+                    if (!res.ok) throw new Error("Logout failed");
+                    localStorage.removeItem("isAuthenticated");
+                    localStorage.removeItem("userRole");
+                    localStorage.removeItem("userEmail");
+                    window.location.href = '/login';
+                });
             });
         }
 
