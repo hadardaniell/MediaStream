@@ -4,8 +4,6 @@ import {
 } from '../controllers/usersController.js';
 import { requireAuth, requireAdmin, requireSelfOrAdmin } from '../middlewares/authMiddleware.js';
 
-console.log('users router loaded');
-
 const router = Router();
 
 router.get('/', requireAuth, requireAdmin, listUsers);
