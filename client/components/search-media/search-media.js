@@ -1,7 +1,19 @@
-document.addEventListener('DOMContentLoaded', () => {
-  renderItems(ITEMS);
+let contentsData = [];
+document.addEventListener('DOMContentLoaded', async () => {
 
-  
+  await fetch('http://localhost:3000/api/content', {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  }).then(res => res.json())
+    .then(data => {
+      contentsData = data;
+      renderItems(data);
+    })
+    .catch(err => {
+      console.error('Error fetching content:', err);
+    });
+
+
 
   // לייקים
   document.getElementById('content').addEventListener('click', (e) => {
@@ -13,51 +25,24 @@ document.addEventListener('DOMContentLoaded', () => {
     burstAt(btn, likedMap[id] ? '❤️' : '💔');
   });
 
-  // חיפוש
-  const searchInput = document.getElementById('search');
-  searchInput.addEventListener('input', () => {
-    const term = searchInput.value.trim().toLowerCase();
-    const filtered = ITEMS.filter(it =>
-      it.title.toLowerCase().includes(term) ||
-      it.genres.some(g => g.toLowerCase().includes(term)) ||
-      String(it.year).includes(term)
-    );
-    renderItems(filtered);
-  });
+  // // חיפוש
+  // const searchInput = document.getElementById('search');
+  // searchInput.addEventListener('input', () => {
+  //   const term = searchInput.value.trim().toLowerCase();
+  //   const filtered = ITEMS.filter(it =>
+  //     it.title.toLowerCase().includes(term) ||
+  //     it.genres.some(g => g.toLowerCase().includes(term)) ||
+  //     String(it.year).includes(term)
+  //   );
+  //   renderItems(filtered);
+  // });
+
 });
 
 
 if (localStorage.getItem('isAuthenticated') !== 'true') {
-  window.location.href = '../login/login.html';
+  window.location.href = '/login';
 }
-
-//---- Multiple content items ----
-const ITEMS = [
-  {
-    id: 'm001',
-    title: 'חתונמי',
-    year: 2016,
-    genres: ['אהבה', 'אימה'],
-    likes: 124,
-    poster: 'client/assets/Danny.png'
-  },
-  {
-    id: 'm002',
-    title: 'האח הגדול',
-    year: 2019,
-    genres: ['ריאליטי', 'דרמה'],
-    likes: 85,
-    poster: 'client/assets/big-brother.webp'
-  },
-  {
-    id: 'm003',
-    title: 'פאודה',
-    year: 2020,
-    genres: ['אקשן', 'מתח'],
-    likes: 312,
-    poster: 'client/assets/fauda.jpg'
-  }
-];
 
 // ---- LocalStorage keys ----
 const LS_LIKE_COUNTS = 'feed.likeCounts';
@@ -75,9 +60,9 @@ if (!likeCounts) {
 }
 let likedMap = loadJSON(LS_LIKED, {});
 
-document.addEventListener('DOMContentLoaded', () => {
-  renderItems(ITEMS);
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//   renderItems(ITEMS);
+// });
 
 function renderItems(items) {
   if (!items.length) {
@@ -86,41 +71,71 @@ function renderItems(items) {
     `;
     return;
   }
+  const content = items.map(item => createCard(item).outerHTML).join('');
+  document.getElementById('content').innerHTML = content;
+}
 
-  const html = items.map(item => {
-    const liked = !!likedMap[item.id];
-    const count = likeCounts[item.id] ?? item.likes;
-    {/* <div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="..." alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
-  </div>
-</div> */}
-    return `
-      <div class="card" data-id="${item.id}">
-        <div class="card-img-top">
-          ${item.poster ? `<img class="poster" src="${escapeHtml(item.poster)}" alt="${escapeHtml(item.title)}">` : ''}
-          <div>
-          <div class="card-body">
+//   
 
-          <div class="card-title">${escapeHtml(item.title)} <span style="opacity:.7">(${item.year})</span></div>
-          <div class="meta">ז'אנר: ${item.genres.map(escapeHtml).join(', ')}</div>
-          <div class="actions">
-            <button type="button" class="btn btn-sm like-btn" aria-pressed="${liked}" aria-label="Like ${escapeHtml(item.title)}">
-              ${liked ? 'אהבתי' : 'סמן לייק'}
-            </button>
-            <span class="likes"><span class="count">${count}</span> לייקים</span>
-          </div>
-          </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
+function createCard(item) {
+  const liked = !!likedMap[item.id];
+  const count = likeCounts[item.id] ?? item.likes;
 
-  document.getElementById('content').innerHTML = html;
+  const col = document.createElement("div");
+  col.className = "col-6 col-md-3 col-lg-2";
+
+  const card = document.createElement("div");
+  card.className = "card mb-3";
+  card.dataset.id = item.id;
+
+  if (item.poster) {
+    const img = document.createElement("img");
+    img.className = "card-img-top";
+    img.src = item.poster;
+    img.alt = item.name;
+    card.appendChild(img);
+  }
+
+  const body = document.createElement("div");
+  body.className = "card-body";
+
+  const title = document.createElement("h5");
+  title.className = "card-title";
+  title.innerHTML = `${escapeHtml(item.name)} <small class="text-muted">(${item.year})</small>`;
+  body.appendChild(title);
+
+  const genre = document.createElement("p");
+  genre.className = "card-text genre";
+  genre.textContent = item.genres.join(" · ");
+  body.appendChild(genre);
+
+  const desc = document.createElement("p");
+  desc.className = "card-text description";
+  desc.textContent = item.description || "";
+  body.appendChild(desc);
+
+  const actions = document.createElement("div");
+  actions.className = "d-flex align-items-center justify-content-between";
+  actions.style.gap = "1em";
+
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = `btn btn-sm ${liked ? "btn-danger" : "btn-outline-primary"} like-btn`;
+  btn.setAttribute("aria-pressed", liked);
+  btn.textContent = liked ? "אהבתי" : "סמן לייק";
+  btn.addEventListener("click", () => toggleLike(item.id, btn));
+
+  const span = document.createElement("span");
+  span.innerHTML = `<span class="count">${count}</span> לייקים`;
+
+  actions.appendChild(btn);
+  actions.appendChild(span);
+  body.appendChild(actions);
+
+  card.appendChild(body);
+  col.appendChild(card);
+
+  return col;
 }
 
 function toggleLike(id, btnEl) {
@@ -161,29 +176,25 @@ function escapeHtml(s) {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
-  renderItems(ITEMS);
+// חיפוש
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', () => {
+  searchInput.value?.length > 0 ? filterAndRender() : renderItems(contentsData);
+});
 
-  // חיפוש
-  const searchInput = document.getElementById('search');
-  searchInput.addEventListener('input', () => {
-    filterAndRender();
-  });
-
-  // מיון אלפביתי
-  const btnSort = document.getElementById('btnSort');
-  let sortAsc = true; // מתחלף בין א->ת לת->א
-  btnSort.addEventListener('click', () => {
-    sortAsc = !sortAsc;
-    btnSort.textContent = sortAsc ? 'מיין א-ת' : 'מיין ת-א';
-    filterAndRender(sortAsc);
-  });
+// מיון אלפביתי
+const btnSort = document.getElementById('btnSort');
+let sortAsc = true; // מתחלף בין א->ת לת->א
+btnSort.addEventListener('click', () => {
+  sortAsc = !sortAsc;
+  btnSort.textContent = sortAsc ? 'מיין א-ת' : 'מיין ת-א';
+  filterAndRender(sortAsc);
 });
 
 function filterAndRender(sortAsc = true) {
   const term = document.getElementById('search').value.trim().toLowerCase();
-  let filtered = ITEMS.filter(it =>
-    it.title.toLowerCase().includes(term) ||
+  let filtered = contentsData.filter(it =>
+    it.name.toLowerCase().includes(term) ||
     it.genres.some(g => g.toLowerCase().includes(term)) ||
     String(it.year).includes(term)
   );
@@ -191,9 +202,8 @@ function filterAndRender(sortAsc = true) {
   // מיון אלפביתי לפי שם
   filtered.sort((a, b) => {
     return sortAsc
-      ? a.title.localeCompare(b.title, 'he')   // א → ת
-      : b.title.localeCompare(a.title, 'he');  // ת → א
+      ? a.name.localeCompare(b.name, ['he', 'en'], { sensitivity: 'base' })
+      : b.name.localeCompare(a.name, ['he', 'en'], { sensitivity: 'base' });
   });
-
   renderItems(filtered);
 }

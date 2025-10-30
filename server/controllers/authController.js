@@ -13,7 +13,7 @@ export const register = async (req, res) => {
         if (existing)
             return res.status(409).json({ error: 'Email already in use' });
 
-        const passowrdHash = await bcrypt.hash(password, SALT_ROUNDS);
+        const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
         const user = await UsersModel.create({
             email: String(email).trim().toLowerCase(),
             passwordHash,
@@ -22,7 +22,7 @@ export const register = async (req, res) => {
         });
 
         req.session.userId = String(user._id);
-        req.session.role = user.role;
+        req.session.roles = user.roles;
         res.status(201).json({_id: user._id, email: user.email, name: user.name, roles: user.roles, name:user.name }); }
     catch (e) {res.status(400).json({ error: e.message });}
 };
@@ -40,7 +40,7 @@ export const login = async (req, res) => {
         if (!ok) return res.status(401).json({ error: 'Invalid email or password' });
 
         req.session.userId = String(user._id);
-        req.session.role = user.roles;
+        req.session.roles = user.roles;
         res.json({_id: user._id, email: user.email, roles: user.roles, name:user.name }); }
     catch (e) {res.status(400).json({ error: e.message });}
 };

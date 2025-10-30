@@ -12,5 +12,6 @@ router.post('/', requireAuth, requireAdmin, createUser);
 router.get('/:id', requireAuth, requireSelfOrAdmin('id'), getUser);
 router.patch('/:id', requireAuth, requireSelfOrAdmin('id'), updateUser);
 router.delete('/:id', requireAuth, requireAdmin, deleteUser);
+router.get('/_ping', (_req, res) => res.json({ ok: true }));
 
 export default router;

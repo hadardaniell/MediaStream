@@ -1,5 +1,6 @@
 // controllers/contentController.js
 import { ContentModel } from '../models/contentModel.js';
+import { EpisodesModel } from '../models/episodesModel.js';
 import { Int32, ObjectId } from 'mongodb';
 
 // allow only schema fields
@@ -103,17 +104,32 @@ export const ContentController = {
     }
   },
 
-  // ✅ GET /api/content/:id
-  async getById(req, res) {
-    try {
-      const item = await ContentModel.getById(req.params.id);
-      if (!item) return res.status(404).json({ error: 'Content not found' });
-      res.json(item);
-    } catch (err) {
-      console.error('❌ Error fetching content by ID:', err);
-      res.status(500).json({ error: 'Failed to fetch content' });
+// ✅ GET /api/content/:id[?include=episodes,episodesCount]
+async getById(req, res) {
+  try {
+    const item = await ContentModel.getById(req.params.id);
+    if (!item) return res.status(404).json({ error: 'Content not found' });
+
+    // Parse include list: e.g., ?include=episodes or ?include=episodes,episodesCount
+    const include = String(req.query.include || '')
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    // Optional: episodesCount without full list
+    if (item.type === 'series' && (include.includes('episodesCount') || include.includes('episodes'))) {
+      const eps = await EpisodesModel.listByContent(item._id);
+      if (include.includes('episodes')) item.episodes = eps;
+      item.episodesCount = eps.length;
     }
-  },
+
+    res.json(item);
+  } catch (err) {
+    console.error('❌ Error fetching content by ID:', err);
+    res.status(500).json({ error: 'Failed to fetch content' });
+  }
+},
+
 
   // ➕ POST /api/content
   async create(req, res) {
