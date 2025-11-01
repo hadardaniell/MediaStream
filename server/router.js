@@ -53,4 +53,25 @@ router.get('/add-media', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/components/add-media/add-media.html'));
 });
 
+router.get('/edit-profile', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/settings/edit-profile/edit-profile.html'));
+});
+
+router.get('/manage-account', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/settings/manage-account/manage-account.html'));
+});
+
+router.get('/manage-profiles', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/settings/manage-profiles/manage-profiles.html'));
+});
+
+router.get('/statistics', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/settings/statistics/statistics.html'));
+});
+
+router.get('/genre', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/genre/genre.html'));
+});
+
+
 export default router;
