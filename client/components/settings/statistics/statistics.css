@@ -1,0 +1,121 @@
+:root {
+  --primary: #e1e6f0;
+  --secondary: #8f98b2;
+  --accent: #53a6f2;
+  --card-bg: #1a1c29;
+  --page-gap: 7rem;
+  --side-padding: 3rem;
+}
+
+body {
+  background-color: #0f1014;
+  color: var(--primary);
+  direction: rtl;
+  font-family: "Noto Sans Hebrew", "Inter", sans-serif;
+  margin: 0;
+  height: 100%;
+}
+
+.sidebar {
+  width: 240px;
+  background-color: #1a1c29;
+  display: flex;
+  flex-direction: column;
+  padding-top: 2em;
+  gap: 1.5em;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.4);
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  padding: 1em 1.5em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.menu-item:hover {
+  background-color: #252833;
+  transform: translateX(-3px);
+}
+
+.menu-item i {
+  font-size: 1.4rem;
+  color: var(--accent);
+}
+
+.menu-item span {
+  font-size: 1rem;
+}
+
+.stat-container {
+  margin-right: 240px;
+  padding: var(--page-gap) var(--side-padding);
+  min-height: 100vh;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2em;
+}
+
+.stat-cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2em;
+}
+
+.stat-card {
+  background-color: var(--card-bg);
+  padding: 1.5em 2em;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  text-align: center;
+  width: 200px;
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h3 {
+  font-size: 1.1rem;
+  color: var(--secondary);
+}
+
+.stat-card p {
+  font-size: 1.6rem;
+  color: var(--accent);
+  margin-top: 0.5em;
+}
+
+.charts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2em;
+  margin-top: 3em;
+}
+
+.chart-box {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 2em;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  width: 400px;
+  text-align: center;
+}
+
+.chart-box h3 {
+  margin-bottom: 1em;
+  color: var(--secondary);
+}
