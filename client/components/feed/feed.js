@@ -15,16 +15,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderNewByGenre(allContent);
 });
 
-// --- LocalStorage לייקים ---
-const LS_LIKE_COUNTS = "feed.likeCounts";
-const LS_LIKED = "feed.liked";
-let likeCounts = JSON.parse(localStorage.getItem(LS_LIKE_COUNTS) || "{}");
-let likedMap = JSON.parse(localStorage.getItem(LS_LIKED) || "{}");
-
-function saveLikes() {
-  localStorage.setItem(LS_LIKE_COUNTS, JSON.stringify(likeCounts));
-  localStorage.setItem(LS_LIKED, JSON.stringify(likedMap));
+function posterClick(id) {
+  window.location.href = `/media-content/${id}`;
 }
+
 
 // Toggle לייק + פנייה לשרת
 async function toggleLike(id, btnEl) {
@@ -48,10 +42,20 @@ async function toggleLike(id, btnEl) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ liked: nowLiked }),
     });
+    if (!res.ok) throw new Error("Failed");
+
+    const data = await res.json(); // מחזיר likes ו־liked (true/false)
+    const card = btnEl.closest(".card");
+    card.querySelector(".count").textContent+= 1;
+    btnEl.textContent = "אהבתי  ";
+    btnEl.className = `btn btn-sm btn-danger like-btn`;
   } catch (err) {
     console.error("Error sending like:", err);
   }
 }
+
+document.getElementById('.card')
+
 
 // --- פונקציות כלליות ---
 function escapeHtml(s) {
@@ -84,10 +88,11 @@ function createCard(item) {
 
   if(item.poster) {
     const img = document.createElement("img");
-    img.className = "card-img-top";
-    img.src = item.poster;
-    img.alt = item.name;
-    card.appendChild(img);
+    img.className = "poster";
+    img.src = item.photo;
+    posterContainer.appendChild(img);
+    posterContainer.addEventListener("click", () => posterClick(item._id));
+    card.appendChild(posterContainer);
   }
 
   const body = document.createElement("div");
