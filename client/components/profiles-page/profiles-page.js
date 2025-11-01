@@ -1,4 +1,21 @@
 // profiles/profiles.js
+
+// document.addEventListener("DOMContentLoaded", async () => {
+//   const userId = localStorage.getItem("userId");
+//   if (!userId) {
+//     // window.location.href = "../login";
+//     // return;
+//   }
+
+//     const allProfiles = await fetch("http://localhost:3000/api/profiles?userId=" + userId, {
+//     method: "GET",
+//     headers: { "Content-Type": "application/json" },
+//   })
+//     .then(res => res.json())
+//     .catch(() => []);
+
+// });
+
 document.querySelectorAll('.profiles-container .profile').forEach((el, idx) => {
   const id = String(idx + 1);
   const name = el.querySelector('.input')?.value?.trim() || `פרופיל ${id}`;

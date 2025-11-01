@@ -46,16 +46,18 @@ document.addEventListener("DOMContentLoaded", () => {
           email: document.getElementById("email").value,
           password: document.getElementById("password").value,
         }),
-      }).then(res => {
+      }).then( async res => {
         if(res.status === 401) {
           alert("אימייל או סיסמה שגויים");
           return;
         }
         if (!res.ok) throw new Error("התחברות נכשלה");
-        window.location.href = '/profiles';
+        const data = await res.json();
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem('userRole', 'user');
         localStorage.setItem('userEmail', document.getElementById("email").value);
+        localStorage.setItem('userId', data._id);
+        window.location.href = '/profiles';
         return res.json();
       })
     }
@@ -69,10 +71,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }),
       }).then(res => {
         if (!res.ok) throw new Error("ההרשמה נכשלה");
-        window.location.href = '/profiles';
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem('userRole', 'user');
         localStorage.setItem('userEmail', document.getElementById("email").value);
+        window.location.href = '/profiles';
         return res.json();
       }
       );
