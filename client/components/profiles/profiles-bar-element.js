@@ -100,7 +100,7 @@ class ProfilesBar extends HTMLElement {
       container.innerHTML = allProfiles.map(profile => `
       <div class="profile" data-id="${profile._id}">
         <img src="${profile.photo || 'client/assets/profiles-photos/mini.png'}" 
-        class="profile-img" id="profile-img-${profile._id}">
+        class="profile-img" id="${profile._id}">
         <input type="text" class="form-control input" value="${profile.name}">
       </div>
     `).join('');
@@ -143,16 +143,15 @@ class ProfilesBar extends HTMLElement {
       const profiles = this.shadowRoot.querySelectorAll('.profile-img');
       profiles.forEach(profile => {
         profile.addEventListener('click', () => {
-          const nameInput = profile.querySelector('input');
-          const profileName = nameInput ? nameInput.value : '';
-          window.location.href = `/feed?profile=${encodeURIComponent(profileName)}`;
+          const id = profile.id;
+          window.location.href = `/feed?profile=${encodeURIComponent(id)}`;
         });
       });
 
       const addBtn = this.shadowRoot.querySelector('.add-container');
       if (addBtn) {
         addBtn.addEventListener('click', () => {
-          alert('כאן נוסיף פרופיל חדש 😎');
+          alert('כאן נוסיף פרופיל חדש');
         });
       }
     } catch (err) {
