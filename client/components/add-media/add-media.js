@@ -76,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
             genres: getSelectedGenres(),
             description: document.getElementById("description").value,
             rating: Number(document.getElementById("rating").value),
-            photo: '/client/assets/' + document.getElementById("photoFile").files[0]?.name,
-            video: '/client/assets/' + document.getElementById("videoFile").files[0]?.name,
+            photo: '/client/assets/posters' + document.getElementById("photoFile").files[0]?.name,
+            video: '/client/assets/movies' + document.getElementById("videoFile").files[0]?.name,
             director: {
                 name: document.getElementById("directorName").value,
                 wikipedia: document.getElementById("directorWiki").value,

@@ -144,6 +144,7 @@ class ProfilesBar extends HTMLElement {
       profiles.forEach(profile => {
         profile.addEventListener('click', () => {
           const id = profile.id;
+          localStorage.setItem('activeProfileId', id);
           window.location.href = `/feed?profile=${encodeURIComponent(id)}`;
         });
       });
