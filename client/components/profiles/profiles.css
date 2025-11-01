@@ -91,6 +91,10 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: anchor-center;
+
+    &:hover {
+        transform: translateY(-5px);
+    }
 }
 
 .add-icon {

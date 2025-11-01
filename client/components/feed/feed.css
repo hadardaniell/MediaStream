@@ -270,7 +270,17 @@
         text-overflow: ellipsis;
     }
 
-    .section-title{
+    .section-title {
         font-weight: 500;
         color: var(--secondary);
+    }
+
+    section {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .row{
+        width: 100%;
     }
