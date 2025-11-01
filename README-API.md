@@ -67,6 +67,20 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 | **PATCH**  | `/api/profiles/:id` | Update a profile’s `name` or `photo`<br>→ Allowed for the profile’s **owner** or an **admin**                       |
 | **DELETE** | `/api/profiles/:id` | Delete a profile<br>→ Allowed for the profile’s **owner** or an **admin**                                           |
 
+## Likes API
+| Method     | Path                                  | Description|
+| ---------- | ------------------------------------- | -----------|
+| **GET**    | `/api/likes`                          | Get all likes (optionally filter by `?profileId=` or `?contentId=`)<br>→ Returns an array of Like documents|
+| **GET**    | `/api/likes/content/:contentId`       | Get all likes for a specific content|
+| **GET**    | `/api/likes/profile/:profileId`       | Get all likes made by a specific profile|
+| **GET**    | `/api/likes/content/:contentId/count` | Get the total number of likes for a specific content|
+| **GET**    | `/api/likes/profile/:profileId/count` | Get the total number of likes made by a specific profile|
+| **POST**   | `/api/likes`                          | Create a new like (`{ profileId, contentId }`)<br>→ Automatically increments `Content.likes` by **+1**|
+| **DELETE** | `/api/likes`                          | Remove a like (`{ profileId, contentId }`)<br>→ Automatically decrements `Content.likes` by **–1** (idempotent)|
+| **DELETE** | `/api/likes/:id`                      | Delete a like by its `_id`|
+| **DELETE** | `/api/likes/profile/:profileId/all`   | Delete all likes belonging to a specific profile<br>→ Also decrements the `likes` count on each related content|
+
+
 ---
 
 ## ⚙️ Notes
