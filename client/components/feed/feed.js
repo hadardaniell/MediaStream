@@ -1,8 +1,10 @@
+// const { it } = require("node:test");
+
 document.addEventListener("DOMContentLoaded", async () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = localStorage.getItem("userId");
   if (!user) {
-    // window.location.href = "../login";
-    // return;
+    window.location.href = "/login";
+    return;
   }
 
   const allContent = await fetch("http://localhost:3000/api/content")
@@ -22,25 +24,13 @@ function posterClick(id) {
 
 // Toggle לייק + פנייה לשרת
 async function toggleLike(id, btnEl) {
-  const nowLiked = !likedMap[id];
-  likedMap[id] = nowLiked;
-  likeCounts[id] = (likeCounts[id] || 0) + (nowLiked ? 1 : -1);
-  if (likeCounts[id] < 0) likeCounts[id] = 0;
+  const activeProfileId = localStorage.getItem("activeProfileId");
 
-  saveLikes();
-
-  // עדכון UI
-  const card = btnEl.closest(".card");
-  card.querySelector(".count").textContent = likeCounts[id];
-  btnEl.setAttribute("aria-pressed", String(nowLiked));
-  btnEl.textContent = nowLiked ? "אהבתי" : "סמן לייק";
-
-  // פנייה ל־API
   try {
-    await fetch(`http://localhost:3000/api/content/${id}/like`, {
+    const res = await fetch(`http://localhost:3000/api/likes`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ liked: nowLiked }),
+      body: JSON.stringify({ profileId: activeProfileId, contentId: id }),
     });
     if (!res.ok) throw new Error("Failed");
 
@@ -50,7 +40,7 @@ async function toggleLike(id, btnEl) {
     btnEl.textContent = "אהבתי  ";
     btnEl.className = `btn btn-sm btn-danger like-btn`;
   } catch (err) {
-    console.error("Error sending like:", err);
+    console.error(err);
   }
 }
 
@@ -76,17 +66,18 @@ function renderSection(containerId, data) {
 }
 
 function createCard(item) {
-  const liked = !!likedMap[item.id];
-  const count = likeCounts[item.id] ?? item.likes;
+  const count = item.likes || 0;
 
   const col = document.createElement("div");
   col.className = "col-6 col-md-3 col-lg-2";
-  
+
   const card = document.createElement("div");
   card.className = "card mb-3";
-  card.dataset.id = item.id;
+  card.dataset.id = item._id;
 
-  if(item.poster) {
+  if (item.photo) {
+    const posterContainer = document.createElement("div");
+    posterContainer.className = "poster-container";
     const img = document.createElement("img");
     img.className = "poster";
     img.src = item.photo;
@@ -119,10 +110,11 @@ function createCard(item) {
 
   const btn = document.createElement("button");
   btn.type = "button";
-  btn.className = `btn btn-sm ${liked ? "btn-danger" : "btn-outline-primary"} like-btn`;
-  btn.setAttribute("aria-pressed", liked);
-  btn.textContent = liked ? "אהבתי" : "סמן לייק";
-  btn.addEventListener("click", () => toggleLike(item.id, btn));
+  btn.className = `btn btn-sm ${item.liked ? "btn-danger" : "btn-outline-primary"} like-btn`;
+  btn.textContent = item.liked ? "אהבתי" : "סמן לייק";
+
+  btn.addEventListener("click", () => toggleLike(item._id, btn));
+
 
   const span = document.createElement("span");
   span.innerHTML = `<span class="count">${count}</span> לייקים`;
