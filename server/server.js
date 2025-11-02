@@ -12,7 +12,8 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import episodesRoutes from './routes/episodesRoutes.js';
 import profileRoutes from './routes/profilesRoutes.js';
-import likesRoutes from './routes/likesRoutes.js'
+import likesRoutes from './routes/likesRoutes.js';
+import watchesRoutes from './routes/watchesRoutes.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -56,6 +57,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/profiles', profileRoutes);
 app.use('/api/likes', likesRoutes);
+app.use('/api/watches', watchesRoutes)
 
 // Start Server
 app.listen(PORT, () => {
