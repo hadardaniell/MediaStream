@@ -84,6 +84,22 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 | **DELETE** | `/api/likes/:id`                      | Delete a like by its `_id`|
 | **DELETE** | `/api/likes/profile/:profileId/all`   | Delete all likes belonging to a specific profile<br>→ Also decrements the `likes` count on each related content|
 
+## Watches API
+
+## Watches API
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **GET** | `/api/watches` | *(Admin only)* List all watch records<br>Supports filters: `?status=in_progress|completed`, `?profileId=`, `?contentId=`, `?limit=50`, `?cursor=` |
+| **GET** | `/api/watches/:profileId` | Get all watch records for a specific profile |
+|  | └ `?status=in_progress|completed` – Filter by status |
+|  | └ `?include=content` – Include full content details for each record |
+| **GET** | `/api/watches/:profileId/:contentId` | Get a single watch record for a specific profile–content pair<br>→ Returns `404` if not watched yet |
+| **POST** | `/api/watches/progress` | Create or update in-progress watch record<br>→ Body: `{ profileId, contentId, progressSeconds, [seasonNumber], [episodeNumber] }`<br>→ For **series**, `seasonNumber` and `episodeNumber` are **required**<br>→ For **movies**, they must **not** be included |
+| **POST** | `/api/watches/complete` | Mark a content as completed<br>→ Body: `{ profileId, contentId }` |
+| **DELETE** | `/api/watches/:profileId/:contentId` | Remove (reset) a watch record – treated as “not started yet” |
+
+
 
 ---
 

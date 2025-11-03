@@ -142,10 +142,6 @@ async markCompleted(req, res) {
       status: 'completed',
       updatedAt: new Date(),
       lastWatchedAt: new Date()
-      // NOTE: we do NOT force season/episode/progress here.
-      // If they already exist, the model can keep them; otherwise they’re optional.
-      // If you want to zero progress on completion, you can add:
-      // progressSeconds: new Int32(0)
     };
 
     await WatchesModel.markCompleted(payload);
