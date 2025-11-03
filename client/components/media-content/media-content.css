@@ -87,7 +87,7 @@ info-bar {
     color: rgb(255, 255, 255) !important;
     font-size: 14px !important;
     font-weight: 600 !important;
-
+    border: none !important;
     display: flex !important;
     height: 52px !important;
     align-items: center !important;
@@ -104,7 +104,7 @@ info-bar {
     color: var(--secondary) !important;
     font-size: 14px !important;
     font-weight: 600 !important;
-
+    border: none !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -113,6 +113,7 @@ info-bar {
 
 .action-buttons {
     display: flex;
+    flex-direction: column-reverse;
     gap: 1em;
 }
 
@@ -219,11 +220,11 @@ info-bar {
     border-radius: 5px;
 }
 
-.active{
+.active {
     font-weight: 700 !important;
 }
 
-.liked{
+.liked {
     background-color: rgb(239, 65, 94) !important;
     color: white !important;
 }
@@ -238,4 +239,31 @@ info-bar {
     &:hover {
         color: var(--link) !important;
     }
+}
+
+.start-btn {
+    font-size: 15px !important;
+    direction: ltr !important;
+    gap: 0.5em !important;
+    height: 52px !important;
+    border-radius: 7px !important;
+    background-color: rgb(34 36 38) !important;
+    color: var(--secondary) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 20px !important;
+
+}
+
+.start-text {
+    font-size: 15px !important;
+}
+
+.actions-wrapper {
+    display: flex;
+    gap: 1em;
 }

@@ -38,8 +38,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       }).catch(err => {
       });
 
-    await fetch('http://localhost:3000/api/watches/' +
-    activeProfileId  + '/' + contentData._id).then(
+  await fetch('http://localhost:3000/api/watches/' +
+    activeProfileId + '/' + contentData._id).then(
       res => res.json()).then(data => {
         activeWatchData = data;
       }).catch(err => {
@@ -94,7 +94,8 @@ function renderContent(content) {
 
   content.cast.forEach(actor => {
     const actorLink = document.createElement("span");
-    actorLink.textContent = actor.name + ' ';
+    actorLink.textContent = actor.name;
+    actorLink.style.marginLeft = "0.7em";
     actorLink.className = "actor-link clickable hovered";
     actorLink.addEventListener("click", () => {
       window.open(actor.wikipedia, "_blank");
@@ -109,10 +110,17 @@ function renderContent(content) {
   actions.className = "action-buttons";
   info.appendChild(actions);
 
+  const actionsWrapper = document.createElement("div");
+  actionsWrapper.className = "actions-wrapper";
+  actions.appendChild(actionsWrapper);
+
   const watchBtn = document.createElement("button");
   watchBtn.className = "watch-btn";
-  if(activeWatchData && activeWatchData.status == 'in_progress') {
-    switch(content.type) {
+  watchBtn.addEventListener("click", () => {
+    window.location.href = '/player/' + content._id;
+  });
+  if (activeWatchData && activeWatchData.status == 'in_progress') {
+    switch (content.type) {
       case 'series':
         watchBtn.textContent = 'המשך צפייה ' + 'S' + activeWatchData.seasonNumber + ' E' + activeWatchData.episodeNumber;
         break;
@@ -121,10 +129,13 @@ function renderContent(content) {
         break;
     }
   }
+  else if (activeWatchData && activeWatchData.status == 'completed') {
+    watchBtn.textContent = "צפייה מחדש";
+  }
   else {
     watchBtn.textContent = "צפו כעת";
   }
-  actions.appendChild(watchBtn);
+  actionsWrapper.appendChild(watchBtn);
 
   const likeBtn = document.createElement("button");
   likeBtn.className = isLiked ? "like-btn liked" : "like-btn";
@@ -153,11 +164,27 @@ function renderContent(content) {
       isLiked = false;
     }
   });
-  actions.appendChild(likeBtn);
+  actionsWrapper.appendChild(likeBtn);
 
   const likeIcon = document.createElement("i");
   likeIcon.className = "bi bi-hand-thumbs-up";
   likeBtn.appendChild(likeIcon);
+
+      const startBtn = document.createElement("button");
+  startBtn.className = 'start-btn';
+  startBtn.addEventListener("click", () => {
+    window.location.href = '/player/' + content._id + '?startFromBeginning=true';
+  });
+  actions.appendChild(startBtn);
+
+  const startText = document.createElement("span");
+  startText.textContent = 'צפייה מהתחלה ';
+  startText.className = 'start-text';
+  startBtn.appendChild(startText);
+
+  const startIcon = document.createElement("i");
+  startIcon.className = "bi bi-arrow-clockwise";
+  startBtn.appendChild(startIcon);
 
   const poster = document.createElement("img");
   poster.className = "poster";
