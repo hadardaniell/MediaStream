@@ -2,6 +2,7 @@
 import { ContentModel } from '../models/contentModel.js';
 import { EpisodesModel } from '../models/episodesModel.js';
 import { Int32, ObjectId } from 'mongodb';
+import { getDb } from '../db.js'
 
 // allow only schema fields
 const ALLOWED_FIELDS = [
@@ -85,6 +86,94 @@ function validateSeasons(arr) {
 
 export const ContentController = {
   // ✅ GET /api/content
+
+   async getByProfile(req, res) {
+    try {
+      const { profileId } = req.params;
+      if (!ObjectId.isValid(profileId)) {
+        return res.status(400).json({ error: 'Invalid profileId' });
+      }
+      const pid = new ObjectId(profileId);
+
+      const db = await getDb();
+      // Adjust collection names if yours differ (e.g., 'Likes' vs 'likes', 'Watches' vs 'watches')
+      const cursor = db.collection('Content').aggregate([
+        // Join Likes for *this* profile
+        {
+          $lookup: {
+            from: 'Likes',
+            let: { contentId: '$_id' },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$contentId', '$$contentId'] },
+                      { $eq: ['$profileId', pid] }
+                    ]
+                  }
+                }
+              },
+              { $project: { _id: 1 } }
+            ],
+            as: 'likesForProfile'
+          }
+        },
+        // Join Watches for *this* profile
+        {
+          $lookup: {
+            from: 'watches',
+            let: { contentId: '$_id' },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$contentId', '$$contentId'] },
+                      { $eq: ['$profileId', pid] }
+                    ]
+                  }
+                }
+              },
+              {
+                $project: {
+                  _id: 0,
+                  status: 1,
+                  progressSeconds: 1,
+                  seasonNumber: 1,
+                  episodeNumber: 1,
+                  updatedAt: 1,
+                  lastWatchedAt: 1
+                }
+              }
+            ],
+            as: 'watchForProfile'
+          }
+        },
+        // Compute booleans/objects
+        {
+          $addFields: {
+            hasLike: { $gt: [{ $size: '$likesForProfile' }, 0] },
+            watch: {
+              $ifNull: [
+                { $arrayElemAt: ['$watchForProfile', 0] },
+                { status: 'unstarted' }
+              ]
+            }
+          }
+        },
+        { $project: { likesForProfile: 0, watchForProfile: 0 } },
+        // Optional: sorting (e.g., newest first, or by rating)
+        // { $sort: { year: -1 } }
+      ]);
+
+      const results = await cursor.toArray();
+      return res.json(results);
+    } catch (err) {
+      console.error('getByProfile error:', err);
+      return res.status(500).json({ error: 'Server error' });
+    }
+  },
   async getAll(req, res) {
     try {
       const filter = {};

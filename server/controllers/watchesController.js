@@ -1,6 +1,8 @@
 // controllers/watchesController.js
 import { WatchesModel } from '../models/watchesModel.js';
 import { ContentModel } from '../models/contentModel.js'; // used to check type 'series'
+import { ObjectId, Int32 } from 'mongodb';
+
 
 const asIntOrUndefined = (v) => {
   if (v === undefined || v === null || v === '') return undefined;
@@ -53,63 +55,107 @@ export const WatchesController = {
     }
   },
 
-  // POST /api/watches/progress
-  // body: { profileId, contentId, progressSeconds, seasonNumber?, episodeNumber? }
-  async upsertProgress(req, res) {
-    try {
-      const { profileId, contentId } = req.body;
-      const progressSeconds = asIntOrUndefined(req.body.progressSeconds);
-      const seasonNumber    = asIntOrUndefined(req.body.seasonNumber);
-      const episodeNumber   = asIntOrUndefined(req.body.episodeNumber);
 
-      if (!profileId || !contentId) {
-        return res.status(400).json({ error: 'profileId and contentId are required' });
-      }
-      if (progressSeconds == null || progressSeconds < 0) {
-        return res.status(400).json({ error: 'progressSeconds (int ≥ 0) is required' });
-      }
+// POST /api/watches/progress
+async upsertProgress(req, res) {
+  try {
+    const { profileId, contentId } = req.body;
+    const progressSeconds = asIntOrUndefined(req.body.progressSeconds);
+    const seasonNumber    = asIntOrUndefined(req.body.seasonNumber);
+    const episodeNumber   = asIntOrUndefined(req.body.episodeNumber);
 
-      // Enforce series-only season/episode
-      const content = await ContentModel.getById(contentId);
-      if (!content) return res.status(404).json({ error: 'Content not found' });
-
-      if (content.type === 'series') {
-        if (seasonNumber == null || episodeNumber == null) {
-          return res.status(400).json({ error: 'seasonNumber and episodeNumber are required for series' });
-        }
-      } else {
-        if (seasonNumber != null || episodeNumber != null) {
-          return res.status(400).json({ error: 'seasonNumber/episodeNumber allowed only for series' });
-        }
-      }
-
-      await WatchesModel.upsertProgress({ profileId, contentId, progressSeconds, seasonNumber, episodeNumber });
-      res.status(204).end();
-    } catch (err) {
-      console.error('upsertProgress error:', err);
-      if (err?.code === 11000) return res.status(409).json({ error: 'Duplicate (profileId, contentId)' });
-      res.status(500).json({ error: 'Failed to upsert progress' });
+    // Basic presence + type checks
+    if (!profileId || !contentId) {
+      return res.status(400).json({ error: 'profileId and contentId are required' });
     }
-  },
-
-  // POST /api/watches/complete
-  // body: { profileId, contentId }
-  async markCompleted(req, res) {
-    try {
-      const { profileId, contentId } = req.body;
-      if (!profileId || !contentId) {
-        return res.status(400).json({ error: 'profileId and contentId are required' });
-      }
-      const content = await ContentModel.getById(contentId);
-      if (!content) return res.status(404).json({ error: 'Content not found' });
-
-      await WatchesModel.markCompleted({ profileId, contentId });
-      res.status(204).end();
-    } catch (err) {
-      console.error('markCompleted error:', err);
-      res.status(500).json({ error: 'Failed to mark completed' });
+    if (!ObjectId.isValid(profileId) || !ObjectId.isValid(contentId)) {
+      return res.status(400).json({ error: 'Invalid profileId or contentId' });
     }
-  },
+    if (progressSeconds == null || progressSeconds < 0) {
+      return res.status(400).json({ error: 'progressSeconds (int ≥ 0) is required' });
+    }
+
+    // Enforce series-only season/episode
+    const content = await ContentModel.getById(contentId);
+    if (!content) return res.status(404).json({ error: 'Content not found' });
+
+    if (content.type === 'series') {
+      if (seasonNumber == null || episodeNumber == null) {
+        return res.status(400).json({ error: 'seasonNumber and episodeNumber are required for series' });
+      }
+    } else {
+      if (seasonNumber != null || episodeNumber != null) {
+        return res.status(400).json({ error: 'seasonNumber/episodeNumber allowed only for series' });
+      }
+    }
+
+    // Convert IDs once
+    const pid = new ObjectId(profileId);
+    const cid = new ObjectId(contentId);
+
+    // Build a clean payload with correct BSON types (no undefineds)
+    const payload = {
+      profileId: pid,
+      contentId: cid,
+      progressSeconds: new Int32(progressSeconds),
+      // Include only if provided (and already validated above)
+      ...(seasonNumber != null ? { seasonNumber: new Int32(seasonNumber) } : {}),
+      ...(episodeNumber != null ? { episodeNumber: new Int32(episodeNumber) } : {}),
+      // always required by schema (set by model as well, but safe here)
+      status: 'in_progress',
+      updatedAt: new Date(),
+      lastWatchedAt: new Date()
+    };
+
+    await WatchesModel.upsertProgress(payload);
+    return res.status(204).end();
+  } catch (err) {
+    console.error('upsertProgress error:', err);
+    if (err?.code === 11000) return res.status(409).json({ error: 'Duplicate (profileId, contentId)' });
+    return res.status(500).json({ error: 'Failed to upsert progress' });
+  }
+},
+
+// POST /api/watches/complete
+// body: { profileId, contentId }
+async markCompleted(req, res) {
+  try {
+    const { profileId, contentId } = req.body;
+
+    if (!profileId || !contentId) {
+      return res.status(400).json({ error: 'profileId and contentId are required' });
+    }
+    if (!ObjectId.isValid(profileId) || !ObjectId.isValid(contentId)) {
+      return res.status(400).json({ error: 'Invalid profileId or contentId' });
+    }
+
+    const content = await ContentModel.getById(contentId);
+    if (!content) return res.status(404).json({ error: 'Content not found' });
+
+    const pid = new ObjectId(profileId);
+    const cid = new ObjectId(contentId);
+
+    // Minimal, schema-safe payload; do not introduce non-schema fields
+    const payload = {
+      profileId: pid,
+      contentId: cid,
+      status: 'completed',
+      updatedAt: new Date(),
+      lastWatchedAt: new Date()
+      // NOTE: we do NOT force season/episode/progress here.
+      // If they already exist, the model can keep them; otherwise they’re optional.
+      // If you want to zero progress on completion, you can add:
+      // progressSeconds: new Int32(0)
+    };
+
+    await WatchesModel.markCompleted(payload);
+    return res.status(204).end();
+  } catch (err) {
+    console.error('markCompleted error:', err);
+    return res.status(500).json({ error: 'Failed to mark completed' });
+  }
+},
+
 
   // DELETE /api/watches/:profileId/:contentId
   async remove(req, res) {
