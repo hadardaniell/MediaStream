@@ -7,6 +7,7 @@ const router = express.Router();
 router.use(requireAuth);
 
 //User Actions
+router.get('/profile/:profileId', ContentController.getByProfile);
 router.get('/', ContentController.getAll);
 router.get('/:id', ContentController.getById);
 

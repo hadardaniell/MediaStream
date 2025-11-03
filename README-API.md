@@ -29,6 +29,10 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 | **GET** | `/api/content/:id` | Get content by ID |
 |  | └ `?include=episodes` – Include episodes (for series) |
 |  | └ `?include=episodesCount` – Include season/episode counts |
+| **GET** | `/api/content/profile/:profileId` | Get all content enriched with the given profile’s **likes** and **watch status** |
+|  | └ Adds `hasLike` → `true` if profile liked this content |
+|  | └ Adds `watch` → `{ status, progressSeconds, ... }` describing the profile’s viewing progress |
+|  | └ Returns `"unstarted"` status if no watch record exists |
 | **POST** | `/api/content` | Create new content *(admin only)* |
 | **PATCH** | `/api/content/:id` | Update content *(admin only)* |
 | **DELETE** | `/api/content/:id` | Delete content *(admin only)* |
