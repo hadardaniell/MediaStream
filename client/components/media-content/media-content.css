@@ -227,3 +227,15 @@ info-bar {
     background-color: rgb(239, 65, 94) !important;
     color: white !important;
 }
+
+.details-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.hovered {
+    &:hover {
+        color: var(--link) !important;
+    }
+}

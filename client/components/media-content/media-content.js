@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   await fetch('http://localhost:3000/api/content?genre=' + contentData.genres.join(',')).then(
     res => res.json()).then(data => {
-      similarContentData = data.slice(0, 5);
+      similarContentData = data.filter(content => content._id != contentData._id).slice(0, 5);
     }).catch(err => {
     });
 
@@ -74,11 +74,11 @@ function renderContent(content) {
 
   const year = document.createElement("b");
   year.textContent = content.year;
-  detailsWrapper.appendChild(year);
+  infoBar.appendChild(year);
 
   const rating = document.createElement("b");
   rating.innerHTML = ` &middot ${content.rating}`;
-  detailsWrapper.appendChild(rating);
+  infoBar.appendChild(rating);
 
   const description = document.createElement("p");
   description.textContent = content.description;
@@ -95,7 +95,7 @@ function renderContent(content) {
   content.cast.forEach(actor => {
     const actorLink = document.createElement("span");
     actorLink.textContent = actor.name + ' ';
-    actorLink.className = "actor-link";
+    actorLink.className = "actor-link clickable hovered";
     actorLink.addEventListener("click", () => {
       window.open(actor.wikipedia, "_blank");
     });
