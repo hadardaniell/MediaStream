@@ -182,7 +182,7 @@ export const ContentController = {
 
     if (req.query.genre) {
       const genres = String(req.query.genre)
-      .replace(/^\[|\]$/g, '')      // tolerate [Action,Comedy]
+      .replace(/^\[|\]$/g, '')
       .split(',')
       .map(g => g.trim())
       .filter(Boolean);

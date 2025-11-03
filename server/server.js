@@ -13,7 +13,8 @@ import userRoutes from './routes/userRoutes.js';
 import episodesRoutes from './routes/episodesRoutes.js';
 import profileRoutes from './routes/profilesRoutes.js';
 import likesRoutes from './routes/likesRoutes.js';
-import watchesRoutes from './routes/watchesRoutes.js'
+import watchesRoutes from './routes/watchesRoutes.js';
+import uploadsRoutes from './routes/uploadRoutes.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,6 +37,7 @@ app.use(session({
 }));
 
 // Cors and Body Parser
+app.use('/api/uploads', uploadsRoutes);
 app.use(cors({ origin: 'http://localhost:5173', credentials: true })); // if frontend separate
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -58,6 +60,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/profiles', profileRoutes);
 app.use('/api/likes', likesRoutes);
 app.use('/api/watches', watchesRoutes)
+app.use('/assets', express.static(path.join(__dirname, 'client', 'assets')));
 
 // Start Server
 app.listen(PORT, () => {
