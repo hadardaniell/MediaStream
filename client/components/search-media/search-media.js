@@ -25,18 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     burstAt(btn, likedMap[id] ? '❤️' : '💔');
   });
 
-  // // חיפוש
-  // const searchInput = document.getElementById('search');
-  // searchInput.addEventListener('input', () => {
-  //   const term = searchInput.value.trim().toLowerCase();
-  //   const filtered = ITEMS.filter(it =>
-  //     it.title.toLowerCase().includes(term) ||
-  //     it.genres.some(g => g.toLowerCase().includes(term)) ||
-  //     String(it.year).includes(term)
-  //   );
-  //   renderItems(filtered);
-  // });
-
 });
 
 
@@ -65,35 +53,45 @@ let likedMap = loadJSON(LS_LIKED, {});
 // });
 
 function renderItems(items) {
+  const contentEl = document.getElementById('content');
+  contentEl.innerHTML = '';
+
   if (!items.length) {
-    document.getElementById('content').innerHTML = `
-      <div class="no-results">לא נמצאו תוצאות</div>
-    `;
+    contentEl.innerHTML = `<div class="no-results">לא נמצאו תוצאות</div>`;
     return;
   }
-  const content = items.map(item => createCard(item).outerHTML).join('');
-  document.getElementById('content').innerHTML = content;
+
+  items.forEach(item => {
+    const card = createCard(item);
+    contentEl.appendChild(card);
+  });
 }
 
-//   
+
+function posterClick(id) {
+  window.location.href = `/media-content/${id}`;
+}
+
 
 function createCard(item) {
-  const liked = !!likedMap[item.id];
-  const count = likeCounts[item.id] ?? item.likes;
+  const count = item.likes || 0;
 
   const col = document.createElement("div");
   col.className = "col-6 col-md-3 col-lg-2";
 
   const card = document.createElement("div");
   card.className = "card mb-3";
-  card.dataset.id = item.id;
+  card.dataset.id = item._id;
 
-  if (item.poster) {
+  if (item.photo) {
+    const posterContainer = document.createElement("div");
+    posterContainer.className = "poster-container";
     const img = document.createElement("img");
-    img.className = "card-img-top";
-    img.src = item.poster;
-    img.alt = item.name;
-    card.appendChild(img);
+    img.className = "poster";
+    img.src = item.photo;
+    posterContainer.addEventListener('click', () => posterClick(item._id));
+    posterContainer.appendChild(img);
+    card.appendChild(posterContainer);
   }
 
   const body = document.createElement("div");
@@ -120,10 +118,11 @@ function createCard(item) {
 
   const btn = document.createElement("button");
   btn.type = "button";
-  btn.className = `btn btn-sm ${liked ? "btn-danger" : "btn-outline-primary"} like-btn`;
-  btn.setAttribute("aria-pressed", liked);
-  btn.textContent = liked ? "אהבתי" : "סמן לייק";
-  btn.addEventListener("click", () => toggleLike(item.id, btn));
+  btn.className = `btn btn-sm ${item.liked ? "btn-danger" : "btn-outline-primary"} like-btn`;
+  btn.textContent = item.liked ? "אהבתי" : "סמן לייק";
+
+  btn.addEventListener("click", () => toggleLike(item._id, btn));
+
 
   const span = document.createElement("span");
   span.innerHTML = `<span class="count">${count}</span> לייקים`;
@@ -137,6 +136,7 @@ function createCard(item) {
 
   return col;
 }
+
 
 function toggleLike(id, btnEl) {
   const nowLiked = !likedMap[id];

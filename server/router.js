@@ -33,20 +33,11 @@ router.get('/search', (req, res) => {
 });
 
 router.get('/media-content/:id', (req, res) => {
-  // const { id } = req.params;
-  // // const content = contents.find(c => c.id === id);
-
-  // if (!content) {
-  //   return res.status(404).json({ error: "Content not found" });
-  // }
-
-  // res.json(content);
-
    res.sendFile(path.join(__dirname, '../client/components/media-content/media-content.html'));
 });
 
-router.get('/player', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/components/media-player/media-player.html'));
+router.get('/player/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/components/player-control/media-player.html'));
 });
 
 router.get('/add-media', (req, res) => {
