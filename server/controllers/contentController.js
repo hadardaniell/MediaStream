@@ -179,7 +179,17 @@ export const ContentController = {
       const filter = {};
       const sort = {};
       if (req.query.type) filter.type = req.query.type;
-      if (req.query.genre) filter.genres = req.query.genre;
+
+    if (req.query.genre) {
+      const genres = String(req.query.genre)
+      .replace(/^\[|\]$/g, '')      // tolerate [Action,Comedy]
+      .split(',')
+      .map(g => g.trim())
+      .filter(Boolean);
+
+  filter.genres = { $in: genres }; // OR condition
+}
+
       if (req.query.year)  filter.year  = parseInt(req.query.year, 10);
       if (req.query.sortBy === 'rating') sort.rating = -1;
       if (req.query.sortBy === 'year')   sort.year   = -1;
