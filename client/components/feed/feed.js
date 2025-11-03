@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderNewByGenre(allContent);
 });
 
+function posterClick(id) {
+  window.location.href = `/media-content/${id}`;
+}
+
 
 // Toggle לייק + פנייה לשרת
 async function toggleLike(id, btnEl) {
@@ -32,13 +36,15 @@ async function toggleLike(id, btnEl) {
 
     const data = await res.json(); // מחזיר likes ו־liked (true/false)
     const card = btnEl.closest(".card");
-    card.querySelector(".count").textContent = data.likes;
-    btnEl.textContent = data.liked ? "אהבתי" : "סמן לייק";
-    btnEl.className = `btn btn-sm ${data.liked ? "btn-danger" : "btn-outline-primary"} like-btn`;
+    card.querySelector(".count").textContent+= 1;
+    btnEl.textContent = "אהבתי  ";
+    btnEl.className = `btn btn-sm btn-danger like-btn`;
   } catch (err) {
     console.error(err);
   }
 }
+
+document.getElementById('.card')
 
 
 // --- פונקציות כלליות ---
@@ -76,6 +82,7 @@ function createCard(item) {
     img.className = "poster";
     img.src = item.photo;
     posterContainer.appendChild(img);
+    posterContainer.addEventListener("click", () => posterClick(item._id));
     card.appendChild(posterContainer);
   }
 

@@ -5,9 +5,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   const mediaId = path.split('/').pop();
 
   if (!mediaId) {
-    // console.error("Media ID is missing from the URL");
-    // return;
+    console.error("Media ID is missing from the URL");
+    return;
   }
+
+  fetch('http://localhost:3000/api/content/' + mediaId).then(res => res.json()).then(data => {
+    renderContent(data);
+  }).catch(err => {
+    console.error("Error fetching media content:", err);
+  });
 
   const mockContent = {
     id: mediaId,
@@ -50,22 +56,76 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // פונקציה שמציגה את פרטי התוכן
 function renderContent(content) {
-  const container = document.getElementById("content-details");
-  container.innerHTML = `
-    <h1>${content.title}</h1>
-    <p>${content.description}</p>
-    <p><strong>שנת יציאה:</strong> ${content.releaseYear}</p>
-    <p><strong>לייקים:</strong> ${content.likes}</p>
-    <button id="play-btn">▶️ ${content.lastWatched ? 'המשך צפייה' : 'הפעל'}</button>
-    <button id="restart-btn">↩️ מההתחלה</button>
-    <button id="like-btn" class="${content.liked ? 'liked' : ''}">❤️ אהבתי</button>
-    <h3>שחקנים:</h3>
-    <ul>
-      ${content.actors.map(actor =>
-    `<li><a href="https://he.wikipedia.org/wiki/${encodeURIComponent(actor)}" target="_blank">${actor}</a></li>`
-  ).join('')}
-    </ul>
-  `;
+  const container = document.getElementById("content-container");
+  const contentDetails = document.createElement("div");
+  contentDetails.className = "content-details";
+  container.appendChild(contentDetails);
+
+  const info = document.createElement("div");
+  info.className = "info";
+  contentDetails.appendChild(info);
+
+  const title = document.createElement("h1");
+  title.textContent = content.name;
+  info.appendChild(title);
+
+  const infoBar = document.createElement("div");
+  infoBar.className = "info-bar";
+  info.appendChild(infoBar);
+
+  const year = document.createElement("b");
+  year.textContent = content.year;
+  infoBar.appendChild(year);
+
+  const rating = document.createElement("b");
+  rating.innerHTML = ` &middot ${content.rating}`;
+  infoBar.appendChild(rating);
+
+  const description = document.createElement("p");
+  description.textContent = content.description;
+  info.appendChild(description);
+
+  const cast = document.createElement("div");
+  cast.className = "info-bar";
+  info.appendChild(cast);
+
+  const castHeader = document.createElement("b");
+  castHeader.textContent = "שחקנים: ";
+  cast.appendChild(castHeader);
+
+  content.cast.forEach(actor => {
+    const actorLink = document.createElement("span");
+    actorLink.textContent = actor.name;
+    actorLink.className = "actor-link";
+    actorLink.addEventListener("click", () => {
+      window.open(actor.wikipedia, "_blank");
+    });
+
+    cast.appendChild(actorLink);
+  })
+
+  info.appendChild(cast);
+
+  const actions = document.createElement("div");
+  actions.className = "action-buttons";
+  contentDetails.appendChild(actions);
+
+  const watchBtn = document.createElement("button");
+  watchBtn.className = "watch-btn";
+  watchBtn.textContent = "צפו כעת";
+  actions.appendChild(watchBtn);
+
+  const likeBtn = document.createElement("button");
+  likeBtn.className = "like-btn";
+  actions.appendChild(likeBtn);
+
+  const likeIcon = document.createElement("i");
+  likeIcon.className = "bi bi-hand-thumbs-up";
+  likeBtn.appendChild(likeIcon);
+
+  const poster = document.createElement("img");
+  poster.className = "poster";
+  container.appendChild(poster);
 }
 
 document.getElementById('similar-content-btn').addEventListener('click', () => {
