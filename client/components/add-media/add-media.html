@@ -35,7 +35,6 @@
                 <select id="type" class="form-select" required>
                     <option value="movie">סרט</option>
                     <option value="series">סדרה</option>
-                    <option value="documentary">דוקומנטרי</option>
                 </select>
             </div>
 
@@ -113,27 +112,27 @@
                 <div id="episodesSection" style="display:none;" class="episodes-wrapper">
                     <label>הוספת פרקים</label>
                     <div class="episode-row">
-                        <div class="form-group">
-                            <label>עונה</label>
-                            <input type="number" id="seasonNumber" class="form-control" required/>
+                        <div class="episode-row-inputs">
+                            <div class="col-md-1"">
+                                <label>עונה</label>
+                                <input type="number" id="seasonNumber" class="form-control" required/>
+                            </div>
+                            <div class="col-md-1">
+                                <label>פרק</label>
+                                <input type="number" id="episodeNumber" class="form-control" required/>
+                            </div>
+                            <div class="col-md-4"">
+                                <label>תיאור קצר</label>
+                                <input type="text" id="shortDescription" class="form-control" required/>
+                            </div>
+                            <div class="col-md-2"">
+                                <label>וידאו</label>
+                                <input type="file" id="episodeVideo" class="form-control episode-video" required/>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>פרק</label>
-                            <input type="number" id="episodeNumber" class="form-control" required/>
+                        <div class="episode-row add-episode-wrapper">
+                            <button type="button" style="width: 90px;" class="btn btn-primary add-actor-btn" id="addEpisode">הוסף פרק</button>
                         </div>
-                    </div>
-                    <div class="episode-row">
-                        <div class="form-group">
-                            <label>תיאור קצר</label>
-                            <input type="text" id="shortDescription" class="form-control" required/>
-                        </div>
-                        <div class="form-group">
-                            <label>וידאו</label>
-                            <input type="file" id="episodeVideo" class="form-control episode-video" required/>
-                        </div>
-                    </div>
-                    <div class="episode-row add-episode-wrapper">
-                        <button type="button" class="btn btn-primary" id="addEpisode">הוסף פרק</button>
                     </div>
                 </div>
                 <ul id="episodesList" class="list-group mt-2"></ul>

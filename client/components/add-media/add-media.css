@@ -268,8 +268,13 @@ input[type="checkbox"]:checked {
 
 .episode-row {
     display: flex;
-    justify-content: center;
-    justify-content: space-around;
+    /* justify-content: center; */
+    justify-content: space-between;
+    gap: 1em;
+}
+.episode-row-inputs {
+    display: flex;
+    gap: 1em;
 }
 
 .episode-video {
@@ -280,6 +285,8 @@ input[type="checkbox"]:checked {
     margin-top: 1em;
     justify-content: start;
     padding-right: 1.7em;
+    align-items: center;
+    margin-right: 1.5em;
 }
 
 .was-validated .form-control:invalid,
