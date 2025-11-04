@@ -154,7 +154,7 @@ function createCard(item) {
 
 // המשך צפייה (לשימוש בעתיד עם API אמיתי)
 function getContinueWatching(all) {
-  const continueWatchingData = all.filter((content) => content.status === "in_progress").slice(0, 6);
+  const continueWatchingData = all.filter((content) => content.watch.status === "in_progress").slice(0, 6);
   if (continueWatchingData.length === 0) {
     document.getElementById("continue-watching-container").style.display = "none";
     return [];
