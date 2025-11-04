@@ -12,9 +12,18 @@
 <body>
 
     <div class="container">
-        <h1 class="mb-4 text-center"> הוספת תוכן חדש</h1>
+        <div>
+            <div class="header-wrapper">
+                <span class="mb-4 text-center disney-gold"> הוספת תוכן חדש</span>
+                <img src="client/assets/disney-plus-logo.webp" 
+                id="disney-logo-btn"
+                class="disney-plus-logo mb-4"/>
+            </div>
+            
+            <hr class="soft-divider"/>
+        </div>
 
-        <form id="contentForm" class="row g-3">
+        <form id="contentForm" novalidate class="row g-3">
 
             <div class="col-md-6">
                 <label class="form-label">שם</label>
@@ -23,16 +32,15 @@
 
             <div class="col-md-6">
                 <label class="form-label">סוג</label>
-                <select id="type" class="form-select">
+                <select id="type" class="form-select" required>
                     <option value="movie">סרט</option>
                     <option value="series">סדרה</option>
-                    <option value="documentary">דוקומנטרי</option>
                 </select>
             </div>
 
             <div class="col-md-4">
                 <label class="form-label">שנת הפצה</label>
-                <input type="number" id="year" class="form-control" min="1900" max="2025" value="2025">
+                <input type="number" id="year" class="form-control" required min="1900" max="2025" value="2025">
             </div>
 
             <!-- Dropdown עם צ׳קבוקסים -->
@@ -43,7 +51,7 @@
                         data-bs-toggle="dropdown" aria-expanded="false">
                         בחר ז׳אנרים
                     </button>
-                    <ul class="dropdown-menu w-100 p-2">
+                    <ul class="dropdown-menu w-100 p-2" >
                         <li><input class="form-check-input me-2" type="checkbox" value="Action">Action</li>
                         <li><input class="form-check-input me-2" type="checkbox" value="Comedy">Comedy</li>
                         <li><input class="form-check-input me-2" type="checkbox" value="Animation">Animation</li>
@@ -58,35 +66,30 @@
 
             <div class="col-12">
                 <label class="form-label">תיאור</label>
-                <textarea id="description" class="form-control" rows="3"></textarea>
+                <textarea id="description" class="form-control" rows="3" required></textarea>
             </div>
 
             <div class="col-md-4">
                 <label class="form-label">דירוג (1–5)</label>
-                <input type="number" id="rating" class="form-control" min="0" max="5" step="0.1" value="4.8">
+                <input type="number" id="rating" class="form-control" required min="0" max="5" step="0.1" value="0">
             </div>
 
             <div class="col-md-4">
                 <label class="form-label">במאי</label>
-                <input type="text" id="directorName" class="form-control" placeholder="Asaf Artsi">
+                <input type="text" id="directorName" class="form-control" required>
             </div>
 
             <div class="col-md-4">
                 <label class="form-label">ויקיפדיה של הבמאי</label>
-                <input type="text" id="directorWiki" class="form-control"
+                <input type="text" id="directorWiki" class="form-control" required
                     placeholder="https://en.wikipedia.org/wiki/Christopher_Nolan">
             </div>
-
-            <!-- <div class="col-12">
-                <label class="form-label">שחקן ראשי</label>
-                <input type="text" id="actorName" class="form-control" placeholder="Leonardo DiCaprio">
-            </div> -->
 
             <div class="col-12">
                 <label class="form-label">שחקנים</label>
                 <div class="input-group mb-2">
-                    <input type="text" id="actorName" class="form-control" placeholder="שם השחקן">
-                    <input type="text" id="actorWiki" class="form-control" placeholder="קישור לויקיפדיה (לא חובה)">
+                    <input type="text" id="actorName" class="form-control" required placeholder="שם השחקן">
+                    <input type="text" id="actorWiki" class="form-control" required placeholder="קישור לויקיפדיה">
                     <button type="button" class="btn add-actor-btn btn-secondary" id="addActor">
                         <i class="bi bi-plus add-icon"></i>
                         הוסף
@@ -97,15 +100,45 @@
 
             <div class="col-md-6">
                 <label class="form-label">בחר.י תמונה</label>
-                <input type="file" id="photoFile" class="form-control" accept="image/*">
+                <input type="file" id="photoFile" class="form-control" required accept="image/*">
             </div>
 
             <div class="col-md-6">
                 <label class="form-label">בחר.י וידאו (MP4)</label>
-                <input type="file" id="videoFile" class="form-control" accept="video/mp4">
+                <input type="file" id="videoFile" class="form-control" required accept="video/mp4">
             </div>
 
-            <div class="col-12 text-center">
+            <div class="col-md-6 episode-container">
+                <div id="episodesSection" style="display:none;" class="episodes-wrapper">
+                    <label>הוספת פרקים</label>
+                    <div class="episode-row">
+                        <div class="episode-row-inputs">
+                            <div class="col-md-1"">
+                                <label>עונה</label>
+                                <input type="number" id="seasonNumber" class="form-control" required/>
+                            </div>
+                            <div class="col-md-1">
+                                <label>פרק</label>
+                                <input type="number" id="episodeNumber" class="form-control" required/>
+                            </div>
+                            <div class="col-md-4"">
+                                <label>תיאור קצר</label>
+                                <input type="text" id="shortDescription" class="form-control" required/>
+                            </div>
+                            <div class="col-md-2"">
+                                <label>וידאו</label>
+                                <input type="file" id="episodeVideo" class="form-control episode-video" required/>
+                            </div>
+                        </div>
+                        <div class="episode-row add-episode-wrapper">
+                            <button type="button" style="width: 90px;" class="btn btn-primary add-actor-btn" id="addEpisode">הוסף פרק</button>
+                        </div>
+                    </div>
+                </div>
+                <ul id="episodesList" class="list-group mt-2"></ul>
+            </div>
+
+            <div class="col-12 text-center add-content-btn-wrapper">
                 <button type="submit" id="buildJSON" class="add-media">הוספת תוכן</button>
             </div>
 

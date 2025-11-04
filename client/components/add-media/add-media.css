@@ -1,7 +1,9 @@
 body {
-    height: 100vh;
+    height: 100%;
     width: 100%;
     background: linear-gradient(#091734, rgb(13 21 36), rgb(15 16 20));
+    background-repeat: no-repeat;
+    background-size: cover;
     direction: rtl;
 
     --primary: #e1e6f0;
@@ -11,6 +13,12 @@ body {
     display: flex;
     justify-content: center;
     padding: 1em;
+
+    --bs-btn-hover-bg: rgb(8 87 225) !important;
+}
+
+.btn.show {
+    background-color: #121e36 !important;
 }
 
 h1 {
@@ -25,12 +33,14 @@ h1 {
 }
 
 .container {
-    padding: 2em;
+    padding: 2em 4em;
     border-radius: 7px;
-    box-shadow: 0px 0px 7px 3px var(--secondary);
-    width: 600px;
-    height: 500px;
-    overflow: auto;
+    /* width: 700px; */
+    /* margin-right: 0px; */
+    /* box-shadow: 0px 0px 7px 3px var(--secondary); */
+    /* width: 600px; */
+    /* height: 500px; */
+    /* overflow: auto; */
 
 }
 
@@ -144,7 +154,7 @@ input[type="file"] {
 }
 */
 .add-media {
-    width: 100%;
+    width: 300px;
     border-radius: 7px;
     background: linear-gradient(to right, rgb(8 87 225), rgb(6 43 154));
     color: rgb(255, 255, 255);
@@ -240,4 +250,101 @@ input[type="checkbox"]:checked {
         background-color: transparent;
         border: none;
     }
+}
+
+.episodes-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+    margin-top: 1em;
+}
+
+.episode-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.episode-row {
+    display: flex;
+    /* justify-content: center; */
+    justify-content: space-between;
+    gap: 1em;
+}
+.episode-row-inputs {
+    display: flex;
+    gap: 1em;
+}
+
+.episode-video {
+    width: 205px !important;
+}
+
+.add-episode-wrapper {
+    margin-top: 1em;
+    justify-content: start;
+    padding-right: 1.7em;
+    align-items: center;
+    margin-right: 1.5em;
+}
+
+.was-validated .form-control:invalid,
+.is-invalid {
+    border-color: var(--bs-form-invalid-border-color) !important;
+}
+
+input[type="checkbox"] {
+    height: 16px !important;
+}
+
+.disney-gold {
+    width: fit-content;
+    font-weight: bold;
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FFF8DC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: -0.8px;
+    color: var(--primary);
+    margin: 0;
+    display: flex;
+}
+
+.soft-divider {
+    border: none;
+    /* מסיר ברירת מחדל */
+    height: 1px;
+    /* עובי הקו */
+    background: linear-gradient(to right,
+            var(--primary),
+            /* קצה שמאל */
+            var(--secondary),
+            /* מרכז */
+            var(--primary)
+            /* קצה ימין */
+        );
+    margin: 20px 0;
+    /* רווח מלמעלה ומלמטה */
+}
+
+.header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.disney-plus-logo {
+    width: 50px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.add-content-btn-wrapper {
+    display: flex;
+    justify-content: center;
 }
