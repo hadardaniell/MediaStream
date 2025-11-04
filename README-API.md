@@ -99,6 +99,22 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 | **POST** | `/api/watches/complete` | Mark a content as completed<br>→ Body: `{ profileId, contentId }` |
 | **DELETE** | `/api/watches/:profileId/:contentId` | Remove (reset) a watch record – treated as “not started yet” |
 
+## Uploads API
+
+| Method | Path | Description |
+|--------|------|-------------|
+| **POST** | `/api/uploads/movie` | Upload a movie file (`.mp4`) to `client/assets/movies`.<br>→ **Body:** raw binary file (`Content-Type: application/octet-stream`)<br>→ **Header:** `X-Filename: <originalFileName>`<br>→ Returns: `{ ok, type, path, filename }` where `path` is the public URL (e.g. `/assets/movies/yourfile.mp4`) |
+| **POST** | `/api/uploads/poster` | Upload a poster image (`.jpg`, `.png`, `.webp`) to `client/assets/posters`.<br>→ **Body:** raw binary file (`Content-Type: application/octet-stream`)<br>→ **Header:** `X-Filename: <originalFileName>`<br>→ Returns: `{ ok, type, path, filename }` where `path` is the public URL (e.g. `/assets/posters/yourfile.webp`) |
+| **POST** | `/api/uploads/profile-photo` | Upload a profile photo (`.jpg`, `.png`, `.webp`) to `client/assets/profile-photos`.<br>→ **Body:** raw binary file (`Content-Type: application/octet-stream`)<br>→ **Header:** `X-Filename: <originalFileName>`<br>→ Returns: `{ ok, type, path, filename }` where `path` is the public URL (e.g. `/assets/profile-photos/avatar.png`) |
+
+### Example cURL for Uploads
+```bash
+curl -i -X POST http://localhost:3000/api/uploads/poster \
+  -H "Content-Type: application/octet-stream" \
+  -H "X-Filename: test-poster.jpg" \
+  --data-binary @/Users/asaf/Desktop/test-poster.jpg
+
+
 
 
 ---
