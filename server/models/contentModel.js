@@ -10,6 +10,87 @@ export const ContentModel = {
     return db.collection('Content').find(filter).sort(sort).toArray();
   },
 
+  //getPopular Function
+    async getPopular({
+    mode = 'likes',
+    limit = 10,
+    type,
+    genres,
+    minRating = 0,
+    wLikes = 1,
+    wRating = 1
+  } = {}) {
+    const db = await getDb();
+
+    // Optional filters on Content
+    const match = {};
+    if (type) match.type = type;
+    if (Array.isArray(genres) && genres.length) match.genres = { $in: genres };
+    if (typeof minRating === 'number') match.rating = { $gte: minRating };
+
+    const pipeline = [
+      { $match: match },
+      {
+        // GROUP BY Likes.contentId and return a count per content
+        $lookup: {
+          from: 'Likes', // ⚠️ collection name as you use elsewhere
+          let: { cid: '$_id' },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$contentId', '$$cid'] } } },
+            { $group: { _id: null, count: { $sum: 1 } } }
+          ],
+          as: 'likesAgg'
+        }
+      },
+      {
+        $addFields: {
+          likesCount: { $ifNull: [{ $arrayElemAt: ['$likesAgg.count', 0] }, 0] },
+          safeRating: { $ifNull: ['$rating', 0] }
+        }
+      },
+      { $project: { likesAgg: 0 } }
+    ];
+
+    if (mode === 'likes') {
+      pipeline.push({ $sort: { likesCount: -1, safeRating: -1, _id: 1 } });
+    } else if (mode === 'rating') {
+      pipeline.push({ $sort: { safeRating: -1, likesCount: -1, _id: 1 } });
+    } else if (mode === 'mixed') {
+      pipeline.push({
+        $addFields: {
+          popScore: {
+            $add: [
+              { $multiply: ['$likesCount', Number(wLikes) || 1] },
+              { $multiply: ['$safeRating', Number(wRating) || 1] }
+            ]
+          }
+        }
+      });
+      pipeline.push({ $sort: { popScore: -1, likesCount: -1, safeRating: -1, _id: 1 } });
+    } else {
+      // default
+      pipeline.push({ $sort: { likesCount: -1, safeRating: -1, _id: 1 } });
+    }
+
+    pipeline.push({ $limit: Math.max(1, Number(limit) || 10) });
+
+    pipeline.push({
+      $project: {
+        name: 1,
+        type: 1,
+        genres: 1,
+        year: 1,
+        description: 1,
+        photo: 1,
+        rating: '$safeRating',
+        likesCount: 1,
+        ...(mode === 'mixed' ? { popScore: 1 } : {})
+      }
+    });
+
+    return db.collection('Content').aggregate(pipeline).toArray();
+  },
+
   // get one content by ID 
   async getById(id) {
     const db = await getDb();
