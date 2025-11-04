@@ -23,6 +23,7 @@ const app = express();
 const PORT = 3000;
 
 // Session Middleware
+app.use(cors({ origin: 'http://localhost:5173', credentials: true })); // if frontend separate
 app.use(session({
   name: 'sid',
   secret: process.env.SESSION_SECRET || 'dev-secret-change-me',
@@ -37,8 +38,6 @@ app.use(session({
 }));
 
 // Cors and Body Parser
-app.use('/api/uploads', uploadsRoutes);
-app.use(cors({ origin: 'http://localhost:5173', credentials: true })); // if frontend separate
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -52,6 +51,7 @@ app.use(async (req, _res, next) => {
 
 // Routes
 app.use('/client', express.static(path.join(__dirname, '../client')));
+app.use('/api/uploads', uploadsRoutes);
 app.use('/', router);
 app.use('/api/content', contentRoutes);
 app.use('/api', episodesRoutes);
