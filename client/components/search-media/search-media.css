@@ -226,7 +226,7 @@
         opacity: .8;
     }
 
-   h2 {
+    h2 {
         font-size: 17px !important;
         color: var(--primary);
         letter-spacing: -0.8px;
@@ -423,7 +423,8 @@
     media-stream-profiles-bar {
         max-width: 750px;
     }
-.card {
+
+    .card {
         /* border: 1px solid #e5e5e5;
         border-radius: 10px;
         padding: 12px;
@@ -563,10 +564,11 @@
         margin: 0 !important;
     }
 
-    .poster-container{
+    .poster-container {
         display: flex;
         justify-content: center;
         cursor: pointer;
+        padding-top: 0.5em;
     }
 
 
@@ -604,7 +606,7 @@
         text-overflow: ellipsis;
     }
 
-    .section-title{
+    .section-title {
         font-weight: 500;
         color: var(--secondary);
     }
