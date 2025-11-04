@@ -1,31 +1,87 @@
 let contentsData = [];
+const activeProfileId = localStorage.getItem('activeProfileId');
+
 document.addEventListener('DOMContentLoaded', async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const mediaType = urlParams.get('mediaType');
+  if (mediaType) {
+    document.getElementById('search').placeholder = mediaType === 'movies' ? 'חיפוש סרטים...' : 'חיפוש סדרות...';
 
-  await fetch('http://localhost:3000/api/content', {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
-  }).then(res => res.json())
-    .then(data => {
-      contentsData = data;
-      renderItems(data);
+    await fetch("http://localhost:3000/api/content/profile/" + activeProfileId + '?type=' + mediaType, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
     })
-    .catch(err => {
-      console.error('Error fetching content:', err);
-    });
+      .then(res => res.json()).then(data => {
+        contentsData = data;
+        renderItems(data);
+      }
+      )
+      .catch(() => []);
+  }
+  else {
+
+    await fetch("http://localhost:3000/api/content/profile/" + activeProfileId, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then(res => res.json()).then(data => {
+        contentsData = data;
+        renderItems(data);
+      }
+      )
+      .catch(() => []);
+  }
 
 
-
-  // לייקים
-  document.getElementById('content').addEventListener('click', (e) => {
-    const btn = e.target.closest('.like-btn');
-    if (!btn) return;
-    const card = btn.closest('.card');
-    const id = card.dataset.id;
-    toggleLike(id, btn);
-    burstAt(btn, likedMap[id] ? '❤️' : '💔');
-  });
+// לייקים
+document.getElementById('content').addEventListener('click', (e) => {
+  const btn = e.target.closest('.like-btn');
+  if (!btn) return;
+  const card = btn.closest('.card');
+  const id = card.dataset.id;
+  toggleLike(id, btn);
+  burstAt(btn, likedMap[id] ? '❤️' : '💔');
+});
 
 });
+
+
+// Toggle לייק + פנייה לשרת
+async function toggleLike(item, btnEl) {
+  try {
+    if (!item.hasLike) {
+      const res = await fetch(`http://localhost:3000/api/likes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
+      }).then(
+        res => res.json()).then(data => {
+          const card = btnEl.closest(".card");
+          card.querySelector(".count").textContent = item.likes + 1;
+          btnEl.className = `btn btn-sm btn-danger like-btn`;
+          item.hasLike = true;
+          item.likes += 1;
+        }).catch(err => {
+        });
+    } else {
+      const res = await fetch(`http://localhost:3000/api/likes`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
+      }).then(
+        res => res.json()).then(data => {
+          const card = btnEl.closest(".card");
+          card.querySelector(".count").textContent = item.likes - 1;
+          btnEl.className = `btn btn-sm btn-outline-primary like-btn`;
+          item.hasLike = false;
+          item.likes -= 1;
+        }).catch(err => {
+        });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 
 if (localStorage.getItem('isAuthenticated') !== 'true') {
@@ -89,8 +145,8 @@ function createCard(item) {
     const img = document.createElement("img");
     img.className = "poster";
     img.src = item.photo;
-    posterContainer.addEventListener('click', () => posterClick(item._id));
     posterContainer.appendChild(img);
+    posterContainer.addEventListener("click", () => posterClick(item._id));
     card.appendChild(posterContainer);
   }
 
@@ -118,10 +174,10 @@ function createCard(item) {
 
   const btn = document.createElement("button");
   btn.type = "button";
-  btn.className = `btn btn-sm ${item.liked ? "btn-danger" : "btn-outline-primary"} like-btn`;
-  btn.textContent = item.liked ? "אהבתי" : "סמן לייק";
+  btn.className = `btn btn-sm ${item.hasLike ? "btn-danger" : "btn-outline-primary"} like-btn`;
+  btn.textContent = item.hasLike ? "אהבתי" : "סמן לייק";
 
-  btn.addEventListener("click", () => toggleLike(item._id, btn));
+  btn.addEventListener("click", () => toggleLike(item, btn));
 
 
   const span = document.createElement("span");
