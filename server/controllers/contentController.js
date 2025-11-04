@@ -2,12 +2,13 @@
 import { ContentModel } from '../models/contentModel.js';
 import { EpisodesModel } from '../models/episodesModel.js';
 import { Int32, ObjectId } from 'mongodb';
-import { getDb } from '../db.js'
+import { getDb } from '../db.js';
+import { syncImdbRatingForContent } from '../services/ratingsService.js';
 
 // allow only schema fields
 const ALLOWED_FIELDS = [
   'name','type','year','photo','video','genres','description','cast','director',
-  'rating','likes','seasons','totalSeasons','totalEpisodes'
+  'rating','likes','seasons','totalSeasons','totalEpisodes','externalIds','ratings'
 ];
 
 const pick = (obj, allowed) =>
@@ -80,6 +81,18 @@ function validateSeasons(arr) {
       if (notes) clean.notes = notes;
     }
     arr[i] = clean;
+  }
+  return null;
+}
+
+//This is for the external IMDB ratings IDs
+function validateExternalIds(obj) {
+  if (obj == null) return null; // optional
+  if (typeof obj !== 'object') return 'externalIds must be an object';
+  for (const [k, v] of Object.entries(obj)) {
+    if (typeof v !== 'string' && typeof v !== 'number') {
+      return `externalIds.${k} must be a string or number`;
+    }
   }
   return null;
 }
@@ -300,7 +313,7 @@ async getById(req, res) {
       body.year = new Int32(y);
 
       const r = toNumber(body.rating);
-      if (r == null || r < 0 || r > 5)
+      if (r == null || r < 0 || r > 10)
         return res.status(400).json({ error: 'rating must be a number between 0 and 5' });
       body.rating = r;
 
@@ -321,6 +334,11 @@ async getById(req, res) {
 
       const castErr = validateCast(body.cast);
       if (castErr) return res.status(400).json({ error: castErr });
+
+      const externalIdsErr = validateExternalIds(body.externalIds);
+      if (externalIdsErr) return res.status(400).json({ error: externalIdsErr });
+
+
 
       // type-specific: series must have seasons; movie must not
       if (body.type === 'series') {
@@ -413,7 +431,7 @@ async getById(req, res) {
 
       if ('rating' in updates && updates.rating != null) {
         const r = toNumber(updates.rating);
-        if (r == null || r < 0 || r > 5)
+        if (r == null || r < 0 || r > 10)
           return res.status(400).json({ error: 'rating must be 0..5' });
         updates.rating = r;
       }
@@ -444,6 +462,12 @@ async getById(req, res) {
         const err = validateCast(updates.cast);
         if (err) return res.status(400).json({ error: err });
       }
+
+      if ('externalIds' in updates && updates.externalIds != null) {
+        const externalIdsErr = validateExternalIds(updates.externalIds);
+        if (externalIdsErr) return res.status(400).json({ error: externalIdsErr });
+      }
+
 
       if ('seasons' in updates) {
         if (updates.seasons != null) {
@@ -490,7 +514,6 @@ async getById(req, res) {
     }
   },
 
-  // 🗑️ DELETE /api/content/:id
 // 🗑️ DELETE /api/content/:id  — deletes Content + related Likes & Watches
   async remove(req, res) {
     try {
@@ -510,4 +533,74 @@ async getById(req, res) {
       return res.status(500).json({ error: 'Failed to delete content' });
     }
   },
+  
+  // ✅ POST /api/content/:id/sync-rating?source=imdb
+async syncRating(req, res) {
+  try {
+    const { id } = req.params;
+    const { source = 'imdb' } = req.query;
+    if (!ObjectId.isValid(String(id))) return res.status(400).json({ error: 'Invalid id' });
+    if (source !== 'imdb') return res.status(400).json({ error: 'Unsupported source; use source=imdb' });
+
+    const result = await syncImdbRatingForContent(id);
+    if (!result.ok) {
+      const map = { NOT_FOUND: 404, MISSING_IMDB_ID: 400, MISSING_OMDB_KEY: 500, NO_RATING: 404 };
+      return res.status(map[result.reason] || 500).json({ error: `Sync failed: ${result.reason}` });
+    }
+    return res.json({ ok: true, rating: result.rating, votes: result.votes });
+  } catch (err) {
+    console.error('syncRating error:', err);
+    return res.status(500).json({ error: 'Failed to sync rating' });
+  }
+},
+
+// ✅ POST /api/content/sync-ratings?source=imdb[&type=movie|series][&genre=[Action,Comedy]][&ids=tt1,tt2]
+async syncRatingsBatch(req, res) {
+  try {
+    const { source = 'imdb', type, genre, ids } = req.query;
+    if (source !== 'imdb') return res.status(400).json({ error: 'Unsupported source; use source=imdb' });
+
+    const db = await getDb();
+    const filter = {};
+    if (type) filter.type = type;
+
+    if (genre) {
+      const genres = String(genre).replace(/^\[|\]$/g, '').split(',').map(s => s.trim()).filter(Boolean);
+      if (genres.length) filter.genres = { $in: genres };
+    }
+
+    if (ids) {
+      // allow targeting by IMDb ID list
+      const imdbIds = String(ids).split(',').map(s => s.trim()).filter(Boolean);
+      if (imdbIds.length) filter['externalIds.imdb'] = { $in: imdbIds };
+    } else {
+      // require presence of imdb id
+      filter['externalIds.imdb'] = { $exists: true, $ne: null };
+    }
+
+    const contents = await db.collection('Content').find(filter, { projection: { _id: 1 } }).toArray();
+    const idsToSync = contents.map(c => c._id.toString());
+
+    const results = [];
+    for (const cid of idsToSync) {
+      // naive throttle to be nice to OMDb
+      // eslint-disable-next-line no-await-in-loop
+      const r = await syncImdbRatingForContent(cid);
+      results.push({ id: cid, ...r });
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise(r => setTimeout(r, 250)); // ~4 req/s
+    }
+
+    const summary = {
+      total: results.length,
+      ok: results.filter(x => x.ok).length,
+      failed: results.filter(x => !x.ok).length
+    };
+    return res.json({ summary, results });
+  } catch (err) {
+    console.error('syncRatingsBatch error:', err);
+    return res.status(500).json({ error: 'Failed to batch sync ratings' });
+  }
+},
+
 };
