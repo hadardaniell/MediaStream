@@ -203,12 +203,54 @@ export const ContentController = {
     }
   },
 
+  async getPopular(req, res) {
+    try {
+      const {
+        mode = 'likes',
+        limit = '10',
+        type,
+        genre,
+        minRating,
+        wLikes,
+        wRating
+      } = req.query;
+
+  
+      const genres = genre
+        ? String(genre)
+            .replace(/^\[|\]$/g, '')
+            .split(',')
+            .map(g => g.trim())
+            .filter(Boolean)
+        : undefined;
+
+      const data = await ContentModel.getPopular({
+        mode,
+        limit: Number(limit),
+        type,
+        genres,
+        minRating: minRating !== undefined ? Number(minRating) : undefined,
+        wLikes: wLikes !== undefined ? Number(wLikes) : undefined,
+        wRating: wRating !== undefined ? Number(wRating) : undefined
+      });
+
+      return res.json(data);
+    } catch (err) {
+      console.error('getPopular error:', err);
+      return res.status(500).json({ error: 'Failed to fetch popular content' });
+    }
+  },
+
 // ✅ GET /api/content/:id[?include=episodes,episodesCount]
 async getById(req, res) {
   try {
-    const item = await ContentModel.getById(req.params.id);
-    if (!item) return res.status(404).json({ error: 'Content not found' });
+    const { id } = req.params;
+    if (!ObjectId.isValid(String(id))) {
+      return res.status(400).json({ error: 'Invalid id' });
+    }
 
+    const item = await ContentModel.getById(id);
+    if (!item) return res.status(404).json({ error: 'Content not found' });
     // Parse include list: e.g., ?include=episodes or ?include=episodes,episodesCount
     const include = String(req.query.include || '')
       .split(',')

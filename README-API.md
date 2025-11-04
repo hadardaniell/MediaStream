@@ -22,10 +22,10 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 | Method | Path | Description |
 |--------|------|-------------|
 | **GET** | `/api/content` | Get all content (supports filters & sort) |
-|  | └ `?type=movie|series` – Filter by type |
-|  | └ `?genre=Comedy` – Filter by genre |
+|  | └ `?type=movie\|series` – Filter by type |
+|  | └ `?genre=[Action,Comedy]` – Filter by one or more genres (OR condition) |
 |  | └ `?year=2020` – Filter by year |
-|  | └ `?sort=year&order=asc|desc` – Sort results |
+|  | └ `?sortBy=rating\|year\|likes` – Sort results |
 | **GET** | `/api/content/:id` | Get content by ID |
 |  | └ `?include=episodes` – Include episodes (for series) |
 |  | └ `?include=episodesCount` – Include season/episode counts |
@@ -33,9 +33,17 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 |  | └ Adds `hasLike` → `true` if profile liked this content |
 |  | └ Adds `watch` → `{ status, progressSeconds, ... }` describing the profile’s viewing progress |
 |  | └ Returns `"unstarted"` status if no watch record exists |
+| **GET** | `/api/content/popular` | Get the most popular content based on **likes** and/or **rating** |
+|  | └ `?mode=likes\|rating\|mixed` – Ranking mode (`mixed` combines both) |
+|  | └ `?limit=10` – Limit the number of results (default 10) |
+|  | └ `?type=movie\|series` – Filter by type |
+|  | └ `?genre=[Action,Comedy]` – Filter by one or more genres (OR condition) |
+|  | └ `?minRating=3.5` – Minimum rating threshold |
+|  | └ `?wLikes=1&wRating=2` – Weights for likes/rating when `mode=mixed` |
 | **POST** | `/api/content` | Create new content *(admin only)* |
 | **PATCH** | `/api/content/:id` | Update content *(admin only)* |
 | **DELETE** | `/api/content/:id` | Delete content *(admin only)* |
+
 
 ---
 
