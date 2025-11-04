@@ -491,17 +491,22 @@ async getById(req, res) {
   },
 
   // 🗑️ DELETE /api/content/:id
+// 🗑️ DELETE /api/content/:id  — deletes Content + related Likes & Watches
   async remove(req, res) {
     try {
       const { id } = req.params;
-      if (!ObjectId.isValid(String(id))) return res.status(400).json({ error: 'Invalid id' });
+      if (!ObjectId.isValid(String(id))) {
+        return res.status(400).json({ error: 'Invalid id' });
+      }
 
-      const ok = await ContentModel.deleteById(id);
-      if (!ok) return res.status(404).json({ error: 'Content not found' });
+      const outcome = await ContentModel.deleteCascadeById(id);
+      if (!outcome.deleted) {
+        return res.status(404).json({ error: 'Content not found' });
+      }
 
       return res.status(204).send();
     } catch (err) {
-      console.error('❌ remove:', err);
+      console.error('❌ remove (cascade):', err);
       return res.status(500).json({ error: 'Failed to delete content' });
     }
   },

@@ -117,6 +117,28 @@ export const ContentModel = {
     return this.getById(id);
   },
 
+  //Delete with Cascade
+  async deleteCascadeById(id) {
+    const db = await getDb();
+    const cid = new ObjectId(String(id));
+
+    // Delete the content first; if it doesn't exist, stop.
+    const res = await db.collection('Content').deleteOne({ _id: cid });
+    if (res.deletedCount !== 1) {
+      return { deleted: false, likesDeleted: 0, watchesDeleted: 0 };
+    }
+
+    // Best-effort cascade
+    const likes = await db.collection('Likes').deleteMany({ contentId: cid });
+    const watches = await db.collection('watches').deleteMany({ contentId: cid });
+
+    return {
+      deleted: true,
+      likesDeleted: likes.deletedCount ?? 0,
+      watchesDeleted: watches.deletedCount ?? 0
+    };
+  },
+
   //Delete one by ID 
   async deleteById(id)
   {
