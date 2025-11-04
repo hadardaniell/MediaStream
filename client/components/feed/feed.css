@@ -190,9 +190,11 @@
         margin: 0 !important;
     }
 
-    .poster-container{
+    .poster-container {
         display: flex;
         justify-content: center;
+        cursor: pointer;
+        padding-top: 0.5em;
     }
 
     .media-content {
@@ -258,7 +260,7 @@
         flex-direction: column;
     }
 
-    h5{
+    h5 {
         font-size: 15px !important;
     }
 
@@ -289,6 +291,6 @@
         width: 100%;
     }
 
-    .row{
+    .row {
         width: 100%;
     }

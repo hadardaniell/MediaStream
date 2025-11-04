@@ -1,4 +1,4 @@
-// const { it } = require("node:test");
+const activeProfileId = localStorage.getItem('activeProfileId');
 
 document.addEventListener("DOMContentLoaded", async () => {
   const user = localStorage.getItem("userId");
@@ -7,11 +7,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const allContent = await fetch("http://localhost:3000/api/content")
+  const allContent = await fetch("http://localhost:3000/api/content/profile/" + activeProfileId, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  })
     .then(res => res.json())
     .catch(() => []);
 
-  renderSection("continueWatching", getContinueWatching(allContent));
+  renderSection("continue-watching", getContinueWatching(allContent));
   renderSection("recommended", getRecommendations(allContent));
   renderSection("popular", getPopular(allContent));
   renderNewByGenre(allContent);
@@ -23,22 +26,37 @@ function posterClick(id) {
 
 
 // Toggle לייק + פנייה לשרת
-async function toggleLike(id, btnEl) {
-  const activeProfileId = localStorage.getItem("activeProfileId");
-
+async function toggleLike(item, btnEl) {
   try {
-    const res = await fetch(`http://localhost:3000/api/likes`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ profileId: activeProfileId, contentId: id }),
-    });
-    if (!res.ok) throw new Error("Failed");
-
-    const data = await res.json(); // מחזיר likes ו־liked (true/false)
-    const card = btnEl.closest(".card");
-    card.querySelector(".count").textContent+= 1;
-    btnEl.textContent = "אהבתי  ";
-    btnEl.className = `btn btn-sm btn-danger like-btn`;
+    if (!item.hasLike) {
+      const res = await fetch(`http://localhost:3000/api/likes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
+      }).then(
+        res => res.json()).then(data => {
+          const card = btnEl.closest(".card");
+          card.querySelector(".count").textContent = item.likes + 1;
+          btnEl.className = `btn btn-sm btn-danger like-btn`;
+          item.hasLike = true;
+          item.likes += 1;
+        }).catch(err => {
+        });
+    } else {
+      const res = await fetch(`http://localhost:3000/api/likes`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
+      }).then(
+        res => res.json()).then(data => {
+          const card = btnEl.closest(".card");
+          card.querySelector(".count").textContent = item.likes - 1;
+          btnEl.className = `btn btn-sm btn-outline-primary like-btn`;
+          item.hasLike = false;
+          item.likes -= 1;
+        }).catch(err => {
+        });
+    }
   } catch (err) {
     console.error(err);
   }
@@ -58,6 +76,8 @@ function escapeHtml(s) {
 }
 
 function renderSection(containerId, data) {
+  if (!data || data.length === 0) return;
+
   const container = document.getElementById(containerId);
   container.innerHTML = "";
   data.forEach((item) => {
@@ -110,10 +130,10 @@ function createCard(item) {
 
   const btn = document.createElement("button");
   btn.type = "button";
-  btn.className = `btn btn-sm ${item.liked ? "btn-danger" : "btn-outline-primary"} like-btn`;
-  btn.textContent = item.liked ? "אהבתי" : "סמן לייק";
+  btn.className = `btn btn-sm ${item.hasLike ? "btn-danger" : "btn-outline-primary"} like-btn`;
+  btn.textContent = item.hasLike ? "אהבתי" : "סמן לייק";
 
-  btn.addEventListener("click", () => toggleLike(item._id, btn));
+  btn.addEventListener("click", () => toggleLike(item, btn));
 
 
   const span = document.createElement("span");
@@ -134,12 +154,36 @@ function createCard(item) {
 
 // המשך צפייה (לשימוש בעתיד עם API אמיתי)
 function getContinueWatching(all) {
-  return all.slice(0, 5);
+  const continueWatchingData = all.filter((content) => content.status === "in_progress").slice(0, 6);
+  if (continueWatchingData.length === 0) {
+    document.getElementById("continue-watching-container").style.display = "none";
+    return [];
+  }
+  return continueWatchingData;
 }
 
 // המלצות לפי דירוג
 function getRecommendations(all) {
-  return all.filter((x) => x.rating >= 4.5).slice(0, 6);
+  const likedData = all.filter((x) => x.hasLike);
+  if (likedData.length === 0) {
+    return all.slice(0, 6);
+  }
+  const favGenres = all.filter((x) => x.hasLike).map(likedContent => likedContent.genres).flat();
+
+  const freqMap = favGenres.reduce((acc, genre) => {
+    acc[genre] = (acc[genre] || 0) + 1;
+    return acc;
+  }, {});
+
+  const sortedByFrequency = [...favGenres].sort((a, b) => {
+    const diff = freqMap[b] - freqMap[a];
+    if (diff !== 0) return diff;
+    return a.localeCompare(b, 'he'); // במקרה של שוויון — לפי אלפבית
+  });
+  const recommended = all.filter((content) => {
+    return content.hasLike === false && content.genres.some(g => sortedByFrequency.includes(g));
+  }).slice(0, 6);
+  return recommended;
 }
 
 // פופולריים
