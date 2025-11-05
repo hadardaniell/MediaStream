@@ -109,8 +109,29 @@ export const ContentController = {
       const pid = new ObjectId(profileId);
 
       const db = await getDb();
+      const filter = {};
+      const sort = {};
+
+        if (req.query.type) filter.type = req.query.type;
+
+        if (req.query.genre) {
+      const genres = String(req.query.genre)
+        .replace(/^\[|\]$/g, '')
+        .split(',')
+        .map(g => g.trim())
+        .filter(Boolean);
+        filter.genres = { $in: genres }; // OR condition
+      }
+
+        if (req.query.year) filter.year = parseInt(req.query.year, 10);
+        if (req.query.sortBy === 'rating') sort.rating = -1;
+        if (req.query.sortBy === 'year')   sort.year   = -1;
+        if (req.query.sortBy === 'likes')  sort.likes  = -1;
       // Adjust collection names if yours differ (e.g., 'Likes' vs 'likes', 'Watches' vs 'watches')
       const cursor = db.collection('Content').aggregate([
+        Object.keys(filter).length ? { $match: filter } : null,
+        Object.keys(sort).length ? { $sort: sort } : null,
+        
         // Join Likes for *this* profile
         {
           $lookup: {
@@ -178,7 +199,7 @@ export const ContentController = {
         { $project: { likesForProfile: 0, watchForProfile: 0 } },
         // Optional: sorting (e.g., newest first, or by rating)
         // { $sort: { year: -1 } }
-      ]);
+      ].filter(Boolean)); // remove null stages
 
       const results = await cursor.toArray();
       return res.json(results);
