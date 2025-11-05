@@ -267,3 +267,11 @@ info-bar {
     display: flex;
     gap: 1em;
 }
+
+.similar-item {
+    max-width: 135px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: center;
+}
