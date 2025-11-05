@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
       .then(res => res.json()).then(data => {
         contentsData = data.filter(item => item.type === (mediaType === 'movies' ? 'movie' : 'series'));
-        renderItems(data);
+        renderItems(contentsData);
       }
       )
       .catch(() => []);
