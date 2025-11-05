@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+   localStorage.setItem("isAuthenticated", false);
   let loginMode = true;
   const form = document.getElementById("login-form");
 
@@ -53,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (!res.ok) throw new Error("התחברות נכשלה");
         const data = await res.json();
-        localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("isAuthenticated", true);
         localStorage.setItem('userRole', 'user');
         localStorage.setItem('userEmail', document.getElementById("email").value);
         localStorage.setItem('userId', data._id);

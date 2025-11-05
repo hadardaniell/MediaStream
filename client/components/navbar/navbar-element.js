@@ -13,7 +13,22 @@ class Navbar extends HTMLElement {
         this.initLogic();
     }
 
-    initLogic() {
+    async initLogic() {
+        this.shadowRoot.querySelector('.add-media-btn').style.display = 'none';
+        let userData = null;
+        await fetch("http://localhost:3000/api/auth/me", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        }).then(res => res.json()).then(data => {
+            userData = data;
+            userData.roles == 'admin' ?
+                this.shadowRoot.querySelector('.add-media-btn').style.display = 'flex' :
+                this.shadowRoot.querySelector('.add-media-btn').style.display = 'none';
+        }
+        ).catch(err => {
+            console.error('Error fetching user data:', err);
+        });
+
         const searchBtn = this.shadowRoot.querySelector('#search-btn');
         if (searchBtn) {
             searchBtn.addEventListener('click', () => {
@@ -34,6 +49,13 @@ class Navbar extends HTMLElement {
                     localStorage.removeItem("userEmail");
                     window.location.href = '/login';
                 });
+            });
+        }
+
+        const addMediaBtn = this.shadowRoot.querySelector('.add-media-btn');
+        if (addMediaBtn) {
+            addMediaBtn.addEventListener('click', () => {
+                window.location.href = '/add-media';
             });
         }
 
