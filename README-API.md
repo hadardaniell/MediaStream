@@ -122,6 +122,19 @@ curl -i -X POST http://localhost:3000/api/uploads/poster \
   -H "X-Filename: test-poster.jpg" \
   --data-binary @/Users/asaf/Desktop/test-poster.jpg
 
+  | Method | Path | Description |
+|--------|------|-------------|
+| **POST** | `/api/content/:id/sync-rating` | **Admin:** Sync rating for a single content item from OMDb (IMDb data). Updates `rating` (0–10) and `ratings.imdb` metadata. |
+|  | └ `?source=imdb` – Data source (currently only `imdb`) |
+|  | └ `?debug=true` – Include failure reason in response (helpful while testing) |
+| **POST** | `/api/content/sync-ratings` | **Admin:** Batch sync ratings. Uses `externalIds.imdb` when present; can also auto-resolve by title/year if enabled in service. |
+|  | └ `?source=imdb` – Data source (currently only `imdb`) |
+|  | └ `?type=movie\|series` – Filter by type |
+|  | └ `?genre=[Action,Comedy]` – Filter by one or more genres (OR condition) |
+|  | └ `?ids=tt1375666,tt4154796` – Limit to specific IMDb IDs |
+|  | └ `?includeMissingImdb=true` – Include items **without** IMDb ID (service tries title/year lookup and saves the ID) |
+
+
 
 
 
