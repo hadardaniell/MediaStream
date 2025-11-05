@@ -1,8 +1,7 @@
 const activeProfileId = localStorage.getItem('activeProfileId');
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const user = localStorage.getItem("userId");
-  if (!user) {
+  if (!Boolean(localStorage.getItem("isAuthenticated"))) {
     window.location.href = "/login";
     return;
   }
@@ -38,6 +37,7 @@ async function toggleLike(item, btnEl) {
           const card = btnEl.closest(".card");
           card.querySelector(".count").textContent = item.likes + 1;
           btnEl.className = `btn btn-sm btn-danger like-btn`;
+          btnEl.textContent = "אהבתי";
           item.hasLike = true;
           item.likes += 1;
         }).catch(err => {
@@ -52,6 +52,7 @@ async function toggleLike(item, btnEl) {
           const card = btnEl.closest(".card");
           card.querySelector(".count").textContent = item.likes - 1;
           btnEl.className = `btn btn-sm btn-outline-primary like-btn`;
+          btnEl.textContent = "סמן לייק";
           item.hasLike = false;
           item.likes -= 1;
         }).catch(err => {
@@ -89,7 +90,6 @@ function createCard(item) {
   const count = item.likes || 0;
 
   const col = document.createElement("div");
-  col.className = "col-6 col-md-3 col-lg-2";
 
   const card = document.createElement("div");
   card.className = "card mb-3";

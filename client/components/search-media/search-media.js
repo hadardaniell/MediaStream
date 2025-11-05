@@ -2,17 +2,22 @@ let contentsData = [];
 const activeProfileId = localStorage.getItem('activeProfileId');
 
 document.addEventListener('DOMContentLoaded', async () => {
+  if (!Boolean(localStorage.getItem("isAuthenticated"))) {
+    window.location.href = "/login";
+    return;
+  }
+
   const urlParams = new URLSearchParams(window.location.search);
   const mediaType = urlParams.get('mediaType');
   if (mediaType) {
     document.getElementById('search').placeholder = mediaType === 'movies' ? 'חיפוש סרטים...' : 'חיפוש סדרות...';
 
-    await fetch("http://localhost:3000/api/content/profile/" + activeProfileId + '?type=' + mediaType, {
+    await fetch("http://localhost:3000/api/content/profile/" + activeProfileId, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then(res => res.json()).then(data => {
-        contentsData = data;
+        contentsData = data.filter(item => item.type === (mediaType === 'movies' ? 'movie' : 'series'));
         renderItems(data);
       }
       )
@@ -33,15 +38,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
 
-// לייקים
-document.getElementById('content').addEventListener('click', (e) => {
-  const btn = e.target.closest('.like-btn');
-  if (!btn) return;
-  const card = btn.closest('.card');
-  const id = card.dataset.id;
-  toggleLike(id, btn);
-  burstAt(btn, likedMap[id] ? '❤️' : '💔');
-});
+  // לייקים
+  // document.getElementById('content').addEventListener('click', (e) => {
+  //   const btn = e.target.closest('.like-btn');
+  //   if (!btn) return;
+  //   const card = btn.closest('.card');
+  //   const id = card.dataset.id;
+  //   toggleLike(id, btn);
+  //   burstAt(btn, likedMap[id] ? '❤️' : '💔');
+  // });
 
 });
 
@@ -59,6 +64,7 @@ async function toggleLike(item, btnEl) {
           const card = btnEl.closest(".card");
           card.querySelector(".count").textContent = item.likes + 1;
           btnEl.className = `btn btn-sm btn-danger like-btn`;
+          btnEl.textContent = "אהבתי";
           item.hasLike = true;
           item.likes += 1;
         }).catch(err => {
@@ -73,6 +79,7 @@ async function toggleLike(item, btnEl) {
           const card = btnEl.closest(".card");
           card.querySelector(".count").textContent = item.likes - 1;
           btnEl.className = `btn btn-sm btn-outline-primary like-btn`;
+          btnEl.textContent = "סמן לייק";
           item.hasLike = false;
           item.likes -= 1;
         }).catch(err => {
@@ -133,7 +140,6 @@ function createCard(item) {
   const count = item.likes || 0;
 
   const col = document.createElement("div");
-  col.className = "col-6 col-md-3 col-lg-2";
 
   const card = document.createElement("div");
   card.className = "card mb-3";
@@ -194,20 +200,40 @@ function createCard(item) {
 }
 
 
-function toggleLike(id, btnEl) {
-  const nowLiked = !likedMap[id];
-  likedMap[id] = nowLiked;
-
-  likeCounts[id] = (likeCounts[id] ?? 0) + (nowLiked ? 1 : -1);
-  if (likeCounts[id] < 0) likeCounts[id] = 0;
-
-  saveJSON(LS_LIKED, likedMap);
-  saveJSON(LS_LIKE_COUNTS, likeCounts);
-
-  const card = btnEl.closest('.card');
-  card.querySelector('.count').textContent = likeCounts[id];
-  btnEl.setAttribute('aria-pressed', String(nowLiked));
-  btnEl.textContent = nowLiked ? 'אהבתי' : 'סמן לייק';
+async function toggleLike(item, btnEl) {
+  try {
+    if (!item.hasLike) {
+      const res = await fetch(`http://localhost:3000/api/likes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
+      }).then(
+        res => res.json()).then(data => {
+          const card = btnEl.closest(".card");
+          card.querySelector(".count").textContent = item.likes + 1;
+          btnEl.className = `btn btn-sm btn-danger like-btn`;
+          item.hasLike = true;
+          item.likes += 1;
+        }).catch(err => {
+        });
+    } else {
+      const res = await fetch(`http://localhost:3000/api/likes`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
+      }).then(
+        res => res.json()).then(data => {
+          const card = btnEl.closest(".card");
+          card.querySelector(".count").textContent = item.likes - 1;
+          btnEl.className = `btn btn-sm btn-outline-primary like-btn`;
+          item.hasLike = false;
+          item.likes -= 1;
+        }).catch(err => {
+        });
+    }
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 function burstAt(el, glyph = '❤️') {

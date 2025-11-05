@@ -65,3 +65,42 @@ nav {
     border-radius: 5px !important;
     padding: 0.5em 1em !important;
 }
+
+.plus-icon {
+    /* display: inline-block; */
+    transition: transform 0.5s ease-in-out; /* מהירות הסיבוב */
+}
+
+.plus-icon:hover {
+    transform: rotate(360deg);
+}
+
+.disney-gold {
+    width: fit-content;
+    font-weight: bold;
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FFF8DC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.8px;
+    color: var(--primary);
+    margin: 0;
+    display: flex;
+}
+
+.left-side-wrapper{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.add-media-btn{
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    cursor: pointer;
+}
