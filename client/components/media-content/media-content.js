@@ -335,6 +335,10 @@ createSimilarContentSection = (similarContents) => {
   return similarContent;
 }
 
+document.querySelector(".close-icon").addEventListener("click", () => {
+  window.history.back();
+});
+
 // document.querySelectorAll('.similar-item').forEach(item => {
 //   item.addEventListener('click', () => {
 //     const id = item.dataset.id; // לוקח את הערך מ-data-id
