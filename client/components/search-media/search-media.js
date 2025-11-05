@@ -36,22 +36,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       )
       .catch(() => []);
   }
-
-
-  // לייקים
-  // document.getElementById('content').addEventListener('click', (e) => {
-  //   const btn = e.target.closest('.like-btn');
-  //   if (!btn) return;
-  //   const card = btn.closest('.card');
-  //   const id = card.dataset.id;
-  //   toggleLike(id, btn);
-  //   burstAt(btn, likedMap[id] ? '❤️' : '💔');
-  // });
-
 });
 
+function renderItems(items) {
+  const contentEl = document.getElementById('content');
+  contentEl.innerHTML = '';
 
-// Toggle לייק + פנייה לשרת
+  if (!items.length) {
+    contentEl.innerHTML = `<div class="no-results">לא נמצאו תוצאות</div>`;
+    return;
+  }
+
+  items.forEach(item => {
+    const card = createCard(item);
+    contentEl.appendChild(card);
+  });
+}
+
+
+function posterClick(id) {
+  window.location.href = `/media-content/${id}`;
+}
+
 async function toggleLike(item, btnEl) {
   try {
     if (!item.hasLike) {
@@ -88,51 +94,6 @@ async function toggleLike(item, btnEl) {
   } catch (err) {
     console.error(err);
   }
-}
-
-
-if (localStorage.getItem('isAuthenticated') !== 'true') {
-  window.location.href = '/login';
-}
-
-// ---- LocalStorage keys ----
-const LS_LIKE_COUNTS = 'feed.likeCounts';
-const LS_LIKED = 'feed.liked';
-
-const loadJSON = (k, fallback) => { try { return JSON.parse(localStorage.getItem(k)) ?? fallback; } catch { return fallback; } };
-const saveJSON = (k, v) => localStorage.setItem(k, JSON.stringify(v));
-
-// init counts (seed on first run)
-let likeCounts = loadJSON(LS_LIKE_COUNTS, null);
-if (!likeCounts) {
-  likeCounts = {};
-  ITEMS.forEach(it => { likeCounts[it.id] = it.likes; });
-  saveJSON(LS_LIKE_COUNTS, likeCounts);
-}
-let likedMap = loadJSON(LS_LIKED, {});
-
-// document.addEventListener('DOMContentLoaded', () => {
-//   renderItems(ITEMS);
-// });
-
-function renderItems(items) {
-  const contentEl = document.getElementById('content');
-  contentEl.innerHTML = '';
-
-  if (!items.length) {
-    contentEl.innerHTML = `<div class="no-results">לא נמצאו תוצאות</div>`;
-    return;
-  }
-
-  items.forEach(item => {
-    const card = createCard(item);
-    contentEl.appendChild(card);
-  });
-}
-
-
-function posterClick(id) {
-  window.location.href = `/media-content/${id}`;
 }
 
 
@@ -200,41 +161,7 @@ function createCard(item) {
 }
 
 
-async function toggleLike(item, btnEl) {
-  try {
-    if (!item.hasLike) {
-      const res = await fetch(`http://localhost:3000/api/likes`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
-      }).then(
-        res => res.json()).then(data => {
-          const card = btnEl.closest(".card");
-          card.querySelector(".count").textContent = item.likes + 1;
-          btnEl.className = `btn btn-sm btn-danger like-btn`;
-          item.hasLike = true;
-          item.likes += 1;
-        }).catch(err => {
-        });
-    } else {
-      const res = await fetch(`http://localhost:3000/api/likes`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
-      }).then(
-        res => res.json()).then(data => {
-          const card = btnEl.closest(".card");
-          card.querySelector(".count").textContent = item.likes - 1;
-          btnEl.className = `btn btn-sm btn-outline-primary like-btn`;
-          item.hasLike = false;
-          item.likes -= 1;
-        }).catch(err => {
-        });
-    }
-  } catch (err) {
-    console.error(err);
-  }
-}
+
 
 function burstAt(el, glyph = '❤️') {
   const fxLayer = document.getElementById('fx-layer');
