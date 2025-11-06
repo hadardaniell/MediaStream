@@ -6,11 +6,11 @@ if (profileId) {
     profile = profiles.find(p => p.id === profileId);
     if (!profile) {
         alert('פרופיל לא נמצא!');
-        window.location.href = '../manage-profiles/manage-profiles.html';
+        window.location.href = '/manage-profiles';
     }
 } else {
     // new profile
-    profile = { id: Date.now(), name: '', img: '../assets/mini.png' };
+    profile = { id: Date.now(), name: '', img: '/client/assets/mini.png' };
 }
 
 const profileName = document.getElementById('profileName');
@@ -57,13 +57,13 @@ saveBtn.addEventListener('click', () => {
 
     localStorage.setItem('profiles', JSON.stringify(profiles));
     alert(`הפרופיל "${profile.name}" נשמר בהצלחה!`);
-    window.location.href = '../manage-profiles/manage-profiles.html';
+    window.location.href = '/manage-profiles';
 });
 
 deleteBtn.addEventListener('click', () => {
     if (profileId && confirm(`בטוח שאת רוצה למחוק את הפרופיל "${profile.name}"?`)) {
         profiles = profiles.filter(p => p.id !== profileId);
         localStorage.setItem('profiles', JSON.stringify(profiles));
-        window.location.href = '../manage-profiles/manage-profiles.html';
+        window.location.href = '/manage-profiles';
     }
 });
