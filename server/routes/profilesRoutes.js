@@ -7,10 +7,14 @@ import {
   updateProfile,
   deleteProfile
 } from '../controllers/profilesController.js';
+import { attachUser } from '../middlewares/sessionMiddleware.js';
 import { requireAuth } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
+//
+router.use(attachUser); 
+//
 router.use(requireAuth);
 
 router.get('/', listProfiles);
