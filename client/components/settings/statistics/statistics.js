@@ -32,15 +32,15 @@ new Chart(ctx2, {
 });
 
 function goTo(page) {
-  switch(page) {
-    case 'manage-account':
-      window.location.href = '../manage-account/manage-account.html';
+  switch (page) {
+    case "manage-account":
+      window.location.href = "/manage-account";
       break;
-    case 'manage-profiles':
-      window.location.href = '../manage-profiles/manage-profiles.html';
+    case "manage-profiles":
+      window.location.href = "/manage-profiles";
       break;
-    case 'statistics':
-      window.location.href = '../statistics/statistics.html';
+    case "statistics":
+      window.location.href = "/statistics";
       break;
   }
 }
