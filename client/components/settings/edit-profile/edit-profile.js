@@ -1,4 +1,7 @@
-let profiles = JSON.parse(localStorage.getItem('profiles')) || [];
+ let profiles = JSON.parse(localStorage.getItem('profiles')) || [];
+// let profiles = await fetch("http://localhost:3000/api/profiles", {
+//   credentials: "include",
+// }).then(res => res.json());
 let profileId = Number(localStorage.getItem('editProfileId'));
 
 let profile;
@@ -55,11 +58,19 @@ saveBtn.addEventListener('click', () => {
         profiles.push(profile);
     }
 
-    localStorage.setItem('profiles', JSON.stringify(profiles));
+     localStorage.setItem('profiles', JSON.stringify(profiles));
+    // await fetch("http://localhost:3000/api/profiles", {
+    // method: "POST",
+    // headers: { "Content-Type": "application/json" },
+    // credentials: "include",
+    // body: JSON.stringify(profile),
+    // });
+
     alert(`הפרופיל "${profile.name}" נשמר בהצלחה!`);
     window.location.href = '/manage-profiles';
 });
 
+//need to chage
 deleteBtn.addEventListener('click', () => {
     if (profileId && confirm(`בטוח שאת רוצה למחוק את הפרופיל "${profile.name}"?`)) {
         profiles = profiles.filter(p => p.id !== profileId);
