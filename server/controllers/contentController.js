@@ -412,6 +412,216 @@ async getById(req, res) {
     }
   },
 
+  //create series with episodes:
+
+    async createSeriesWithEpisodes(req, res) {
+    const atomic = String(req.query.atomic ?? 'true') !== 'false'; // default true
+
+    try {
+      // -----------------------------
+      // 1) VALIDATE & BUILD CONTENT DOC (mirrors create())
+      // -----------------------------
+      const body = pick(req.body?.content, ALLOWED_FIELDS);
+      if (!body) return res.status(400).json({ error: 'Provide content in body.content' });
+
+      if (body.name == null || trimStr(body.name) === '') return res.status(400).json({ error: 'name is required' });
+      if (body.type == null || !TYPE_ENUM.includes(String(body.type))) return res.status(400).json({ error: 'type must be "series" or "movie"' });
+      if (String(body.type) !== 'series') return res.status(400).json({ error: 'type must be "series" for this endpoint' });
+      if (body.year == null) return res.status(400).json({ error: 'year is required' });
+      if (body.photo == null || !PHOTO_RE.test(String(body.photo))) return res.status(400).json({ error: 'photo must be a valid URL or path ending with .png/.jpg/.jpeg/.webp' });
+      if (body.video == null || !VIDEO_RE.test(String(body.video))) return res.status(400).json({ error: 'Video must be a valid URL or path ending with .mp4' });
+      if (body.genres == null) return res.status(400).json({ error: 'genres is required' });
+      if (body.description == null || trimStr(body.description) === '') return res.status(400).json({ error: 'description is required' });
+      if (body.cast == null) return res.status(400).json({ error: 'cast is required' });
+      if (body.director == null) return res.status(400).json({ error: 'director is required' });
+      if (body.rating == null) return res.status(400).json({ error: 'rating is required' });
+
+      body.name = trimStr(body.name);
+      body.type = String(body.type);
+
+      const y = toInt(body.year);
+      if (y == null || y < 1888 || y > 2100)
+        return res.status(400).json({ error: 'year must be an integer between 1888 and 2100' });
+      body.year = new Int32(y);
+
+      const r = toNumber(body.rating);
+      if (r == null || r < 0 || r > 10)
+        return res.status(400).json({ error: 'rating must be a number between 0 and 10' });
+      body.rating = r;
+
+      body.photo = String(body.photo);
+      body.video = String(body.video);
+
+      if (!Array.isArray(body.genres)) body.genres = [String(body.genres)];
+      {
+        const err = validateGenres(body.genres);
+        if (err) return res.status(400).json({ error: err });
+      }
+
+      {
+        const err = validateDirector(body.director);
+        if (err) return res.status(400).json({ error: err });
+        body.director = {
+          name: trimStr(body.director.name),
+          ...(body.director.wikipedia ? { wikipedia: String(body.director.wikipedia) } : {})
+        };
+      }
+
+      {
+        const err = validateCast(body.cast);
+        if (err) return res.status(400).json({ error: err });
+      }
+
+      {
+        const err = validateExternalIds(body.externalIds);
+        if (err) return res.status(400).json({ error: err });
+      }
+
+      if (body.seasons == null) return res.status(400).json({ error: 'seasons is required for type=series' });
+      {
+        const err = validateSeasons(body.seasons);
+        if (err) return res.status(400).json({ error: err });
+        body.seasons = body.seasons.map((s) => ({
+          seasonNumber: new Int32(s.seasonNumber),
+          episodesCount: new Int32(s.episodesCount),
+          ...(s.year != null ? { year: new Int32(s.year) } : {}),
+          ...(s.notes ? { notes: s.notes } : {})
+        }));
+      }
+
+      if (body.totalSeasons == null) {
+        body.totalSeasons = new Int32(body.seasons.length);
+      } else {
+        const ts = toInt(body.totalSeasons);
+        if (ts == null || ts < 1) return res.status(400).json({ error: 'totalSeasons must be int >= 1' });
+        body.totalSeasons = new Int32(ts);
+      }
+
+      if (body.totalEpisodes == null) {
+        const computed = body.seasons.reduce((a, s) => a + s.episodesCount.valueOf(), 0);
+        body.totalEpisodes = new Int32(computed);
+      } else {
+        const te = toInt(body.totalEpisodes);
+        if (te == null || te < 1) return res.status(400).json({ error: 'totalEpisodes must be int >= 1' });
+        body.totalEpisodes = new Int32(te);
+      }
+
+      body.likes = new Int32(0);
+
+      // -----------------------------
+      // 2) CREATE CONTENT
+      // -----------------------------
+      const createdContent = await ContentModel.create(body);
+
+      // -----------------------------
+      // 3) BULK CREATE EPISODES (reuse your bulk pattern)
+      // -----------------------------
+      const episodesPayload = Array.isArray(req.body?.episodes) ? req.body.episodes : [];
+      if (episodesPayload.length === 0) {
+        return res.status(201).json({
+          content: createdContent,
+          episodes: { ok: true, insertedCount: 0, rejectedCount: 0, inserted: [], rejects: [] }
+        });
+      }
+
+      const contentId = createdContent._id;
+      const now = new Date();
+      const seen = new Set();
+      const docs = [];
+      const rejects = [];
+
+      for (const [i, ep] of episodesPayload.entries()) {
+        const { seasonNumber, episodeNumber, shortDescription, video } = ep ?? {};
+        const key = `${seasonNumber}#${episodeNumber}`;
+
+        if (!seasonNumber || !episodeNumber || !shortDescription || !video) {
+          rejects.push({ index: i, error: 'Missing required fields (seasonNumber, episodeNumber, shortDescription, video)' });
+          continue;
+        }
+        if (seen.has(key)) {
+          rejects.push({ index: i, error: 'Duplicate in request (same seasonNumber+episodeNumber)' });
+          continue;
+        }
+        seen.add(key);
+
+        docs.push({
+          contentId: new ObjectId(String(contentId)),
+          seasonNumber: new Int32(Number(seasonNumber)),
+          episodeNumber: new Int32(Number(episodeNumber)),
+          shortDescription: String(shortDescription),
+          video: String(video),
+          createdAt: now,
+          updatedAt: now,
+        });
+      }
+
+      if (docs.length === 0) {
+        if (atomic) {
+          await ContentModel.deleteById(String(contentId)); // roll back
+          return res.status(400).json({ error: 'No valid episodes to insert', rejects });
+        }
+        return res.status(201).json({
+          content: createdContent,
+          episodes: { ok: false, insertedCount: 0, rejectedCount: rejects.length, inserted: [], rejects, message: 'No valid episodes to insert' }
+        });
+      }
+
+      const db = await getDb();
+      try {
+        const result = await db.collection('Episodes').insertMany(docs, { ordered: false });
+        const inserted = Object.values(result.insertedIds).map((id, idx) => ({ index: idx, _id: id }));
+        return res.status(201).json({
+          content: createdContent,
+          episodes: {
+            ok: true,
+            insertedCount: inserted.length,
+            rejectedCount: rejects.length,
+            inserted,
+            rejects
+          }
+        });
+      } catch (e) {
+        const writeErrors = e?.writeErrors ?? [];
+        const dupes = writeErrors
+          .filter(w => String(w.code) === '11000')
+          .map(w => ({ index: w.index, error: 'Duplicate (contentId, seasonNumber, episodeNumber)' }));
+
+        const insertedIds = e?.result?.result?.insertedIds ?? e?.result?.insertedIds ?? {};
+        const inserted = Object.entries(insertedIds).map(([k, v]) => ({ index: Number(k), _id: v }));
+
+        if (atomic) {
+          await ContentModel.deleteById(String(createdContent._id)); // roll back content
+          return res.status(207).json({
+            error: 'Bulk episodes failed; content rolled back (atomic mode)',
+            episodes: {
+              ok: false,
+              insertedCount: inserted.length,
+              errorCount: writeErrors.length + rejects.length,
+              inserted,
+              rejects: rejects.concat(dupes),
+              message: 'Bulk insert partially/fully failed'
+            }
+          });
+        }
+        return res.status(207).json({
+          content: createdContent,
+          episodes: {
+            ok: false,
+            insertedCount: inserted.length,
+            errorCount: writeErrors.length + rejects.length,
+            inserted,
+            rejects: rejects.concat(dupes),
+            message: 'Bulk insert partially/fully failed'
+          }
+        });
+      }
+    } catch (err) {
+      console.error('❌ createSeriesWithEpisodes:', err);
+      if (err?.errInfo) console.error('Validation details:', JSON.stringify(err.errInfo, null, 2));
+      return res.status(500).json({ error: 'Failed to create series with episodes' });
+    }
+  },
+
   // ✏️ PATCH /api/content/:id
   async update(req, res) {
     try {
