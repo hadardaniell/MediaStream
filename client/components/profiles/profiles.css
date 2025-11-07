@@ -45,9 +45,11 @@ h1 {
     cursor: pointer;
 
     &:hover {
-        border: 2px white solid;
+        /* border: 2px white solid; */
         /* border-radius: 60px; */
         border-radius: 50%;
+        box-shadow: 0px 0px 10px 0px var(--secondary);
+        transform: scale(1.05);
     }
 }
 
@@ -61,7 +63,7 @@ h1 {
     justify-content: center;
 
     &:hover {
-        transform: translateY(-5px);
+        transform: scale(1.05);
     }
 }
 
@@ -94,7 +96,7 @@ h1 {
     align-items: anchor-center;
 
     &:hover {
-        transform: translateY(-5px);
+        transform: scale(1.05);
     }
 }
 
@@ -111,4 +113,35 @@ h1 {
     gap: 0.3em;
     cursor: pointer;
     color: var(--secondary);
+}
+
+/* ✨ אנימציה רכה לכל פרופיל */
+.profile {
+  opacity: 0;
+  transform: translateY(3px);
+  animation: fadeInUp 0.2s ease forwards;
+}
+
+/* הגדרה של האנימציה */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* גורם לכל פרופיל להופיע בעיכוב קטן זה אחר זה */
+.profile:nth-child(1) { animation-delay: 0.1s; }
+.profile:nth-child(2) { animation-delay: 0.15s; }
+.profile:nth-child(3) { animation-delay: 0.2s; }
+.profile:nth-child(4) { animation-delay: 0.25s; }
+.profile:nth-child(5) { animation-delay: 0.3s; }
+.profile:nth-child(6) { animation-delay: 0.35s; }
+
+/* אותו דבר גם לכפתור ההוספה */
+.add-container {
+  opacity: 0;
+  transform: translateY(3px);
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: 0.4s;
 }

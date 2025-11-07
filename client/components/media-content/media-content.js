@@ -167,7 +167,7 @@ function renderContent(content) {
   actionsWrapper.appendChild(likeBtn);
 
   const likeIcon = document.createElement("i");
-  likeIcon.className = "bi bi-hand-thumbs-up";
+  likeIcon.className = "bi bi-hand-thumbs-up like-icon";
   likeBtn.appendChild(likeIcon);
 
       const startBtn = document.createElement("button");
@@ -199,10 +199,14 @@ function renderContent(content) {
   mediaNav.className = "media-nav";
   extraContentContainer.appendChild(mediaNav);
 
+  const hr = document.createElement("hr");
+  hr.className = "soft-divider";
+  extraContentContainer.appendChild(hr);
+
   if (content.episodes && content.episodes.length > 0) {
     const episodesBtn = document.createElement("h2")
     episodesBtn.id = "episodes-btn";
-    episodesBtn.className = "clickable";
+    episodesBtn.className = "clickable hover-link";
     episodesBtn.textContent = "פרקים";
     episodesBtn.addEventListener("click", () => {
       document.getElementById('episodes-nav').scrollIntoView({
@@ -256,7 +260,7 @@ function renderContent(content) {
     extraContentContainer.appendChild(createEpisodesSection(defaultSeasonEpisodes));
     const similarContentBtn = document.createElement("h2")
     similarContentBtn.id = "similar-content-btn";
-    similarContentBtn.className = "clickable";
+    similarContentBtn.className = "clickable hover-link";
     similarContentBtn.textContent = "תכנים דומים";
     similarContentBtn.addEventListener("click", () => {
       document.getElementById('similar-content-section').scrollIntoView({

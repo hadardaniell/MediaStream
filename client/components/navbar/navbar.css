@@ -43,6 +43,7 @@ nav {
     &:hover {
         color: #e1e6f0 !important;
         font-weight: 600;
+        text-shadow: 3px 0px 18px;
     }
 }
 
@@ -56,11 +57,11 @@ nav {
     background-color: whitesmoke !important;
 }
 
-.item{
+.item {
     text-align: right !important;
 }
 
-.logout-btn{
+.logout-btn {
     background-color: rgb(35 38 48) !important;
     border-radius: 5px !important;
     padding: 0.5em 1em !important;
@@ -68,7 +69,8 @@ nav {
 
 .plus-icon {
     /* display: inline-block; */
-    transition: transform 0.5s ease-in-out; /* מהירות הסיבוב */
+    transition: transform 0.5s ease-in-out;
+    /* מהירות הסיבוב */
 }
 
 .plus-icon:hover {
@@ -92,13 +94,13 @@ nav {
     display: flex;
 }
 
-.left-side-wrapper{
+.left-side-wrapper {
     display: flex;
     align-items: center;
     gap: 1em;
 }
 
-.add-media-btn{
+.add-media-btn {
     display: flex;
     align-items: center;
     gap: 0.5em;
