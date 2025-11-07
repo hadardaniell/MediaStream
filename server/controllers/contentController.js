@@ -8,8 +8,8 @@ import { syncImdbRatingForContent } from '../services/ratingsService.js';
 // allow only schema fields
 const ALLOWED_FIELDS = [
   'name','type','year','photo','video','genres','description','cast','director',
-  'rating','likes','seasons','totalSeasons','totalEpisodes','externalIds','ratings'
-];
+  'rating','likes','externalIds','ratings'
+]; 
 
 const pick = (obj, allowed) =>
   Object.fromEntries(Object.entries(obj ?? {}).filter(([k]) => allowed.includes(k)));
@@ -277,7 +277,7 @@ export const ContentController = {
 
 // ✅ GET /api/content/:id[?include=episodes,episodesCount]
 async getById(req, res) {
-  try {
+try {
     const { id } = req.params;
     if (!ObjectId.isValid(String(id))) {
       return res.status(400).json({ error: 'Invalid id' });
@@ -285,23 +285,50 @@ async getById(req, res) {
 
     const item = await ContentModel.getById(id);
     if (!item) return res.status(404).json({ error: 'Content not found' });
-    // Parse include list: e.g., ?include=episodes or ?include=episodes,episodesCount
+
+    // Parse include list: e.g., ?include=episodes,seasons,episodesCount,totals
     const include = String(req.query.include || '')
       .split(',')
       .map(s => s.trim())
       .filter(Boolean);
 
-    // Optional: episodesCount without full list
-    if (item.type === 'series' && (include.includes('episodesCount') || include.includes('episodes'))) {
-      const eps = await EpisodesModel.listByContent(item._id);
-      if (include.includes('episodes')) item.episodes = eps;
+    // Only fetch episodes if the client asked for something that needs them
+    const wants = new Set(include);
+    const needsEpisodes =
+      item.type === 'series' &&
+      (wants.has('episodes') || wants.has('episodesCount') || wants.has('seasons') || wants.has('totals'));
+
+    let eps = null;
+    if (needsEpisodes) {
+      eps = await EpisodesModel.listByContent(item._id); // one DB hit
+    }
+
+    if (wants.has('episodes') && eps) {
+      item.episodes = eps;
+    }
+
+    if ((wants.has('episodesCount') || wants.has('totals')) && eps) {
       item.episodesCount = eps.length;
     }
 
-    res.json(item);
+    if ((wants.has('seasons') || wants.has('totals')) && eps) {
+      // Build seasons array from episodes
+      const counts = new Map();
+      for (const e of eps) {
+        counts.set(e.seasonNumber, (counts.get(e.seasonNumber) || 0) + 1);
+      }
+      item.seasons = [...counts.entries()]
+        .sort(([a], [b]) => a - b)
+        .map(([seasonNumber, episodesCount]) => ({ seasonNumber, episodesCount }));
+
+      item.totalSeasons = item.seasons.length;
+      item.totalEpisodes = eps.length;
+    }
+
+    return res.json(item);
   } catch (err) {
     console.error('❌ Error fetching content by ID:', err);
-    res.status(500).json({ error: 'Failed to fetch content' });
+    return res.status(500).json({ error: 'Failed to fetch content' });
   }
 },
 
@@ -335,7 +362,7 @@ async getById(req, res) {
 
       const r = toNumber(body.rating);
       if (r == null || r < 0 || r > 10)
-        return res.status(400).json({ error: 'rating must be a number between 0 and 5' });
+        return res.status(400).json({ error: 'rating must be a number between 0 and 10' });
       body.rating = r;
 
       body.photo = String(body.photo);
@@ -358,45 +385,7 @@ async getById(req, res) {
 
       const externalIdsErr = validateExternalIds(body.externalIds);
       if (externalIdsErr) return res.status(400).json({ error: externalIdsErr });
-
-
-
-      // type-specific: series must have seasons; movie must not
-      if (body.type === 'series') {
-        if (body.seasons == null) return res.status(400).json({ error: 'seasons is required for type=series' });
-
-        const seasonsErr = validateSeasons(body.seasons);
-        if (seasonsErr) return res.status(400).json({ error: seasonsErr });
-
-        // cast season ints to Int32 for DB
-        body.seasons = body.seasons.map((s) => ({
-          seasonNumber: new Int32(s.seasonNumber),
-          episodesCount: new Int32(s.episodesCount),
-          ...(s.year != null ? { year: new Int32(s.year) } : {}),
-          ...(s.notes ? { notes: s.notes } : {})
-        }));
-
-        if (body.totalSeasons == null) {
-          body.totalSeasons = new Int32(body.seasons.length);
-        } else {
-          const ts = toInt(body.totalSeasons);
-          if (ts == null || ts < 1) return res.status(400).json({ error: 'totalSeasons must be int >= 1' });
-          body.totalSeasons = new Int32(ts);
-        }
-
-        if (body.totalEpisodes == null) {
-          const computed = body.seasons.reduce((a, s) => a + s.episodesCount.valueOf(), 0);
-          body.totalEpisodes = new Int32(computed);
-        } else {
-          const te = toInt(body.totalEpisodes);
-          if (te == null || te < 1) return res.status(400).json({ error: 'totalEpisodes must be int >= 1' });
-          body.totalEpisodes = new Int32(te);
-        }
-      } else {
-        if (body.seasons != null) return res.status(400).json({ error: 'seasons must not be provided for type=movie' });
-        delete body.totalSeasons;
-        delete body.totalEpisodes;
-      }
+    
 
       // defaults (BSON int)
       body.likes = new Int32(0);
@@ -475,35 +464,6 @@ async getById(req, res) {
       {
         const err = validateExternalIds(body.externalIds);
         if (err) return res.status(400).json({ error: err });
-      }
-
-      if (body.seasons == null) return res.status(400).json({ error: 'seasons is required for type=series' });
-      {
-        const err = validateSeasons(body.seasons);
-        if (err) return res.status(400).json({ error: err });
-        body.seasons = body.seasons.map((s) => ({
-          seasonNumber: new Int32(s.seasonNumber),
-          episodesCount: new Int32(s.episodesCount),
-          ...(s.year != null ? { year: new Int32(s.year) } : {}),
-          ...(s.notes ? { notes: s.notes } : {})
-        }));
-      }
-
-      if (body.totalSeasons == null) {
-        body.totalSeasons = new Int32(body.seasons.length);
-      } else {
-        const ts = toInt(body.totalSeasons);
-        if (ts == null || ts < 1) return res.status(400).json({ error: 'totalSeasons must be int >= 1' });
-        body.totalSeasons = new Int32(ts);
-      }
-
-      if (body.totalEpisodes == null) {
-        const computed = body.seasons.reduce((a, s) => a + s.episodesCount.valueOf(), 0);
-        body.totalEpisodes = new Int32(computed);
-      } else {
-        const te = toInt(body.totalEpisodes);
-        if (te == null || te < 1) return res.status(400).json({ error: 'totalEpisodes must be int >= 1' });
-        body.totalEpisodes = new Int32(te);
       }
 
       body.likes = new Int32(0);
@@ -663,7 +623,7 @@ async getById(req, res) {
       if ('rating' in updates && updates.rating != null) {
         const r = toNumber(updates.rating);
         if (r == null || r < 0 || r > 10)
-          return res.status(400).json({ error: 'rating must be 0..5' });
+          return res.status(400).json({ error: 'rating must be 0..10' });
         updates.rating = r;
       }
 
@@ -697,40 +657,6 @@ async getById(req, res) {
       if ('externalIds' in updates && updates.externalIds != null) {
         const externalIdsErr = validateExternalIds(updates.externalIds);
         if (externalIdsErr) return res.status(400).json({ error: externalIdsErr });
-      }
-
-
-      if ('seasons' in updates) {
-        if (updates.seasons != null) {
-          const err = validateSeasons(updates.seasons);
-          if (err) return res.status(400).json({ error: err });
-          // cast nested ints to Int32
-          updates.seasons = updates.seasons.map((s) => ({
-            seasonNumber: new Int32(s.seasonNumber),
-            episodesCount: new Int32(s.episodesCount),
-            ...(s.year != null ? { year: new Int32(s.year) } : {}),
-            ...(s.notes ? { notes: s.notes } : {})
-          }));
-        }
-      }
-
-      if ('totalSeasons' in updates && updates.totalSeasons != null) {
-        const ts = toInt(updates.totalSeasons);
-        if (ts == null || ts < 1)
-          return res.status(400).json({ error: 'totalSeasons must be int >= 1' });
-        updates.totalSeasons = new Int32(ts);
-      }
-
-      if ('totalEpisodes' in updates && updates.totalEpisodes != null) {
-        const te = toInt(updates.totalEpisodes);
-        if (te == null || te < 1)
-          return res.status(400).json({ error: 'totalEpisodes must be int >= 1' });
-        updates.totalEpisodes = new Int32(te);
-      }
-
-      // movie vs series constraints on update
-      if (updates.type === 'movie' && updates.seasons != null) {
-        return res.status(400).json({ error: 'seasons must not be provided for type=movie' });
       }
 
       // do NOT set updatedAt unless schema includes it
