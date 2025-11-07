@@ -57,104 +57,106 @@ function renderItems(items) {
 function posterClick(id) {
   window.location.href = `/media-content/${id}`;
 }
-
 async function toggleLike(item, btnEl) {
   try {
+
+
     if (!item.hasLike) {
-      const res = await fetch(`http://localhost:3000/api/likes`, {
+      await fetch(`http://localhost:3000/api/likes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
-      }).then(
-        res => res.json()).then(data => {
-          const card = btnEl.closest(".card");
-          card.querySelector(".count").textContent = item.likes + 1;
-          btnEl.className = `btn btn-sm btn-danger like-btn`;
-          btnEl.textContent = "אהבתי";
-          item.hasLike = true;
-          item.likes += 1;
-        }).catch(err => {
-        });
+      });
+
+      const likeBtn = document.getElementById("likeBtn");
+
+      item.hasLike = true;
+      item.likes += 1;
+
+      // עדכון כפתור ו‑count
+      likeBtn.textContent = item.likes;
+      btnEl.classList.add("active");
+      btnEl.innerHTML = `<i class="bi bi-heart-fill"></i> ${item.likes}`;
     } else {
-      const res = await fetch(`http://localhost:3000/api/likes`, {
+      await fetch(`http://localhost:3000/api/likes`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
-      }).then(
-        res => res.json()).then(data => {
-          const card = btnEl.closest(".card");
-          card.querySelector(".count").textContent = item.likes - 1;
-          btnEl.className = `btn btn-sm btn-outline-primary like-btn`;
-          btnEl.textContent = "סמן לייק";
-          item.hasLike = false;
-          item.likes -= 1;
-        }).catch(err => {
-        });
+      });
+      const likeBtn = document.getElementById("likeBtn");
+
+      item.hasLike = false;
+      item.likes -= 1;
+
+      // עדכון כפתור ו‑count
+      likeBtn.textContent = item.likes;
+      btnEl.classList.remove("active");
+      btnEl.innerHTML = `<i class="bi bi-heart"></i> ${item.likes}`;
     }
   } catch (err) {
     console.error(err);
   }
 }
 
-
 function createCard(item) {
   const count = item.likes || 0;
-
   const col = document.createElement("div");
 
   const card = document.createElement("div");
-  card.className = "card mb-3";
+  card.className = "card";
   card.dataset.id = item._id;
 
-  if (item.photo) {
-    const posterContainer = document.createElement("div");
-    posterContainer.className = "poster-container";
-    const img = document.createElement("img");
-    img.className = "poster";
-    img.src = item.photo;
-    posterContainer.appendChild(img);
-    posterContainer.addEventListener("click", () => posterClick(item._id));
-    card.appendChild(posterContainer);
-  }
+  const img = document.createElement("img");
+  img.src = item.photo;
+  img.alt = item.name;
+  img.addEventListener("click", () => posterClick(item._id));
+  card.appendChild(img);
 
-  const body = document.createElement("div");
-  body.className = "card-body";
+  const overlay = document.createElement("div");
+  overlay.className = "card-overlay";
 
   const title = document.createElement("h5");
   title.className = "card-title";
-  title.innerHTML = `${escapeHtml(item.name)} <small class="text-muted">(${item.year})</small>`;
-  body.appendChild(title);
+  title.innerHTML = `${escapeHtml(item.name)} <small>(${item.year})</small>`;
+  overlay.appendChild(title);
 
-  const genre = document.createElement("p");
-  genre.className = "card-text genre";
+  const genre = document.createElement("div");
+  genre.className = "card-details";
   genre.textContent = item.genres.join(" · ");
-  body.appendChild(genre);
+  overlay.appendChild(genre);
 
   const desc = document.createElement("p");
-  desc.className = "card-text description";
+  desc.className = "description";
   desc.textContent = item.description || "";
-  body.appendChild(desc);
+  overlay.appendChild(desc);
 
   const actions = document.createElement("div");
-  actions.className = "d-flex align-items-center justify-content-between";
-  actions.style.gap = "1em";
+  actions.className = "card-actions";
 
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.className = `btn btn-sm ${item.hasLike ? "btn-danger" : "btn-outline-primary"} like-btn`;
-  btn.textContent = item.hasLike ? "אהבתי" : "סמן לייק";
+  const likeBtn = document.createElement("button");
+  likeBtn.id = "likeBtn";
+  likeBtn.className = `like-btn ${item.hasLike ? "active" : ""}`;
+  likeBtn.innerHTML = item.hasLike
+    ? `<i class="bi bi-heart-fill"></i> ${count}`
+    : `<i class="bi bi-heart"></i> ${count}`;
+  likeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleLike(item, likeBtn);
+  });
 
-  btn.addEventListener("click", () => toggleLike(item, btn));
+  const watchBtn = document.createElement("button");
+  watchBtn.className = "btn-watch";
+  watchBtn.textContent = "צפה עכשיו";
+  watchBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    posterClick(item._id);
+  });
 
+  actions.appendChild(watchBtn);
+  actions.appendChild(likeBtn);
+  overlay.appendChild(actions);
 
-  const span = document.createElement("span");
-  span.innerHTML = `<span class="count">${count}</span> לייקים`;
-
-  actions.appendChild(btn);
-  actions.appendChild(span);
-  body.appendChild(actions);
-
-  card.appendChild(body);
+  card.appendChild(overlay);
   col.appendChild(card);
 
   return col;

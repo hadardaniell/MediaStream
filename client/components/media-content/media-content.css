@@ -1,4 +1,4 @@
-body {
+/* body {
     background-color: #0f1014 !important;
     display: flex;
     flex-direction: column;
@@ -274,15 +274,415 @@ info-bar {
     flex-direction: column;
     gap: 0.5em;
     align-items: center;
-}
+}*/
 
 .close-icon {
     color: var(--secondary);
     font-size: 24px;
     direction: rtl;
     cursor: pointer;
-    
+
     &:hover {
         color: var(--secondary);
     }
+}
+
+/* === כללי === */
+body {
+    background: radial-gradient(circle at 20% 20%, #0a0b0f, #090a0d 60%, #0b0c10 100%);
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    letter-spacing: -0.4px;
+    font-family: "Noto-Sans-Hebrew-Fonts", "Inter", sans-serif !important;
+
+    --primary: #e1e6f0;
+    --secondary: rgb(143, 152, 178);
+    --link: rgb(53, 134, 240);
+}
+
+/* === טקסטים === */
+h1 {
+    font-size: 35px;
+    font-weight: 600;
+    letter-spacing: -0.8px !important;
+    color: var(--primary) !important;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+h2 {
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.4px !important;
+    color: var(--secondary) !important;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+h3 {
+    font-size: 18px !important;
+    font-weight: 500;
+    letter-spacing: -0.4px !important;
+    color: var(--secondary) !important;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.media-nav {
+    padding-top: 2em;
+    display: flex;
+    gap: 2em;
+    /* border-bottom: 1px solid rgb(143 152 178 / 57%); */
+    margin-bottom: 1em;
+    direction: rtl;
+}
+
+/* === אזור התוכן === */
+.content-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2em;
+    margin-top: 2em;
+    flex-wrap: wrap;
+    direction: rtl;
+    width: 100%;
+    padding: 0 3em;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* === פוסטר === */
+.poster {
+    width: 360px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    width: 350px;
+    height: 470px;
+}
+
+.poster:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 60px rgba(10, 108, 255, 0.3);
+}
+
+/* === פרטי מידע === */
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+    max-width: 600px;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.info-bar {
+    display: flex;
+    gap: 1em;
+    color: #c3c8d4;
+    font-size: 15px;
+}
+
+.info p {
+    color: #aeb4c3;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+/* === כפתורים עיקריים === */
+/* === אזור כפתורים === */
+.actions-wrapper {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    /* flex-wrap: wrap; */
+    /* margin-top: 1em; */
+}
+
+/* === כפתור צפייה (דיסני+ סטייל) === */
+/* === אזור הכפתורים הראשיים === */
+.actions-wrapper {
+    display: flex;
+    /* gap: 1.5em; */
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* === כפתור "צפו עכשיו" === */
+.watch-btn {
+    width: 320px;
+    height: 54px;
+    border-radius: 8px;
+    background: linear-gradient(to right, rgb(8 87 225), rgb(6 43 154)) !important;
+
+    /* background: linear-gradient(135deg, #0077ff, #0047ff); */
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 85, 255, 0.4);
+    transition: all 0.25s ease;
+}
+
+.watch-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(0, 120, 255, 0.5);
+    background: linear-gradient(135deg, #3399ff, #0055ff);
+}
+
+/* === כפתור "צפייה מהתחלה" === */
+.start-btn {
+    width: 320px;
+    height: 54px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #b8bcd0;
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.start-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    transform: scale(1.04);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+/* === כפתור "לייק" === */
+.like-btn {
+    width: 54px;
+    height: 54px;
+    border-radius: 8px;
+    background: radial-gradient(circle at 30% 30%, #1a1c21, #101115);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #b8bcd0;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.like-btn:hover {
+    transform: scale(1.12);
+    background: radial-gradient(circle at 30% 30%, #242630, #14151a);
+    color: #ffffff;
+}
+
+/* === לייק פעיל === */
+.liked {
+    /*background: linear-gradient(135deg, #ff3366, #cc0033);
+    */
+    background: #ff3366;
+    color: #fff;
+    border: none;
+    /* box-shadow: 0 0 25px rgba(255, 51, 102, 0.5); */
+    /* transform: scale(1.1); */
+}
+
+.liked:hover {
+    background: linear-gradient(135deg, #ff4d7a, #e6003e);
+    box-shadow: 0 0 35px rgba(255, 80, 120, 0.7);
+}
+
+/* === ריווח בין כל הכפתורים === */
+/* .actions-wrapper .watch-btn,
+.actions-wrapper .start-btn,
+.actions-wrapper .like-btn {
+    margin-bottom: 0.5em;
+} */
+
+
+/* === פרקים === */
+.episode-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    margin-top: 2em;
+}
+
+.episode {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 0.5em;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+    direction: rtl;
+}
+
+.episode:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.episode-img {
+    width: 200px;
+    height: 115px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* === תוכן דומה === */
+.similar-content {
+    margin-top: 3em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    direction: rtl;
+}
+
+.similar-list {
+    display: flex;
+    gap: 1em;
+    overflow-x: auto;
+    padding-bottom: 1em;
+    scroll-behavior: smooth;
+}
+
+.similar-item {
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: center;
+    transition: transform 0.3s ease;
+    justify-content: center;
+    max-height: 325px;
+    height: 280px;
+}
+
+.similar-item:hover {
+    transform: scale(1.07);
+}
+
+.similar-img {
+    width: 140px;
+    height: 200px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* === סרגל עונות === */
+.navbar-container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    direction: rtl;
+
+
+    .navbar-nav {
+        padding: 1em 0;
+        display: flex;
+        flex-direction: row;
+        gap: 2em;
+    }
+
+    .nav-item {
+        cursor: pointer;
+    }
+}
+
+/* .navbar-container {
+    display: flex;
+    margin-top: 1em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 1.5em;
+    padding: 0.8em 0;
+}
+
+.nav-item h3 {
+    color: #b0b6c6;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.nav-item h3:hover,
+.nav-item h3.active {
+    color: #1d64f2;
+} */
+
+/* === אנימציות עדינות === */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content-details,
+.extra-content-container {
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.actor-link:hover {
+    text-shadow: 3px 0px 18px;
+    cursor: pointer;
+    transform: translateY(-2px);
+}
+
+.extra-content-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 3em;
+}
+
+hover-link {
+    cursor: pointer;
+}
+
+.hover-link:hover {
+    color: var(--primary);
+    text-shadow: 3px 0px 18px;
+    cursor: pointer;
+}
+
+
+.soft-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right,
+            var(--primary),
+            var(--secondary),
+            var(--primary));
+    margin: 20px 0;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 1em;
 }

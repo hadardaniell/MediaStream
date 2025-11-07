@@ -19,7 +19,7 @@
                 <div class="subtitle" id="subtitle">S01E01</div>
             </div>
             <div>
-                <button id="openListBtn" title="רשימת פרקים">פרקים</button>
+                <button id="openListBtn" class="episode-menu-trigger-btn" title="רשימת פרקים">פרקים</button>
             </div>
         </div>
 
@@ -31,14 +31,14 @@
         </div>
 
         <div class="controls" aria-hidden="false">
-            <button id="back10" title="חזור 10 שניות">
+            <button id="back10" title="חזור 10 שניות" class="sec-btn">
                 10s
                 <i class="bi bi-arrow-counterclockwise"></i>
             </button>
             <button id="playPause" class="big" title="השהה / נגן">
                 <i class="bi bi-play-fill"></i>
             </button>
-            <button id="forward10" title="קדימה 10 שניות">
+            <button id="forward10" title="קדימה 10 שניות" class="sec-btn">
                 <i class="bi bi-arrow-clockwise"></i>
                 10s
             </button>
@@ -50,14 +50,20 @@
             </div>
 
             <div class="right-actions">
+                <button id="nextBtn" class="sec-btn next-btn" title="פרק הבא">
+                    פרק הבא
+                    <i class="bi bi-play-fill"></i>
+                </button>
                 <button id="fullscreenBtn" title="מסך מלא">⛶</button>
-                <button id="nextBtn" title="פרק הבא">▶ פרק הבא</button>
             </div>
         </div>
     </div>
 
     <div class="drawer" id="drawer">
-        <h3>רשימת פרקים</h3>
+        <div class="menu-header">
+            <h3>רשימת פרקים</h3>
+            <i class="bi bi-x close-icon" id="close-icon"></i>
+        </div>
         <div id="episodesList"></div>
         <div style="height:20px;"></div>
     </div>
