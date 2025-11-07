@@ -117,27 +117,34 @@ export const ContentModel = {
     return this.getById(id);
   },
 
-  //Delete with Cascade
-  async deleteCascadeById(id) {
-    const db = await getDb();
-    const cid = new ObjectId(String(id));
+// Delete with Cascade
+async deleteCascadeById(id) {
+  const db = await getDb();
+  const cid = new ObjectId(String(id));
 
-    // Delete the content first; if it doesn't exist, stop.
-    const res = await db.collection('Content').deleteOne({ _id: cid });
-    if (res.deletedCount !== 1) {
-      return { deleted: false, likesDeleted: 0, watchesDeleted: 0 };
-    }
+  // 1) Delete the content itself
+  const res = await db.collection('Content').deleteOne({ _id: cid });
+  if (res.deletedCount !== 1) {
+    return { deleted: false, episodesDeleted: 0, likesDeleted: 0, watchesDeleted: 0 };
+  }
 
-    // Best-effort cascade
-    const likes = await db.collection('Likes').deleteMany({ contentId: cid });
-    const watches = await db.collection('watches').deleteMany({ contentId: cid });
+  // 2) Best-effort cascade
+  const [episodes, likes, watchesLower, watchesUpper] = await Promise.all([
+    db.collection('Episodes').deleteMany({ contentId: cid }).catch(() => ({ deletedCount: 0 })),
+    db.collection('Likes').deleteMany({ contentId: cid }).catch(() => ({ deletedCount: 0 })),
+    db.collection('watches').deleteMany({ contentId: cid }).catch(() => ({ deletedCount: 0 })),
+    db.collection('Watches').deleteMany({ contentId: cid }).catch(() => ({ deletedCount: 0 })),
+  ]);
 
-    return {
-      deleted: true,
-      likesDeleted: likes.deletedCount ?? 0,
-      watchesDeleted: watches.deletedCount ?? 0
-    };
-  },
+  const watchesDeleted = (watchesLower?.deletedCount || 0) + (watchesUpper?.deletedCount || 0);
+
+  return {
+    deleted: true,
+    episodesDeleted: episodes?.deletedCount ?? 0,
+    likesDeleted: likes?.deletedCount ?? 0,
+    watchesDeleted
+  };
+},
 
   //Delete one by ID 
   async deleteById(id)

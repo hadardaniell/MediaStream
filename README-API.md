@@ -41,6 +41,8 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 |  | └ `?minRating=3.5` – Minimum rating threshold |
 |  | └ `?wLikes=1&wRating=2` – Weights for likes/rating when `mode=mixed` |
 | **POST** | `/api/content` | Create new content *(admin only)* |
+| **POST** | `/api/content/series-with-episodes` | Create a **series** and its **episodes** in one call.
+|          |Body: `{ content: { ...series fields... }, episodes: [{ seasonNumber, episodeNumber, shortDescription, video }, ...] }`
 | **PATCH** | `/api/content/:id` | Update content *(admin only)* |
 | **DELETE** | `/api/content/:id` | Delete content *(admin only)* |
 
