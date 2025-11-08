@@ -14,7 +14,7 @@ const pick = (obj, allowed) =>
   Object.fromEntries(Object.entries(obj ?? {}).filter(([k]) => allowed.includes(k)));
 
 const TYPE_ENUM = ['series','movie'];
-const GENRE_ENUM = ['Action','Animation','Comedy','Crime','Documentary','Horror','Romance','Sci-Fi'];
+const GENRE_ENUM = ['Action','Animation','Comedy','Crime','Documentary','Horror','Romance','SciFi'];
 const WIKI_RE   = /^https?:\/\/[a-z\-]+\.wikipedia\.org\/.+/;
 const PHOTO_RE  = /^(?:\/|https?:\/\/).+\.(?:png|jpg|jpeg|webp)$/i;
 const VIDEO_RE = /^(?:\/|https?:\/\/).+\.(?:mp4)$/i;
@@ -346,6 +346,7 @@ try {
       if (body.description == null || trimStr(body.description) === '') return res.status(400).json({ error: 'description is required' });
       if (body.cast == null) return res.status(400).json({ error: 'cast is required' });
       if (body.director == null) return res.status(400).json({ error: 'director is required' });
+      if (body.rating == null) req.body.rating = 0;
 
       // normalize scalars
       body.name = trimStr(body.name);
@@ -360,6 +361,9 @@ try {
 
       body.photo = String(body.photo);
       body.video = String(body.video);
+
+      const r = body.rating == null ? 0 : Number(body.rating);
+      body.rating = Number.isFinite(r) ? r : 0;
 
       // normalize arrays/objects
       if (!Array.isArray(body.genres)) body.genres = [String(body.genres)];
@@ -423,6 +427,9 @@ try {
       if (y == null || y < 1888 || y > 2100)
         return res.status(400).json({ error: 'year must be an integer between 1888 and 2100' });
       body.year = new Int32(y);
+
+      const r = body.rating == null ? 0 : Number(body.rating);
+      body.rating = Number.isFinite(r) ? r : 0;
 
 
       body.photo = String(body.photo);
@@ -606,6 +613,10 @@ try {
         const n = toInt(updates.likes);
         if (n == null || n < 0) return res.status(400).json({ error: 'likes must be int >= 0' });
         updates.likes = new Int32(n); // BSON int
+      }
+      if ('rating' in updates) {
+        const r = updates.rating == null ? 0 : Number(updates.rating);
+        updates.rating = Number.isFinite(r) ? r : 0;
       }
 
       if ('genres' in updates && updates.genres != null) {

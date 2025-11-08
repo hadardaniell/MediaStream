@@ -20,6 +20,20 @@ function toYearMaybeInt32(y) {
   return Number.isFinite(n) ? n : '';
 }
 
+// Helper to normalize rating safely
+function parseOmdbRating(raw) {
+  // raw is often a string like "8.3" or "N/A"
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : 0; // default to 0 if missing/invalid
+}
+
+// Helper to normalize votes safely
+function parseOmdbVotes(raw) {
+  // raw can be "1,234,567" or "N/A"
+  const n = Number(String(raw ?? '0').replace(/,/g, ''));
+  return Number.isFinite(n) ? n : 0;
+}
+
 /**
  * Fetches IMDb rating for one content item.
  * - If externalIds.imdb is missing, tries OMDb search by title & year, saves imdbID back to the doc, then fetches rating.
@@ -50,7 +64,6 @@ export async function syncImdbRatingForContent(contentId) {
             { _id },
             { $set: { 'externalIds.imdb': imdbId } }
           );
-          // console.log(`🆕 Added IMDb ID ${imdbId} for ${content.name}`);
         }
       }
     }
@@ -64,12 +77,14 @@ export async function syncImdbRatingForContent(contentId) {
   if (!resp.ok) return { ok: false, reason: 'HTTP_' + resp.status };
 
   const data = await resp.json();
-  if (data?.Response !== 'True' || !data?.imdbRating) {
-    return { ok: false, reason: 'NO_RATING' };
+  if (data?.Response !== 'True') {
+    // e.g., invalid ID or movie not found
+    return { ok: false, reason: 'NO_TITLE_MATCH' };
   }
 
-  const ratingVal = Number(data.imdbRating); // 0..10 scale
-  const votes = Number(String(data.imdbVotes || '0').replace(/,/g, ''));
+  // Normalize rating/votes: missing/invalid => 0
+  const ratingVal = parseOmdbRating(data.imdbRating); // 0..10
+  const votes = parseOmdbVotes(data.imdbVotes); // integer >= 0
 
   const now = new Date();
   const res = await db.collection('Content').updateOne(
@@ -82,7 +97,8 @@ export async function syncImdbRatingForContent(contentId) {
           votes,
           lastSync: now,
           matchedTitle: data.Title ?? content.name,
-          matchedYear: data.Year ?? toYearMaybeInt32(content.year)
+          // OMDb Year can be "1999" or "1999–2007"; keep raw string for traceability
+          matchedYear: data.Year ?? String(toYearMaybeInt32(content.year) || '')
         }
       }
     }
