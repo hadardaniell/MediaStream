@@ -7,7 +7,7 @@ import { syncImdbRatingForContent } from '../services/ratingsService.js';
 
 // allow only schema fields
 const ALLOWED_FIELDS = [
-  'name','type','year','photo','genres','description','cast','director','likes','externalIds'
+  'name','type','year','photo','genres','description','cast','director','likes','externalIds','rating'
 ]; 
 
 const pick = (obj, allowed) =>
