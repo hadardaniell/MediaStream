@@ -29,7 +29,8 @@ class ProfilesBar extends HTMLElement {
     `;
 
     // אחרי שה־HTML נטען, מוסיפים האזנה ללחיצה
-    this.initLogic();
+    await this.initLogic();
+    this.dispatchEvent(new CustomEvent('component-ready', { bubbles: true }));
   }
 
   // initLogic() {

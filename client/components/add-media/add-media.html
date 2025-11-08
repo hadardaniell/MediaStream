@@ -15,12 +15,10 @@
         <div>
             <div class="header-wrapper">
                 <span class="mb-4 text-center disney-gold"> הוספת תוכן חדש</span>
-                <img src="client/assets/disney-plus-logo.webp" 
-                id="disney-logo-btn"
-                class="disney-plus-logo mb-4"/>
+                <img src="client/assets/disney-plus-logo.webp" id="disney-logo-btn" class="disney-plus-logo mb-4" />
             </div>
-            
-            <hr class="soft-divider"/>
+
+            <hr class="soft-divider" />
         </div>
 
         <form id="contentForm" novalidate class="row g-3">
@@ -28,6 +26,7 @@
             <div class="col-md-6">
                 <label class="form-label">שם</label>
                 <input type="text" id="name" class="form-control" required>
+                <div class="invalid-feedback">השדה לא תקין</div>
             </div>
 
             <div class="col-md-6">
@@ -51,15 +50,15 @@
                         data-bs-toggle="dropdown" aria-expanded="false">
                         בחר ז׳אנרים
                     </button>
-                    <ul class="dropdown-menu w-100 p-2" >
-                        <li><input class="form-check-input me-2" type="checkbox" value="Action">Action</li>
-                        <li><input class="form-check-input me-2" type="checkbox" value="Comedy">Comedy</li>
-                        <li><input class="form-check-input me-2" type="checkbox" value="Animation">Animation</li>
-                        <li><input class="form-check-input me-2" type="checkbox" value="Horror">Horror</li>
-                        <li><input class="form-check-input me-2" type="checkbox" value="Sci-Fi">Sci-Fi</li>
-                        <li><input class="form-check-input me-2" type="checkbox" value="Romance">Romance</li>
-                        <li><input class="form-check-input me-2" type="checkbox" value="Crime">Crime</li>
-                        <li><input class="form-check-input me-2" type="checkbox" value="Documentary">Documentary</li>
+                    <ul class="dropdown-menu w-100 p-2">
+                        <li><input class="form-check-input me-2" type="checkbox" value="Action">אקשן</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Comedy">קומדיה</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Animation">אנימציה</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Horror">אימה</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Sci-Fi">מדע בדיוני</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Romance">רומנטיקה</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Crime">פשע</li>
+                        <li><input class="form-check-input me-2" type="checkbox" value="Documentary">דוקומנטרי</li>
                     </ul>
                 </div>
             </div>
@@ -67,22 +66,20 @@
             <div class="col-12">
                 <label class="form-label">תיאור</label>
                 <textarea id="description" class="form-control" rows="3" required></textarea>
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label">דירוג (1–5)</label>
-                <input type="number" id="rating" class="form-control" required min="0" max="5" step="0.1" value="0">
+                <div class="invalid-feedback">השדה לא תקין</div>
             </div>
 
             <div class="col-md-4">
                 <label class="form-label">במאי</label>
                 <input type="text" id="directorName" class="form-control" required>
+                <div class="invalid-feedback">השדה לא תקין</div>
             </div>
 
             <div class="col-md-4">
                 <label class="form-label">ויקיפדיה של הבמאי</label>
                 <input type="text" id="directorWiki" class="form-control" required
                     placeholder="https://en.wikipedia.org/wiki/Christopher_Nolan">
+                <div class="invalid-feedback">השדה לא תקין</div>
             </div>
 
             <div class="col-12">
@@ -101,11 +98,13 @@
             <div class="col-md-6">
                 <label class="form-label">בחר.י תמונה</label>
                 <input type="file" id="photoFile" class="form-control" required accept="image/*">
+                <div class="invalid-feedback">שדה חובה</div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6" id="movie">
                 <label class="form-label">בחר.י וידאו (MP4)</label>
-                <input type="file" id="videoFile" class="form-control" required accept="video/mp4">
+                <input type="file" id="videoFile" class="form-control" accept="video/mp4">
+                <div class="invalid-feedback">שדה חובה</div>
             </div>
 
             <div class="col-md-6 episode-container">
@@ -115,40 +114,41 @@
                         <div class="episode-row-inputs">
                             <div class="col-md-1"">
                                 <label>עונה</label>
-                                <input type="number" id="seasonNumber" class="form-control" required/>
-                            </div>
-                            <div class="col-md-1">
-                                <label>פרק</label>
-                                <input type="number" id="episodeNumber" class="form-control" required/>
-                            </div>
-                            <div class="col-md-4"">
+                                <input type=" number" id="seasonNumber" class="form-control" />
+                        </div>
+                        <div class="col-md-1">
+                            <label>פרק</label>
+                            <input type="number" id="episodeNumber" class="form-control" />
+                        </div>
+                        <div class="col-md-4"">
                                 <label>תיאור קצר</label>
-                                <input type="text" id="shortDescription" class="form-control" required/>
-                            </div>
-                            <div class="col-md-2"">
-                                <label>וידאו</label>
-                                <input type="file" id="episodeVideo" class="form-control episode-video" required/>
-                            </div>
-                        </div>
-                        <div class="episode-row add-episode-wrapper">
-                            <button type="button" style="width: 90px;" class="btn btn-primary add-actor-btn" id="addEpisode">הוסף פרק</button>
-                        </div>
+                                <input type=" text" id="shortDescription" class="form-control" />
                     </div>
+                    <div class="col-md-2"">
+                                <label>וידאו</label>
+                                <input type="file" id="episodeVideo" class="form-control episode-video" />
                 </div>
-                <ul id="episodesList" class="list-group mt-2"></ul>
             </div>
-
-            <div class="col-12 text-center add-content-btn-wrapper">
-                <button type="submit" id="buildJSON" class="add-media">הוספת תוכן</button>
+            <div class="episode-row add-episode-wrapper">
+                <button type="button" style="width: 90px;" class="btn btn-primary add-actor-btn" id="addEpisode">הוסף
+                    פרק</button>
             </div>
+    </div>
+    </div>
+    <ul id="episodesList" class="list-group mt-2"></ul>
+    </div>
 
-            <!-- <div class="col-12 text-center">
+    <div class="col-12 text-center add-content-btn-wrapper">
+        <button type="submit" id="buildJSON" class="add-media">הוספת תוכן</button>
+    </div>
+
+    <!-- <div class="col-12 text-center">
                 <button type="submit" class="btn btn-primary mt-3 px-4" id="buildJSON">צור JSON</button>
             </div> -->
-        </form>
+    </form>
 
-        <h4 class="mt-5"> JSON שנוצר:</h4>
-        <pre id="output">{}</pre>
+    <h4 class="mt-5"> JSON שנוצר:</h4>
+    <pre id="output">{}</pre>
     </div>
     <script src="client/components/add-media/add-media.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>

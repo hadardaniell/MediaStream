@@ -10,7 +10,8 @@ class Navbar extends HTMLElement {
       ${html}
     `;
 
-        this.initLogic();
+        await this.initLogic();
+        this.dispatchEvent(new CustomEvent('component-ready', { bubbles: true }));
     }
 
     async initLogic() {

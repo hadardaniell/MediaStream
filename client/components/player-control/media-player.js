@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           }
         }
       }).catch(err => {
-        if (err.message.includes('Not found')) {
+        // if (err.message.includes('Not found')) {
           activeWatchData = null;
           // אין נתוני צפייה קודמים
           switch (contentData.type) {
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               loadMovie(contentData, true);
             }
           }
-        }
+        // }
       });
 
 
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     highlightActiveEpisode();
 
     // אם פרמטר מה-URL STARTFROMBEGINNING=true, מתחילים מהתחלה
-    if (startFromBeginning || activeWatchData.status != 'in_progress') {
+    if (startFromBeginning || !activeWatchData || activeWatchData.status != 'in_progress') {
       video.currentTime = 0;
     }
     // אחרת אם יש נתוני activeWatchData ומצב in_progress
