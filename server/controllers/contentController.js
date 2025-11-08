@@ -7,7 +7,7 @@ import { syncImdbRatingForContent } from '../services/ratingsService.js';
 
 // allow only schema fields
 const ALLOWED_FIELDS = [
-  'name','type','year','photo','genres','description','cast','director','likes','externalIds','ratings'
+  'name','type','year','photo','genres','description','cast','director','likes','externalIds'
 ]; 
 
 const pick = (obj, allowed) =>
@@ -357,10 +357,6 @@ try {
       // BSON int
       body.year = new Int32(y);
 
-      const r = toNumber(body.rating);
-      if (r == null || r < 0 || r > 10)
-        return res.status(400).json({ error: 'rating must be a number between 0 and 10' });
-      body.rating = r;
 
       body.photo = String(body.photo);
       body.video = String(body.video);
@@ -428,10 +424,6 @@ try {
         return res.status(400).json({ error: 'year must be an integer between 1888 and 2100' });
       body.year = new Int32(y);
 
-      const r = toNumber(body.rating);
-      if (r == null || r < 0 || r > 10)
-        return res.status(400).json({ error: 'rating must be a number between 0 and 10' });
-      body.rating = r;
 
       body.photo = String(body.photo);
       body.video = String(body.video);
@@ -608,13 +600,6 @@ try {
         updates.photo = String(updates.photo);
         if (!PHOTO_RE.test(updates.photo))
           return res.status(400).json({ error: 'photo must be a valid image URL/path' });
-      }
-
-      if ('rating' in updates && updates.rating != null) {
-        const r = toNumber(updates.rating);
-        if (r == null || r < 0 || r > 10)
-          return res.status(400).json({ error: 'rating must be 0..10' });
-        updates.rating = r;
       }
 
       if ('likes' in updates) {
