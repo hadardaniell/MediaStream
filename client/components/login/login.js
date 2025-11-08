@@ -1,6 +1,6 @@
+let loginMode = true;
 document.addEventListener("DOMContentLoaded", () => {
    localStorage.setItem("isAuthenticated", false);
-  let loginMode = true;
   const form = document.getElementById("login-form");
 
   form.addEventListener("submit", async (event) => {
@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   document.getElementById("signin-mode").addEventListener("click", () => {
-    loginMode = !loginMode;
     if (loginMode) {
       document.getElementById("main-header").textContent = "הרשמו כדי להמשיך";
       document.getElementById("login-btn").textContent = "הרשמה";
@@ -36,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("question-login").textContent = "משתמש חדש?";
       document.getElementById("signin-mode").textContent = "להרשמה לחצו";
     }
+    loginMode = !loginMode;
   });
 
   document.getElementById('login-btn').addEventListener('click', async () => {

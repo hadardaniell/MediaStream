@@ -1,23 +1,108 @@
+// const activeProfileId = localStorage.getItem('activeProfileId');
+
+// document.addEventListener("DOMContentLoaded", async () => {
+//   const loader = document.getElementById("loader");
+//   const container = document.getElementById("container");
+//   // loader.style.display = "flex";
+//   // container.style.opacity = 1;
+
+
+//   if (!Boolean(localStorage.getItem("isAuthenticated"))) {
+//     window.location.href = "/login";
+//     return;
+//   }
+
+//   await Promise.all([
+//     waitForComponent('media-stream-navbar'),
+//     waitForComponent('media-stream-profiles-bar')
+//   ]);
+//   container.style.display = "block";
+//   loader.style.display = "none";
+
+//   try {
+//     const allContent = await fetch("http://localhost:3000/api/content/profile/" + activeProfileId, {
+//       method: "GET",
+//       headers: { "Content-Type": "application/json" },
+//     })
+//       .then(res => res.json())
+//       .catch(() => []);
+
+//     renderSection("continue-watching", getContinueWatching(allContent));
+//     renderSection("recommended", getRecommendations(allContent));
+//     renderSection("popular", getPopular(allContent));
+//     renderNewByGenre(allContent);
+//     // await customElements.whenDefined('media-stream-navbar');
+//     // await customElements.whenDefined('media-stream-profiles-bar');
+
+//     const navbar = document.querySelector('media-stream-navbar');
+//     const profilesBar = document.querySelector('media-stream-profiles-bar');
+//   }
+//   catch {
+//     //error
+//   }
+//   finally {
+//     loader.style.display = "none"
+//     // container.style.opacity = 1;
+//     container.style.display = "flex"
+//   }
+// });
+
 const activeProfileId = localStorage.getItem('activeProfileId');
 
 document.addEventListener("DOMContentLoaded", async () => {
+  const loader = document.getElementById("loader");
+  const container = document.getElementById("container");
+
   if (!Boolean(localStorage.getItem("isAuthenticated"))) {
     window.location.href = "/login";
     return;
   }
 
-  const allContent = await fetch("http://localhost:3000/api/content/profile/" + activeProfileId, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  })
-    .then(res => res.json())
-    .catch(() => []);
+  try {
+    // מחכים שה־custom elements יטענו
+    await Promise.all([
+      waitForComponentReady('media-stream-navbar'),
+      waitForComponentReady('media-stream-profiles-bar')
+    ]);
 
-  renderSection("continue-watching", getContinueWatching(allContent));
-  renderSection("recommended", getRecommendations(allContent));
-  renderSection("popular", getPopular(allContent));
-  renderNewByGenre(allContent);
+    // Fetch תוכן
+    const response = await fetch(`http://localhost:3000/api/content/profile/${activeProfileId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    });
+    const allContent = await response.json().catch(() => []);
+
+    // Render תוכן
+    renderSection("continue-watching", getContinueWatching(allContent));
+    renderSection("recommended", getRecommendations(allContent));
+    renderSection("popular", getPopular(allContent));
+    renderNewByGenre(allContent);
+
+  } catch (err) {
+    console.error(err);
+    // במקרה של שגיאה, עדיין מוסירים את הלודר
+    loader.style.display = "none";
+    container.style.display = "flex";
+  }
+  finally{
+    loader.style.display = "none";
+    container.style.display = "flex";
+  }
 });
+
+// פונקציה שמחכה עד ש־custom element נטען
+function waitForComponentReady(selector) {
+  return new Promise(resolve => {
+    const el = document.querySelector(selector);
+    if (!el) return resolve();
+
+    // אם כבר מוכן
+    if (el.shadowRoot && el.shadowRoot.children.length > 0) return resolve();
+
+    el.addEventListener('component-ready', () => resolve(), { once: true });
+  });
+}
+
 
 function posterClick(id) {
   window.location.href = `/media-content/${id}`;
