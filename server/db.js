@@ -12,7 +12,7 @@ export async function getDb() {
   if (!db) {
     await client.connect();
     db = client.db("DisneyPlusDB"); // name of your database
-    console.log("✅ Connected to MongoDB Atlas");
+    console.log("Connected to MongoDB Atlas - Great Success!");
   }
   return db;
 }

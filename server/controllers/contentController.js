@@ -7,7 +7,7 @@ import { syncImdbRatingForContent } from '../services/ratingsService.js';
 
 // allow only schema fields
 const ALLOWED_FIELDS = [
-  'name','type','year','photo','video','genres','description','cast','director',
+  'name','type','year','photo','genres','description','cast','director',
   'rating','likes','externalIds','ratings'
 ]; 
 
@@ -343,7 +343,6 @@ try {
       if (body.type == null || !TYPE_ENUM.includes(String(body.type))) return res.status(400).json({ error: 'type must be "series" or "movie"' });
       if (body.year == null) return res.status(400).json({ error: 'year is required' });
       if (body.photo == null || !PHOTO_RE.test(String(body.photo))) return res.status(400).json({ error: 'photo must be a valid URL or path ending with .png/.jpg/.jpeg/.webp' });
-      if (body.video == null || !VIDEO_RE.test(String(body.video))) return res.status(400).json({ error: 'Video must be a valid URL or path ending with .mp4' });
       if (body.genres == null) return res.status(400).json({ error: 'genres is required' });
       if (body.description == null || trimStr(body.description) === '') return res.status(400).json({ error: 'description is required' });
       if (body.cast == null) return res.status(400).json({ error: 'cast is required' });
@@ -418,7 +417,6 @@ try {
       if (String(body.type) !== 'series') return res.status(400).json({ error: 'type must be "series" for this endpoint' });
       if (body.year == null) return res.status(400).json({ error: 'year is required' });
       if (body.photo == null || !PHOTO_RE.test(String(body.photo))) return res.status(400).json({ error: 'photo must be a valid URL or path ending with .png/.jpg/.jpeg/.webp' });
-      if (body.video == null || !VIDEO_RE.test(String(body.video))) return res.status(400).json({ error: 'Video must be a valid URL or path ending with .mp4' });
       if (body.genres == null) return res.status(400).json({ error: 'genres is required' });
       if (body.description == null || trimStr(body.description) === '') return res.status(400).json({ error: 'description is required' });
       if (body.cast == null) return res.status(400).json({ error: 'cast is required' });
@@ -614,12 +612,7 @@ try {
         if (!PHOTO_RE.test(updates.photo))
           return res.status(400).json({ error: 'photo must be a valid image URL/path' });
       }
-      if ('video' in updates && updates.video != null) {
-        updates.video = String(updates.video);
-        if (!VIDEO_RE.test(updates.video))
-          return res.status(400).json({ error: 'Video must be a valid mp4 URL/path' });
-      }
-
+      
       if ('rating' in updates && updates.rating != null) {
         const r = toNumber(updates.rating);
         if (r == null || r < 0 || r > 10)

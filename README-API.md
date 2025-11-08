@@ -116,6 +116,8 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 | **POST** | `/api/uploads/movie` | Upload a movie file (`.mp4`) to `client/assets/movies`.<br>→ **Body:** raw binary file (`Content-Type: application/octet-stream`)<br>→ **Header:** `X-Filename: <originalFileName>`<br>→ Returns: `{ ok, type, path, filename }` where `path` is the public URL (e.g. `/assets/movies/yourfile.mp4`) |
 | **POST** | `/api/uploads/poster` | Upload a poster image (`.jpg`, `.png`, `.webp`) to `client/assets/posters`.<br>→ **Body:** raw binary file (`Content-Type: application/octet-stream`)<br>→ **Header:** `X-Filename: <originalFileName>`<br>→ Returns: `{ ok, type, path, filename }` where `path` is the public URL (e.g. `/assets/posters/yourfile.webp`) |
 | **POST** | `/api/uploads/profile-photo` | Upload a profile photo (`.jpg`, `.png`, `.webp`) to `client/assets/profile-photos`.<br>→ **Body:** raw binary file (`Content-Type: application/octet-stream`)<br>→ **Header:** `X-Filename: <originalFileName>`<br>→ Returns: `{ ok, type, path, filename }` where `path` is the public URL (e.g. `/assets/profile-photos/avatar.png`) |
+| **POST** | `/api/uploads/episode` | Upload an episode file for a specific series and season/episode number |
+
 
 ### Example cURL for Uploads
 ```bash
