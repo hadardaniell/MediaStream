@@ -7,8 +7,7 @@ import { syncImdbRatingForContent } from '../services/ratingsService.js';
 
 // allow only schema fields
 const ALLOWED_FIELDS = [
-  'name','type','year','photo','genres','description','cast','director',
-  'rating','likes','externalIds','ratings'
+  'name','type','year','photo','genres','description','cast','director','likes','externalIds','ratings'
 ]; 
 
 const pick = (obj, allowed) =>
@@ -347,7 +346,6 @@ try {
       if (body.description == null || trimStr(body.description) === '') return res.status(400).json({ error: 'description is required' });
       if (body.cast == null) return res.status(400).json({ error: 'cast is required' });
       if (body.director == null) return res.status(400).json({ error: 'director is required' });
-      if (body.rating == null) return res.status(400).json({ error: 'rating is required' });
 
       // normalize scalars
       body.name = trimStr(body.name);
@@ -421,7 +419,6 @@ try {
       if (body.description == null || trimStr(body.description) === '') return res.status(400).json({ error: 'description is required' });
       if (body.cast == null) return res.status(400).json({ error: 'cast is required' });
       if (body.director == null) return res.status(400).json({ error: 'director is required' });
-      if (body.rating == null) return res.status(400).json({ error: 'rating is required' });
 
       body.name = trimStr(body.name);
       body.type = String(body.type);
@@ -612,7 +609,7 @@ try {
         if (!PHOTO_RE.test(updates.photo))
           return res.status(400).json({ error: 'photo must be a valid image URL/path' });
       }
-      
+
       if ('rating' in updates && updates.rating != null) {
         const r = toNumber(updates.rating);
         if (r == null || r < 0 || r > 10)
