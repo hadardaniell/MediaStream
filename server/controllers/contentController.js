@@ -7,7 +7,7 @@ import { syncImdbRatingForContent } from '../services/ratingsService.js';
 
 // allow only schema fields
 const ALLOWED_FIELDS = [
-  'name','type','year','photo','genres','description','cast','director','likes','externalIds','rating'
+  'name','type','year','photo','genres','description','cast','director','likes','externalIds','rating','video'
 ]; 
 
 const pick = (obj, allowed) =>
@@ -365,6 +365,22 @@ try {
       const r = body.rating == null ? 0 : Number(body.rating);
       body.rating = Number.isFinite(r) ? r : 0;
 
+      if (body.type === 'movie') {
+  // video is OPTIONAL for movies (not required) — only validate if provided
+      if (body.video != null) {
+    body.video = String(body.video);
+     if (!VIDEO_RE.test(body.video)) {
+      return res.status(400).json({ error: 'video must be a valid .mp4 URL/path' });
+       }
+    }
+    } else if (body.type === 'series') {
+  // series MUST NOT have a content-level video
+  if (body.video != null) {
+    return res.status(400).json({ error: 'Do not include video for type "series"; episodes carry the videos.' });
+  }
+  delete body.video;
+}
+
       // normalize arrays/objects
       if (!Array.isArray(body.genres)) body.genres = [String(body.genres)];
       const genresErr = validateGenres(body.genres);
@@ -390,6 +406,18 @@ try {
       // do NOT add createdAt/updatedAt unless they exist in schema
 
       const created = await ContentModel.create(body);
+
+      try {
+        const r = await syncImdbRatingForContent(String(created._id));
+        if (r?.ok) {
+        // reflect fresh rating/ratings.imdb in response
+        const fresh = await ContentModel.getById(String(created._id));
+        return res.status(201).json(fresh);
+      }
+    } catch (e) {
+      console.warn('post-create rating sync failed:', e?.message || e);
+    }
+
       return res.status(201).json(created);
     } catch (err) {
       console.error('❌ create:', err);
@@ -430,6 +458,11 @@ try {
 
       const r = body.rating == null ? 0 : Number(body.rating);
       body.rating = Number.isFinite(r) ? r : 0;
+
+      if (body.video != null) {
+      return res.status(400).json({ error: 'Do not include video on series content; use episodes.video instead.' });
+      }
+      delete body.video;
 
 
       body.photo = String(body.photo);
@@ -472,10 +505,21 @@ try {
       // -----------------------------
       const episodesPayload = Array.isArray(req.body?.episodes) ? req.body.episodes : [];
       if (episodesPayload.length === 0) {
-        return res.status(201).json({
-          content: createdContent,
-          episodes: { ok: true, insertedCount: 0, rejectedCount: 0, inserted: [], rejects: [] }
-        });
+      // Sync rating now that content is persisted
+        let syncedContent = createdContent;
+        try {
+          const r = await syncImdbRatingForContent(String(createdContent._id));
+          if (r?.ok) {
+          syncedContent = await ContentModel.getById(String(createdContent._id));
+          }
+    }  catch (e) {
+         console.warn('post-create(series, no-episodes) rating sync failed:', e?.message || e);
+    }
+      return res.status(201).json({
+      content: syncedContent,
+    episodes: { ok: true, insertedCount: 0, rejectedCount: 0, inserted: [], rejects: [] }
+    });
+
       }
 
       const contentId = createdContent._id;
@@ -524,16 +568,25 @@ try {
       try {
         const result = await db.collection('Episodes').insertMany(docs, { ordered: false });
         const inserted = Object.values(result.insertedIds).map((id, idx) => ({ index: idx, _id: id }));
+        let syncedContent = createdContent;
+      try {
+        const r = await syncImdbRatingForContent(String(createdContent._id));
+        if (r?.ok) {
+        syncedContent = await ContentModel.getById(String(createdContent._id));
+        }
+      } catch (e) {
+      console.warn('post-create(series) rating sync failed:', e?.message || e);
+      }
         return res.status(201).json({
-          content: createdContent,
-          episodes: {
-            ok: true,
-            insertedCount: inserted.length,
-            rejectedCount: rejects.length,
-            inserted,
-            rejects
-          }
-        });
+        content: syncedContent,
+        episodes: {
+          ok: true,
+          insertedCount: inserted.length,
+          rejectedCount: rejects.length,
+          inserted,
+          rejects
+        }
+      });
       } catch (e) {
         const writeErrors = e?.writeErrors ?? [];
         const dupes = writeErrors
@@ -585,6 +638,31 @@ try {
       const updates = pick(req.body, ALLOWED_FIELDS);
       if (Object.keys(updates).length === 0)
         return res.status(400).json({ error: 'No updatable fields provided' });
+
+      let existing = null;
+
+      if ('video' in updates || 'type' in updates) {
+        existing = await ContentModel.getById(id);
+        if (!existing) return res.status(404).json({ error: 'Content not found' });
+      }
+        const effectiveType = ('type' in updates && updates.type != null)
+        ? String(updates.type)
+        : String(existing?.type);
+
+      if ('video' in updates) {
+        if (updates.video == null || updates.video === '') {
+        updates.$unset = { ...(updates.$unset || {}), video: '' };
+        delete updates.video; // prevent $set of undefined
+      } else {
+        updates.video = String(updates.video);
+        if (effectiveType === 'series') {
+        return res.status(400).json({ error: 'Series cannot have a content-level video; use episodes.' });
+      }
+      if (!VIDEO_RE.test(updates.video)) {
+        return res.status(400).json({ error: 'video must be a valid .mp4 URL/path' });
+         }
+        }
+      }
 
       if ('name' in updates && updates.name != null) {
         updates.name = trimStr(updates.name);
