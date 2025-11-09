@@ -244,14 +244,14 @@ function renderContent(content) {
       const seasonHeader = document.createElement("h3");
       seasonHeader.textContent = `עונה ${seasonNum}`;
       if (activeSeason === seasonNum) {
-        seasonHeader.classList.add("active");
+        seasonHeader.classList.add("active-season");
       }
 
       seasonItem.addEventListener("click", () => {
         activeSeason = seasonNum;
 
-        seasonsList.querySelectorAll("h3").forEach(h => h.classList.remove("active"));
-        seasonHeader.classList.add("active");
+        seasonsList.querySelectorAll("h3").forEach(h => h.classList.remove("active-season"));
+        seasonHeader.classList.add("active-season");
 
         const episodesPerSeason = content.episodes.filter(ep => ep.seasonNumber === seasonNum);
 
