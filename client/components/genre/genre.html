@@ -13,22 +13,21 @@
 
 <body dir="rtl">
   <div class="container py-4">
-    <!-- <h1>בחר ז׳אנר</h1> -->
 
-    <!-- סרגל סינון -->
-    <div class="filter-bar mb-3">
-      <div class="btn-group flex-wrap" role="group">
-        <button class="btn btn-primary filter-btn" data-genre="all">הכל</button>
-        <button class="btn btn-outline-light filter-btn" data-genre="action">קומדיה</button>
-        <button class="btn btn-outline-light filter-btn" data-genre="comedy">רומנטיקה</button>
-        <button class="btn btn-outline-light filter-btn" data-genre="drama">אקשן</button>
-        <button class="btn btn-outline-light filter-btn" data-genre="animation">דרמה</button>
-        <button class="btn btn-outline-light filter-btn" data-genre="action">מדע בדיוני</button>
-        <button class="btn btn-outline-light filter-btn" data-genre="action">אנימציה</button>
-        <button class="btn btn-outline-light filter-btn" data-genre="action">ריאליטי</button>  
-      </div>
+    <!-- סינון ומיון -->
+    <div class="filters d-flex justify-content-center align-items-center flex-wrap gap-3">
+      <select id="genreSelect" class="form-select form-select-dark w-auto">
+        <option value="all">כל הז׳אנרים</option>
+        <option value="action">אקשן</option>
+        <option value="horror">אימה</option>
+        <option value="crime">פשע</option>
+        <option value="scifi">מדע בדיוני</option>
+        <option value="animation">אנימציה</option>
+        <option value="romance">רומנטיקה</option>
+        <option value="comedy">קומדיה</option>
+        <option value="documentary">דוקומנטרי</option>
+      </select>
 
-    <div class="filters d-flex justify-content-center mt-4 flex-wrap gap-3">
       <select id="sortSelect" class="form-select form-select-dark w-auto">
         <option value="popularity">מיון לפי פופולריות</option>
         <option value="rating">מיון לפי דירוג</option>
@@ -39,8 +38,6 @@
         <option value="watched">נצפה</option>
         <option value="unwatched">לא נצפה</option>
       </select>
-    </div>
-
     </div>
 
     <!-- תוכן הסדרות -->
