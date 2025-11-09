@@ -14,7 +14,9 @@ import episodesRoutes from './routes/episodesRoutes.js';
 import profileRoutes from './routes/profilesRoutes.js';
 import likesRoutes from './routes/likesRoutes.js';
 import watchesRoutes from './routes/watchesRoutes.js';
-import uploadsRoutes from './routes/uploadRoutes.js'
+import uploadsRoutes from './routes/uploadRoutes.js';
+import { requestLogger } from './middlewares/requestLogger.js';
+import { errorLogger } from './middlewares/errorLogger.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -49,6 +51,8 @@ app.use(async (req, _res, next) => {
   next();
 });
 
+app.use(requestLogger);
+
 // Routes
 app.use('/client', express.static(path.join(__dirname, '../client')));
 app.use('/api/uploads', uploadsRoutes);
@@ -61,6 +65,8 @@ app.use('/api/profiles', profileRoutes);
 app.use('/api/likes', likesRoutes);
 app.use('/api/watches', watchesRoutes)
 app.use('/assets', express.static(path.join(__dirname, 'client', 'assets')));
+
+app.use(errorLogger);
 
 // Start Server
 app.listen(PORT, () => {
