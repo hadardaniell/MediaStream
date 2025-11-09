@@ -161,6 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', e => {
         e.preventDefault();
 
+        // const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        // successModal.show();
+
         // בדיקה שדות genres
         const checkedGenres = document.querySelectorAll(".dropdown-menu input[type='checkbox']:checked");
         const dropdown = document.querySelector(".btn-genres");
@@ -212,14 +215,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const mediaPhotoFile = document.getElementById("photoFile").files[0];
 
-        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+        // document.getElementById("output").textContent = JSON.stringify(data, null, 2);
 
         const uploadedMedia = await addMedia(type, data);
         if (uploadedMedia) {
             await upload(mediaPhotoFile, 'poster');
             if (type === 'series') {
                 episodesValue.forEach(ep => {
-                    const episode = episodes.find(episode =>  ep.name === episode.name 
+                    const episode = episodes.find(episode => ep.name === episode.name
                         && ep.seasonNumber === episode.seasonNumber
                         && ep.episodeNumber === episode.episodeNumber);
                     uploadEpisode(episode.video, name, ep.seasonNumber, ep.episodeNumber);
@@ -230,6 +233,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 await upload(movieFile, 'movie');
             }
         }
+
+        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
     }
 
     document.getElementById("disney-logo-btn").addEventListener("click", () => {
@@ -253,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await res.json();
             console.log("נשלח בהצלחה:", result);
             alert("התוכן נוסף בהצלחה!");
-            return result; 
+            return result;
         } catch (err) {
             console.error("שגיאה בשליחה:", err);
             alert("שגיאה בשליחה לשרת");
@@ -298,10 +304,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function slugifyDir(name) {
-  return String(name)
-    .trim()
-    .toLowerCase()
-    .replace(/['"`]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '') || 'series';
+    return String(name)
+        .trim()
+        .toLowerCase()
+        .replace(/['"`]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '') || 'series';
 }
