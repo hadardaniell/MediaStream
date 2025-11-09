@@ -28,65 +28,15 @@ class ProfilesBar extends HTMLElement {
       ${html}
     `;
 
-    // אחרי שה־HTML נטען, מוסיפים האזנה ללחיצה
     await this.initLogic();
     this.dispatchEvent(new CustomEvent('component-ready', { bubbles: true }));
   }
 
-  // initLogic() {
-  //   let allProfiles = [];
-  //   // document.addEventListener("DOMContentLoaded", async () => {
-  //     const userId = localStorage.getItem("userId");
-  //     if (!userId) {
-  //       // window.location.href = "../login";
-  //       // return;
-  //     }
-
-  //     const allProfiles = await fetch("http://localhost:3000/api/profiles?userId=" + userId, {
-  //       method: "GET",
-  //       headers: { "Content-Type": "application/json" },
-  //     })
-  //       .then(res => allProfiles = res.json())
-  //       .catch(() => []);
-
-  //     document.getElementById('profiles-container').innerHTML = allProfiles.map((profile) => {
-  //       return `<div class="profile">
-  //       <img src="${photo}" class="profile-img">
-  //       <input type="text" class="form-control input" value="${profile.name}">
-  //     </div>`;
-  //     });
-
-  //   // });
-  //   // כל פרופיל הוא div עם class "profile"
-  //   const profiles = this.shadowRoot.querySelectorAll('.profile');
-  //   profiles.forEach(profile => {
-  //     profile.addEventListener('click', () => {
-  //       // אפשר לקחת את שם המשתמש מה־input שבתוך הפרופיל
-  //       const nameInput = profile.querySelector('input');
-  //       const profileName = nameInput ? nameInput.value : '';
-
-  //       // ניווט ל־feed עם פרמטרים
-  //       // history.pushState({}, '', `/feed?profile=${encodeURIComponent(profileName)}`);
-  //       // loadPage('/feed');
-  //       // navigateTo(`/feed?profile=${encodeURIComponent(profileName)}`);
-
-  //       window.location.href = `/feed`;
-  //     });
-  //   });
-
-  //   // לחיצה על כפתור ההוספה
-  //   const addBtn = this.shadowRoot.querySelector('.add-container');
-  //   if (addBtn) {
-  //     addBtn.addEventListener('click', () => {
-  //       alert('כאן נוסיף פרופיל חדש 😎');
-  //     });
-  //   }
-  // }
-
   async initLogic() {
     const userId = localStorage.getItem("userId");
+    const activeProfileId = localStorage.getItem('activeProfileId');
     if (!userId) {
-      // window.location.href = "../login";
+      window.location.href = "../login";
       return;
     }
 
@@ -97,11 +47,11 @@ class ProfilesBar extends HTMLElement {
       const allProfiles = await res.json();
       const container = this.shadowRoot.getElementById('profiles-container');
 
-      // ממלאים את הפרופילים
       container.innerHTML = allProfiles.map(profile => `
       <div class="profile" data-id="${profile._id}">
-        <img src="${profile.photo || 'client/assets/profiles-photos/mini.png'}" 
+        <img src="${profile.photo}" class="${activeProfileId == profile._id ? 'profile-img active-profile' : 'profile-img'}" 
         class="profile-img" id="${profile._id}">
+        <div class="active-check"></div>
         <input type="text" class="form-control input" value="${profile.name}">
       </div>
     `).join('');

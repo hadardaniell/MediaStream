@@ -179,7 +179,8 @@ function renderContent(content) {
 
   const startBtn = document.createElement("button");
   startBtn.className = 'start-btn';
-  startBtn.addEventListener("click", () => {
+  startBtn.addEventListener("click", async () => {
+    await resetWatchProgress(contentData._id);
     window.location.href = '/player/' + content._id + '?startFromBeginning=true';
   });
   actions.appendChild(startBtn);
@@ -358,3 +359,12 @@ createSimilarContentSection = (similarContents) => {
 document.querySelector(".close-icon").addEventListener("click", () => {
   window.location.href = '/feed?profile=' + activeProfileId;
 });
+
+  async function resetWatchProgress(contentId) {
+    await fetch('http://localhost:3000/api/watches/' + activeProfileId + '/' + contentId  , {
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      method: 'DELETE'
+    }).then(res => res)
+  }
