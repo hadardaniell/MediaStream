@@ -541,7 +541,7 @@ h3 {
 
 .episode-img {
     width: 200px;
-    height: 115px;
+    height: 150px;
     border-radius: 8px;
     object-fit: cover;
 }
@@ -685,4 +685,9 @@ hover-link {
     display: flex;
     flex-direction: column-reverse;
     gap: 1em;
+}
+
+
+.clickable {
+    cursor: pointer;
 }
