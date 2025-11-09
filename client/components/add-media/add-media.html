@@ -107,7 +107,7 @@
                 <div class="invalid-feedback">שדה חובה</div>
             </div>
 
-            <div class="col-md-6 episode-container">
+            <div class="col-md-12 episode-container">
                 <div id="episodesSection" style="display:none;" class="episodes-wrapper">
                     <label>הוספת פרקים</label>
                     <div class="episode-row">
@@ -126,7 +126,7 @@
                     </div>
                     <div class="col-md-2"">
                                 <label>וידאו</label>
-                                <input type="file" id="episodeVideo" class="form-control episode-video" />
+                                <input type=" file" id="episodeVideo" class="form-control episode-video" />
                 </div>
             </div>
             <div class="episode-row add-episode-wrapper">
@@ -147,9 +147,29 @@
             </div> -->
     </form>
 
-    <h4 class="mt-5"> JSON שנוצר:</h4>
-    <pre id="output">{}</pre>
+    
+    <!-- 
+        <h4 class="mt-5"> JSON שנוצר:</h4>
+        <pre id="output">{}</pre> -->
+    </div>
+    <!-- Modal הצלחה -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content disney-modal">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">הוספת תוכן התבצעה בהצלחה</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    התוכן נוסף בהצלחה וזמין לצפייה!
+                </div>
+                <div class="modal-footer border-0 justify-content-between">
+                    <button type="button" class="btn btn-outline-light btn-add" data-bs-dismiss="modal">הוספת תוכן נוסף</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">צפייה בתוכן</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="client/components/add-media/add-media.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
