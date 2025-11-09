@@ -207,6 +207,179 @@ export const ContentController = {
       return res.status(500).json({ error: 'Server error' });
     }
   },
+
+  // ✅ GET /api/content/popular/profile/:profileId
+// Query params (same as /popular): ?mode=likes|rating|hybrid&limit=10&type=movie|series&genre=[Action,Comedy]&minRating=7&wLikes=1&wRating=1
+async getPopularWithProfile(req, res) {
+  try {
+    const {
+      mode = 'likes',      // 'likes' | 'rating' | 'hybrid'
+      limit = '10',
+      type,
+      genre,
+      minRating,
+      wLikes,
+      wRating
+    } = req.query;
+
+    const { profileId } = req.params;
+    if (!ObjectId.isValid(String(profileId))) {
+      return res.status(400).json({ error: 'Invalid profileId' });
+    }
+    const pid = new ObjectId(String(profileId));
+
+    // Build filters (same conventions as your other methods)
+    const filter = {};
+    if (type) filter.type = String(type);
+
+    if (genre) {
+      const genres = String(genre)
+        .replace(/^\[|\]$/g, '')
+        .split(',')
+        .map(g => g.trim())
+        .filter(Boolean);
+      if (genres.length) filter.genres = { $in: genres };
+    }
+
+    if (minRating !== undefined) {
+      const mr = Number(minRating);
+      if (Number.isFinite(mr)) filter.rating = { $gte: mr };
+    }
+
+    // We’ll compute popularity inside the pipeline:
+    // - likesCount: total likes for each content
+    // - score: based on mode:
+    //      likes   => likesCount
+    //      rating  => rating
+    //      hybrid  => (wLikes * likesCount) + (wRating * rating)
+    const wL = Number.isFinite(Number(wLikes)) ? Number(wLikes) : 1;
+    const wR = Number.isFinite(Number(wRating)) ? Number(wRating) : 1;
+
+    // Build score expression based on mode
+    let scoreExpr;
+    if (mode === 'rating') {
+      scoreExpr = { $ifNull: ['$rating', 0] };
+    } else if (mode === 'hybrid') {
+      scoreExpr = {
+        $add: [
+          { $multiply: [ wL, { $ifNull: ['$likesCount', 0] } ] },
+          { $multiply: [ wR, { $ifNull: ['$rating', 0] } ] }
+        ]
+      };
+    } else {
+      // default: likes
+      scoreExpr = { $ifNull: ['$likesCount', 0] };
+    }
+
+    const db = await getDb();
+
+    const pipeline = [
+      Object.keys(filter).length ? { $match: filter } : null,
+
+      // Total likes for each content
+      {
+        $lookup: {
+          from: 'Likes',
+          localField: '_id',
+          foreignField: 'contentId',
+          as: 'likesAll'
+        }
+      },
+      { $addFields: { likesCount: { $size: '$likesAll' } } },
+
+      // Profile-specific like (boolean)
+      {
+        $lookup: {
+          from: 'Likes',
+          let: { contentId: '$_id' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$contentId', '$$contentId'] },
+                    { $eq: ['$profileId', pid] }
+                  ]
+                }
+              }
+            },
+            { $limit: 1 },
+            { $project: { _id: 1 } }
+          ],
+          as: 'likeForProfile'
+        }
+      },
+      { $addFields: { hasLike: { $gt: [{ $size: '$likeForProfile' }, 0] } } },
+
+      // Profile-specific watch info (last state)
+      {
+        $lookup: {
+          from: 'watches',
+          let: { contentId: '$_id' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$contentId', '$$contentId'] },
+                    { $eq: ['$profileId', pid] }
+                  ]
+                }
+              }
+            },
+            { $sort: { updatedAt: -1 } },
+            {
+              $project: {
+                _id: 0,
+                status: 1,
+                progressSeconds: 1,
+                seasonNumber: 1,
+                episodeNumber: 1,
+                updatedAt: 1,
+                lastWatchedAt: 1
+              }
+            },
+            { $limit: 1 }
+          ],
+          as: 'watchForProfile'
+        }
+      },
+      {
+        $addFields: {
+          watch: {
+            $ifNull: [{ $arrayElemAt: ['$watchForProfile', 0] }, { status: 'unstarted' }]
+          }
+        }
+      },
+
+      // Compute score for ordering
+      { $addFields: { score: scoreExpr } },
+
+      // Sort by chosen popularity score (desc)
+      { $sort: { score: -1, _id: 1 } },
+
+      // Limit
+      { $limit: Number(limit) },
+
+      // Clean-up projection
+      {
+        $project: {
+          likesAll: 0,
+          likeForProfile: 0,
+          watchForProfile: 0
+        }
+      }
+    ].filter(Boolean);
+
+    const rows = await db.collection('Content').aggregate(pipeline).toArray();
+    return res.json(rows);
+  } catch (err) {
+    console.error('getPopularWithProfile error:', err);
+    return res.status(500).json({ error: 'Failed to fetch popular content with profile context' });
+  }
+},
+
+
   async getAll(req, res) {
     try {
       const filter = {};

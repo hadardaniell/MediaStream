@@ -12,6 +12,7 @@ router.get('/', ContentController.getAll);
 router.post('/:id/sync-rating', requireAdmin, ContentController.syncRating);
 router.post('/sync-ratings', requireAdmin, ContentController.syncRatingsBatch);
 router.get('/popular', ContentController.getPopular);
+router.get('/popular/profile/:profileId', ContentController.getPopularWithProfile);
 router.get('/:id', ContentController.getById);
 
 //Admin Actions
