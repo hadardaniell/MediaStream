@@ -691,3 +691,8 @@ hover-link {
 .clickable {
     cursor: pointer;
 }
+
+.active-season{
+    font-weight: 600;
+    color: #3399ff !important;
+}

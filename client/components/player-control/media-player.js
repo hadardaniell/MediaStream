@@ -8,6 +8,7 @@ let startFromBeginning = false;
 let progressSeconds = 0;
 let season = 0;
 let episode = 0;
+let isCompleted = false;
 
 const video = document.getElementById('video');
 const playPauseBtn = document.getElementById('playPause');
@@ -74,9 +75,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     video.currentTime = progressSeconds;
     if (autoplay) video.play();
 
-    video.removeEventListener('loadedmetadata', startPosition);
+    // video.removeEventListener('loadedmetadata', startPosition);
   }
-
 
 
   function loadEpisode(episodes, season, episode, progressSeconds = 0, autoplay = false) {
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function renderEpisodes() {
-  seasonNumberDrawer.textContent = 'עונה ' + season;
+    seasonNumberDrawer.textContent = 'עונה ' + season;
     const seasonIndex = contentData.episodes.filter(ep => ep.seasonNumber === season)
       .findIndex(ep => ep.episodeNumber === episode);
     episodesList.innerHTML = '';
@@ -199,7 +199,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // סיום הפרק — עוברים אוטומטית לפרק הבא
-  video.addEventListener('ended', () => {
+  video.addEventListener('ended', async () => {
+    if (contentData.type === 'movie') {
+      await completed(contentId, activeProfileId);
+      isCompleted = true;
+      return;
+    }
+
     const seasonIndex = contentData.episodes.filter(ep => ep.seasonNumber === season)
       .findIndex(ep => ep.episodeNumber === episode + 1);
     if (seasonIndex === -1) {
@@ -207,7 +213,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       episode = 1;
     }
     else episode += 1
+    const maxSeason = Math.max(...contentData.episodes.map(ep => ep.seasonNumber));
+    if (contentData.type === 'series' && season > maxSeason) {
+      await completed(contentId, activeProfileId);
+      isCompleted = true;
+      return;
+    }
     loadEpisode(contentData.episodes, season, episode, 0, true);
+
     renderEpisodes();
   });
 
@@ -255,8 +268,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('subtitle').style.display = 'none';
   }
 
-  document.getElementById('backBtn').addEventListener('click' , () => {
+  document.getElementById('backBtn').addEventListener('click', async () => {
+    if (isCompleted) {
+      window.location.href = '/media-content/' + contentData._id
+      return;
+    };
+
+    progressData = {
+      profileId: activeProfileId,
+      contentId: contentData._id,
+      progressSeconds: Math.floor(video.currentTime)
+    }
+    if (contentData.type === 'series')
+      progressData = { ...progressData, episodeNumber: episode, seasonNumber: season }
+
+    await updateWatchProgress(progressData);
     window.location.href = '/media-content/' + contentData._id;
   });
 
+  async function updateWatchProgress(progressData) {
+    await fetch('http://localhost:3000/api/watches/progress', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify(progressData)
+    }).then(res => res)
+  }
+
+  async function completed(contentId, profileId) {
+    await fetch('http://localhost:3000/api/watches/complete', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({ contentId, profileId })
+    }).then(res => res)
+  }
 });

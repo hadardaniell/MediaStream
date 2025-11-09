@@ -17,25 +17,34 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActorRequired();
     };
 
-    function renderCast() {
-        const castList = document.getElementById("castList");
-        castList.innerHTML = "";
-        cast.forEach((c, i) => {
-            const li = document.createElement("li");
-            li.className = "list-group-item d-flex justify-content-between align-items-center actor-item";
-            li.innerHTML = `
-                <div>${c.name} ${c.wikipedia ? `<a href="${c.wikipedia}" target="_blank"> - ויקיפדיה </a>` : ""}</div>
-                <button class="btn btn-sm btn-outline-danger btn-delete">×</button>
-            `;
-            li.querySelector("button").addEventListener('click', () => {
-                cast.splice(i, 1);
-                renderCast();
-                updateActorRequired();
-            });
-            li.classList.add('fade-in');
-            castList.appendChild(li);
+function renderCast() {
+    const castList = document.getElementById("castList");
+    castList.innerHTML = "";
+
+    cast.forEach((c, i) => {
+        const li = document.createElement("li");
+        li.className = "actor-item";
+        li.innerHTML = `
+            <div class="actor-info">
+                <span class="actor-name">${c.name}</span>
+                ${c.wikipedia ? `<a href="${c.wikipedia}" target="_blank" class="wiki-link">ויקיפדיה</a>` : ""}
+            </div>
+            <button class="btn-delete">
+                <span>×</span>
+            </button>
+        `;
+
+        li.querySelector(".btn-delete").addEventListener("click", () => {
+            cast.splice(i, 1);
+            renderCast();
+            updateActorRequired();
         });
-    }
+
+        li.classList.add("fade-in");
+        castList.appendChild(li);
+    });
+}
+
 
     function updateActorRequired() {
         const actorNameField = document.getElementById("actorName");
@@ -139,23 +148,34 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function renderEpisodes() {
-        const list = document.getElementById("episodesList");
-        list.innerHTML = "";
-        episodes.forEach((ep, i) => {
-            const li = document.createElement("li");
-            li.className = "list-group-item d-flex justify-content-between align-items-center";
-            li.innerHTML = `
-                <div><b>עונה ${ep.seasonNumber}, פרק ${ep.episodeNumber}:</b> ${ep.shortDescription}</div>
-                <button class="btn btn-sm btn-outline-danger btn-delete">×</button>
-            `;
-            li.querySelector("button").addEventListener("click", () => {
-                episodes.splice(i, 1);
-                renderEpisodes();
-                updateEpisodeRequired();
-            });
-            list.appendChild(li);
+    const list = document.getElementById("episodesList");
+    list.innerHTML = "";
+
+    episodes.forEach((ep, i) => {
+        const li = document.createElement("li");
+        li.className = "episode-item";
+        li.innerHTML = `
+            <div class="episode-info">
+                <div class="episode-title">
+                    <span class="episode-number">עונה ${ep.seasonNumber}, פרק ${ep.episodeNumber}</span>
+                </div>
+                <p class="episode-desc">${ep.shortDescription}</p>
+            </div>
+            <button class="btn-delete">
+                <span>×</span>
+            </button>
+        `;
+
+        li.querySelector(".btn-delete").addEventListener("click", () => {
+            episodes.splice(i, 1);
+            renderEpisodes();
+            updateEpisodeRequired();
         });
-    }
+
+        li.classList.add("fade-in");
+        list.appendChild(li);
+    });
+}
 
     const form = document.getElementById("contentForm");
     form.addEventListener('submit', e => {
