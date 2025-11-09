@@ -1,24 +1,29 @@
 let activeWatchData = null;
 let contentData = null;
 const activeProfileId = localStorage.getItem('activeProfileId');
-let startFromBeginning = false;
-let seasonNumber = 1;
-let currentIndex = 0;
+// let seasonNumber = 1;
+// let currentIndex = 0;
 
-  const video = document.getElementById('video');
-  const playPauseBtn = document.getElementById('playPause');
-  const back10Btn = document.getElementById('back10');
-  const forward10Btn = document.getElementById('forward10');
-  const fullscreenBtn = document.getElementById('fullscreenBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const seekBar = document.getElementById('seekBar');
-  const currentTimeEl = document.getElementById('currentTime');
-  const durationEl = document.getElementById('duration');
-  const openListBtn = document.getElementById('openListBtn');
-  const drawer = document.getElementById('drawer');
-  const episodesList = document.getElementById('episodesList');
-  const titleEl = document.getElementById('title');
-  const subtitleEl = document.getElementById('subtitle');
+let startFromBeginning = false;
+let progressSeconds = 0;
+let season = 0;
+let episode = 0;
+
+const video = document.getElementById('video');
+const playPauseBtn = document.getElementById('playPause');
+const back10Btn = document.getElementById('back10');
+const forward10Btn = document.getElementById('forward10');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
+const nextBtn = document.getElementById('nextBtn');
+const seekBar = document.getElementById('seekBar');
+const currentTimeEl = document.getElementById('currentTime');
+const durationEl = document.getElementById('duration');
+const openListBtn = document.getElementById('openListBtn');
+const drawer = document.getElementById('drawer');
+const episodesList = document.getElementById('episodesList');
+const titleEl = document.getElementById('title');
+const subtitleEl = document.getElementById('subtitle');
+const seasonNumberDrawer = document.getElementById('seasonNumber');
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -26,10 +31,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // קבלת הפרמטרים ב‑query string
   startFromBeginning = Boolean(url.searchParams.get('startFromBeginning'));
+  progressSeconds = Number(url.searchParams.get('progressSeconds'));
+  season = Number(url.searchParams.get('season'));
+  episode = Number(url.searchParams.get('episode'));
 
-  // קבלת ה‑id מה‑path
-  // למשל אם המסלול תמיד /player/:id
-  const pathParts = url.pathname.split('/'); // ["", "player", "6906742729436cd7a1174eb3"]
+  const pathParts = url.pathname.split('/');
   const contentId = pathParts[2];
 
   console.log('ID:', contentId);
@@ -41,57 +47,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).catch(err => {
     });
 
-  await fetch('http://localhost:3000/api/watches/' +
-    activeProfileId + '/' + contentData._id).then(
-      res => res.json()).then(data => {
-        activeWatchData = data;
-        switch (contentData.type) {
-          case 'series': {
-            const epIndex = contentData.episodes.findIndex(ep =>
-              ep.seasonNumber === activeWatchData.seasonNumber &&
-              ep.episodeNumber === activeWatchData.episodeNumber);
+  switch (contentData.type) {
+    case 'series': {
+      if (startFromBeginning) {
+        season = 1;
+        episode = 1;
+      }
+      loadEpisode(contentData.episodes, season, episode, progressSeconds ?? 0, false);
+      renderEpisodes()
+      break;
+    }
+    case 'movie': {
+      movieMode();
+      loadMovie(contentData, progressSeconds ?? 0, true)
+    }
+  }
 
-            seasonNumber = contentData.episodes[epIndex].seasonNumber;
-
-            document.getElementById('openListBtn').style.display = 'block';
-            if (startFromBeginning || activeWatchData.status !== 'in_progress')
-              loadEpisode(0, true);
-            else {
-              // document.getElementById('openListBtn').style.display = 'none';
-              // const epIndex = contentData.episodes.findIndex(ep =>
-              //   ep.seasonNumber === activeWatchData.seasonNumber &&
-              //   ep.episodeNumber === activeWatchData.episodeNumber);
-
-              // this.seasonNumber = contentData.episodes[epIndex].seasonNumber;
-              loadEpisode(epIndex, false);
-              renderEpisodes();
-            }
-            break;
-          }
-          case 'movie': {
-            movieMode();
-            loadMovie(contentData, true);
-          }
-        }
-      }).catch(err => {
-        // if (err.message.includes('Not found')) {
-          activeWatchData = null;
-          // אין נתוני צפייה קודמים
-          switch (contentData.type) {
-            case 'series': {
-              loadEpisode(0, false);
-              break;
-            }
-            case 'movie': {
-              movieMode();
-              loadMovie(contentData, true);
-            }
-          }
-        // }
-      });
-
-
-  function loadMovie(movieData, autoplay = false) {
+  function loadMovie(movieData, progressSeconds = 0, autoplay = false) {
     if (!movieData) return;
 
     // עדכון UI
@@ -99,13 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     video.src = movieData.video; // כאן ה-URL של הסרט
     video.load();
 
-    // הגדרת זמן התחלה
-    if (startFromBeginning || !activeWatchData || activeWatchData.status !== 'in_progress') {
-      video.currentTime = 0;
-    } else if (activeWatchData && activeWatchData.status === 'in_progress') {
-      video.currentTime = activeWatchData.progressSeconds || 0;
-    }
-
+    video.currentTime = progressSeconds;
     if (autoplay) video.play();
 
     video.removeEventListener('loadedmetadata', startPosition);
@@ -113,10 +79,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
-  function loadEpisode(index, autoplay = false) {
-    const ep = contentData.episodes[index];
+  function loadEpisode(episodes, season, episode, progressSeconds = 0, autoplay = false) {
+    const ep = episodes.find(ep => ep.seasonNumber === season && ep.episodeNumber === episode);
     if (!ep) return;
-    currentIndex = index;
+    currentIndex = episodes.findIndex((_ep) => _ep === ep);
     // עדכון UI
     titleEl.textContent = ep.shortDescription;
     subtitleEl.textContent = 'S' + ep.seasonNumber.toString() + ' ' + 'E' + ep.episodeNumber.toString();
@@ -124,28 +90,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     video.load();
     highlightActiveEpisode();
 
-    // אם פרמטר מה-URL STARTFROMBEGINNING=true, מתחילים מהתחלה
-    if (startFromBeginning || !activeWatchData || activeWatchData.status != 'in_progress') {
-      video.currentTime = 0;
-    }
-    // אחרת אם יש נתוני activeWatchData ומצב in_progress
-    else if (activeWatchData && activeWatchData.status === 'in_progress') {
-      video.currentTime = activeWatchData.progressSeconds || 0;
-    }
-
+    video.currentTime = progressSeconds;
 
     if (autoplay) video.play();
   }
 
   function renderEpisodes() {
+  seasonNumberDrawer.textContent = 'עונה ' + season;
+    const seasonIndex = contentData.episodes.filter(ep => ep.seasonNumber === season)
+      .findIndex(ep => ep.episodeNumber === episode);
     episodesList.innerHTML = '';
-    contentData.episodes.filter(ep => ep.seasonNumber === seasonNumber).forEach((ep, i) => {
+    contentData.episodes.filter(ep => ep.seasonNumber === season).forEach((ep, i) => {
       const subtitle = 'S' + ep.seasonNumber.toString() + ' ' + 'E' + ep.episodeNumber.toString();
       const el = document.createElement('div');
-      el.className = 'episode' + (i === currentIndex ? ' active' : '');
+      el.className = 'episode' + (i === seasonIndex ? ' active' : '');
       el.innerHTML = `<div style="font-weight:600">${ep.shortDescription}</div><div style="color:rgba(255,255,255,0.6);font-size:13px">${subtitle}</div>`;
       el.addEventListener('click', () => {
-        loadEpisode(i, true);
+        episode = ep.episodeNumber;
+        season = ep.seasonNumber;
+        loadEpisode(contentData.episodes, ep.seasonNumber, ep.episodeNumber, 0, true);
         toggleDrawer(false);
       });
       episodesList.appendChild(el);
@@ -168,15 +131,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /* ---- אירועים בסיסיים ---- */
   playPauseBtn.addEventListener('click', () => {
-    if (video.paused) { video.play(); }
+    if (video.paused) {
+      video.play();
+    }
     else { video.pause(); }
   });
 
-  video.addEventListener('play', () => {
-    playPauseBtn.innerHTML = '<i class="bi bi-pause-fill"></i>';
-  });
-  video.addEventListener('pause', () => {
-    playPauseBtn.innerHTML = '<i class="bi bi-play-fill"></i>'
+  video.addEventListener('click', () => {
+    if (video.paused) {
+      playPauseBtn.innerHTML = '<i class="bi bi-pause-fill"></i>';
+      video.play();
+    }
+    else {
+      playPauseBtn.innerHTML = '<i class="bi bi-play-fill"></i>'
+      video.pause();
+    }
   });
 
   // חזרה/קדימה 10 שניות
@@ -217,21 +186,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // כפתור פרק הבא
   nextBtn.addEventListener('click', () => {
-    const next = (currentIndex + 1) % episodes.length;
-    loadEpisode(next, true);
+    const seasonIndex = contentData.episodes.filter(ep => ep.seasonNumber === season)
+      .findIndex(ep => ep.episodeNumber === episode + 1);
+    if (seasonIndex === -1) {
+      season += 1;
+      episode = 1;
+    }
+    else episode += 1
+    loadEpisode(contentData.episodes, season, episode, 0, true);
+    seasonNumberDrawer.textContent = 'עונה ' + season
+    renderEpisodes();
   });
 
   // סיום הפרק — עוברים אוטומטית לפרק הבא
   video.addEventListener('ended', () => {
-    const next = (currentIndex + 1) % episodes.length;
-    loadEpisode(next, true);
+    const seasonIndex = contentData.episodes.filter(ep => ep.seasonNumber === season)
+      .findIndex(ep => ep.episodeNumber === episode + 1);
+    if (seasonIndex === -1) {
+      season += 1;
+      episode = 1;
+    }
+    else episode += 1
+    loadEpisode(contentData.episodes, season, episode, 0, true);
+    renderEpisodes();
   });
 
   document.getElementById("close-icon").addEventListener("click", e => {
     toggleDrawer(false);
   });
 
-
+  seasonNumberDrawer.textContent = 'עונה ' + season
 
   function highlightActiveEpisode() {
     const items = episodesList.querySelectorAll('.episode');
@@ -246,7 +230,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (show) renderEpisodes();
   }
 
-  openListBtn.addEventListener('click', () => toggleDrawer(!drawer.classList.contains('open')));
+  openListBtn.addEventListener('click', () => {
+    toggleDrawer(!drawer.classList.contains('open'));
+  });
 
   /* ---- קיצורי מקלדת יעילים ---- */
   document.addEventListener('keydown', (e) => {
@@ -268,5 +254,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('nextBtn').style.display = 'none';
     document.getElementById('subtitle').style.display = 'none';
   }
+
+  document.getElementById('backBtn').addEventListener('click' , () => {
+    window.location.href = '/media-content/' + contentData._id;
+  });
 
 });

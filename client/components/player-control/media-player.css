@@ -464,4 +464,29 @@ input[type="range"]::-webkit-slider-thumb {
     align-items: center;
     gap: 0.2em;
     justify-content: space-between;
+
+    i{
+        margin-top: 3px;
+    }
+}
+
+.menu-sub-header{
+    display: flex;
+    flex-direction: row;
+    direction: rtl;
+    gap: 0.5em;
+}
+
+.back-btn{
+    font-size: 20px;
+    cursor: pointer !important;
+    &:hover{
+        color: var(--light);
+    }
+}
+
+.actions{
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
 }

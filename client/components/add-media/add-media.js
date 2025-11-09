@@ -1,6 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // localStorage.getItem()
+let newMedia = null;
 
+document.addEventListener('DOMContentLoaded', () => {
     let cast = [];
     let episodes = [];
 
@@ -256,7 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!res.ok) throw new Error("שגיאה בבקשה");
 
-            const result = await res.json();
+            newMedia = await res.json();
+            // newMedia = result;
             console.log("נשלח בהצלחה:", result);
             alert("התוכן נוסף בהצלחה!");
             return result;
@@ -266,8 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return null;
         }
     }
-
-
 
     async function upload(file, type = 'poster' | 'movie') {
         await fetch('http://localhost:3000/api/uploads/poster', {
@@ -311,3 +310,11 @@ function slugifyDir(name) {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '') || 'series';
 }
+
+document.getElementById('addAnotherContent').addEventListener('click', () => {
+    window.location.href = '/add-media'
+})
+
+document.getElementById('toMediaContent').addEventListener('click', () => {
+    window.location.href = '/media-content/' + newMedia._id //to check
+})

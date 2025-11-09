@@ -252,6 +252,38 @@ input[type="checkbox"] {
     color: var(--primary);
     margin: 0;
     display: flex;
+
+.disney-gold {
+    width: fit-content;
+    font-weight: bold;
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FFF8DC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: -0.8px;
+    color: var(--primary);
+    margin: 0;
+    display: flex;
+
+.disney-gold {
+    width: fit-content;
+    font-weight: bold;
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FFF8DC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: -0.8px;
+    color: var(--primary);
+    margin: 0;
+    display: flex;
 }
 
 .soft-divider {
@@ -354,8 +386,7 @@ textarea:hover {
 }
 
 .btn-genres,
-.add-actor-btn,
-.add-media {
+.add-actor-btn {
     background: linear-gradient(90deg, #007bff, #0059ff);
     border: none;
     color: #fff;
@@ -468,15 +499,15 @@ select.is-invalid+.error-message {
 }
 
 select.form-select option {
-  background-color: #12182b;
-  color: var(--primary);
-  padding: 1em;
-  border-radius: 12px !important;
+    background-color: #12182b;
+    color: var(--primary);
+    padding: 1em;
+    border-radius: 12px !important;
 }
 
 select.form-select option:hover {
-  background-color: #eef6ff;
-  color: #007bff;
+    background-color: #eef6ff;
+    color: #007bff;
 }
 
 
@@ -577,4 +608,149 @@ select.form-select option:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.add-media {
+    width: 320px;
+    height: 54px;
+    border-radius: 8px;
+    background: linear-gradient(to right, rgb(8 87 225), rgb(6 43 154)) !important;
+
+    /* background: linear-gradient(135deg, #0077ff, #0047ff); */
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    /* box-shadow: 0 4px 15px rgba(0, 85, 255, 0.4); */
+    transition: all 0.25s ease;
+}
+
+.add-media:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(0, 120, 255, 0.5);
+    background: linear-gradient(135deg, #3399ff, #0055ff);
+}
+
+.episodes-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+    margin-top: 1.5em;
+}
+
+.episode-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.episode-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+}
+
+.episode-row-inputs {
+    display: flex;
+    gap: 1em;
+}
+
+.episode-video {
+    width: 300px !important;
+}
+
+.add-episode-wrapper {
+    margin-top: 1em;
+    justify-content: start;
+    padding-right: 1.7em;
+    align-items: center;
+    margin-right: 1.5em;
+}
+
+input::placeholder {
+    color: var(--secondary) !important;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    gap: 1em;
+}
+
+.input-group {
+    >* {
+        border-radius: 5px !important;
+    }
+}
+
+/* popup */
+
+.disney-modal {
+    background-color: #0f1014 !important;
+    font-family: "Noto-Sans-Hebrew-Fonts", "Inter", sans-serif !important;
+    color: #fff;
+    border-radius: 1rem;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border: none;
+    /* overflow: hidden; */
+    animation: fadeInScale 0.4s ease forwards;
+    /* z-index: 9999; */
+}
+
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.disney-modal .btn-primary {
+    background: linear-gradient(90deg, #00bdff, #0072ff);
+    border: none;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgb(182 165 165 / 30%);
+    border-radius: 21px;
+    letter-spacing: -0.2px;
+    transition: all 0.3s ease !important;
+
+    &:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+}
+
+.disney-modal .modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.btn-add {
+    background: rgba(255, 255, 255, 0.1);
+    color: #d1d6e4 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 20px !important;
+    font-size: 0.85rem !important;
+    padding: 0.45rem 1rem !important;
+    cursor: pointer;
+    transition: all 0.3s ease !important;
+}
+
+.btn-add:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
 }

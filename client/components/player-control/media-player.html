@@ -18,15 +18,15 @@
                 <div class="title" id="title"></div>
                 <div class="subtitle" id="subtitle"></div>
             </div>
-            <div>
+            <div class="actions">
                 <button id="openListBtn" class="episode-menu-trigger-btn" title="רשימת פרקים">פרקים</button>
+                <i class="bi bi-arrow-right-circle back-btn" id="backBtn"></i>
             </div>
+
         </div>
 
         <div class="video-wrap">
-            <video id="video" preload="metadata" poster="" playsinline>
-                <!-- <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4"> -->
-                הדפדפן לא תומך בנגן הווידאו.
+            <video id="video" preload="metadata" playsinline>
             </video>
         </div>
 
@@ -61,7 +61,10 @@
 
     <div class="drawer" id="drawer">
         <div class="menu-header">
-            <h3>רשימת פרקים</h3>
+            <div class="menu-sub-header">
+                <h3>רשימת פרקים</h3>
+                <h3 id="seasonNumber"></h3>
+            </div>
             <i class="bi bi-x close-icon" id="close-icon"></i>
         </div>
         <div id="episodesList"></div>

@@ -5,48 +5,44 @@ let isLiked = false;
 let activeProfileId = localStorage.getItem('activeProfileId');
 let activeWatchData = null;
 
-// add catch for all fetches
-
 document.addEventListener("DOMContentLoaded", async () => {
-  const path = window.location.pathname; // לדוגמה: "/media-content/123"
+  const path = window.location.pathname;
 
-  // מפריד לפי '/' ומקבל את הפרמטר האחרון
   const mediaId = path.split('/').pop();
 
   if (!mediaId) {
-    console.error("Media ID is missing from the URL");
+    window.location.href = '/feed?profile=' + activeProfileId;
     return;
   }
 
-  await fetch('http://localhost:3000/api/content/' + mediaId + '?include=episodes').then(
-    res => res.json()).then(data => {
-      contentData = data;
-    }).catch(err => {
-    });
-
-  await fetch('http://localhost:3000/api/content?genre=' + contentData.genres.join(',')).then(
-    res => res.json()).then(data => {
-      similarContentData = data.filter(content => content._id != contentData._id).slice(0, 5);
-    }).catch(err => {
-    });
-
-  await fetch('http://localhost:3000/api/likes?profileId=' +
-    activeProfileId + '&contentId=' +
-    contentData._id).then(
+  try {
+    await fetch('http://localhost:3000/api/content/' + mediaId + '?include=episodes').then(
       res => res.json()).then(data => {
-        isLiked = data.length > 0;
-      }).catch(err => {
+        contentData = data;
       });
 
-  await fetch('http://localhost:3000/api/watches/' +
-    activeProfileId + '/' + contentData._id).then(
+    await fetch('http://localhost:3000/api/content?genre=' + contentData.genres.join(',')).then(
       res => res.json()).then(data => {
-        activeWatchData = data;
-      }).catch(err => {
+        similarContentData = data.filter(content => content._id != contentData._id).slice(0, 5);
       });
 
+    await fetch('http://localhost:3000/api/likes?profileId=' +
+      activeProfileId + '&contentId=' +
+      contentData._id).then(
+        res => res.json()).then(data => {
+          isLiked = data.length > 0;
+        });
 
-  renderContent(contentData);
+    await fetch('http://localhost:3000/api/watches/' +
+      activeProfileId + '/' + contentData._id).then(
+        res => res.json()).then(data => {
+          activeWatchData = data;
+        });
+    renderContent(contentData);
+  }
+  catch {
+    if (res.status === 404) activeWatchData = null;
+  }
 });
 
 // פונקציה שמציגה את פרטי התוכן
@@ -116,25 +112,36 @@ function renderContent(content) {
 
   const watchBtn = document.createElement("button");
   watchBtn.className = "watch-btn";
-  watchBtn.addEventListener("click", () => {
-    window.location.href = '/player/' + content._id;
-  });
+  let url = '/player/' + content._id;
+
   if (activeWatchData && activeWatchData.status == 'in_progress') {
     switch (content.type) {
-      case 'series':
+      case 'series': {
         watchBtn.textContent = 'המשך צפייה ' + 'S' + activeWatchData.seasonNumber + ' E' + activeWatchData.episodeNumber;
+        url += `?season=${activeWatchData.seasonNumber}&episode=${activeWatchData.episodeNumber}&progressSeconds=${activeWatchData.progressSeconds}`;
         break;
-      case 'movie':
-        watchBtn.textContent = 'המשך צפייה';
+      }
+      case 'movie': {
+        if (activeWatchData && activeWatchData.status == 'in_progress') {
+          watchBtn.textContent = 'המשך צפייה';
+          url += '?progressSeconds=' + activeWatchData.progressSeconds;
+        }
         break;
+      }
     }
   }
   else if (activeWatchData && activeWatchData.status == 'completed') {
     watchBtn.textContent = "צפייה מחדש";
+    url += '?startFromBeginning=true'
   }
   else {
     watchBtn.textContent = "צפו כעת";
+    url += '?startFromBeginning=true'
   }
+
+  watchBtn.addEventListener("click", () => {
+    window.location.href = url;
+  });
   actionsWrapper.appendChild(watchBtn);
 
   const likeBtn = document.createElement("button");
@@ -170,7 +177,7 @@ function renderContent(content) {
   likeIcon.className = "bi bi-hand-thumbs-up like-icon";
   likeBtn.appendChild(likeIcon);
 
-      const startBtn = document.createElement("button");
+  const startBtn = document.createElement("button");
   startBtn.className = 'start-btn';
   startBtn.addEventListener("click", () => {
     window.location.href = '/player/' + content._id + '?startFromBeginning=true';
@@ -185,6 +192,10 @@ function renderContent(content) {
   const startIcon = document.createElement("i");
   startIcon.className = "bi bi-arrow-clockwise";
   startBtn.appendChild(startIcon);
+
+  if (activeWatchData && activeWatchData.status == 'completed') {
+    startBtn.style.display = 'none';
+  }
 
   const poster = document.createElement("img");
   poster.className = "poster";
@@ -283,10 +294,12 @@ createEpisodesSection = (episodes) => {
     episodeItem.dataset.id = ep.id;
 
     const photo = document.createElement("img");
-    photo.src = ep.photo;
+    photo.src = contentData.photo;
     photo.className = 'episode-img';
-    // photo.src = '/client/assets/beauty-and-the-beast-poster.jpg';
     episodeItem.appendChild(photo);
+    episodeItem.addEventListener("click", () => {
+      window.location.href = "/player/" + contentData._id + "?season=" + ep.seasonNumber + "&episode=" + ep.episodeNumber
+    })
 
     const episodeInfo = document.createElement("div");
     episodeInfo.className = "episode-info";
@@ -323,6 +336,9 @@ createSimilarContentSection = (similarContents) => {
     const similarItem = document.createElement("div");
     similarItem.className = "similar-item clickable";
     similarItem.dataset.id = item._id;
+    similarItem.addEventListener("click", () => {
+      window.location.href = "/media-content/" + item._id
+    })
 
     const similarImg = document.createElement("img");
     similarImg.className = "similar-img";
@@ -340,12 +356,5 @@ createSimilarContentSection = (similarContents) => {
 }
 
 document.querySelector(".close-icon").addEventListener("click", () => {
-  window.history.back();
+  window.location.href = '/feed?profile=' + activeProfileId;
 });
-
-// document.querySelectorAll('.similar-item').forEach(item => {
-//   item.addEventListener('click', () => {
-//     const id = item.dataset.id; // לוקח את הערך מ-data-id
-//     window.location.href = `/media-content/${id}`; // עובר ל-URL הרצוי
-//   });
-// });

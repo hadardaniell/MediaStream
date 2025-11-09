@@ -12,12 +12,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (mediaType) {
     document.getElementById('search').placeholder = mediaType === 'movies' ? 'חיפוש סרטים...' : 'חיפוש סדרות...';
 
-    await fetch("http://localhost:3000/api/content/profile/" + activeProfileId, {
+    await fetch("http://localhost:3000/api/content/profile/" + activeProfileId + '?type=' + mediaType, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then(res => res.json()).then(data => {
-        contentsData = data.filter(item => item.type === (mediaType === 'movies' ? 'movie' : 'series'));
+        contentsData = data;
+        // contentsData = data.filter(item => item.type === (mediaType === 'movies' ? 'movie' : 'series'));
         renderItems(contentsData);
       }
       )
