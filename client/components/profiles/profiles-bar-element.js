@@ -150,12 +150,14 @@ class ProfilesBar extends HTMLElement {
         });
       });
 
-      const addBtn = this.shadowRoot.querySelector('.add-container');
-      if (addBtn) {
-        addBtn.addEventListener('click', () => {
-          alert('כאן נוסיף פרופיל חדש');
-        });
-      }
+    const addBtn = this.shadowRoot.querySelector('.add-container');
+    if (addBtn) {
+      addBtn.addEventListener('click', () => {
+        // מעבר לעמוד עריכת פרופיל
+        window.location.href = '/edit-profile';
+      });
+    }
+
     } catch (err) {
       console.error("Error loading profiles:", err);
     }
