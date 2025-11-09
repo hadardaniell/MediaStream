@@ -64,7 +64,8 @@ class Navbar extends HTMLElement {
         const dropdownMenu = this.shadowRoot.querySelector('.dropdown-menu');
 
         dropdownToggle.addEventListener('click', (e) => {
-            e.preventDefault();
+            //e.preventDefault();
+            window.location.href = '/genre';
             dropdownMenu.classList.toggle('show');
         });
 
