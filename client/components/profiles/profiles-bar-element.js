@@ -154,6 +154,7 @@ class ProfilesBar extends HTMLElement {
     if (addBtn) {
       addBtn.addEventListener('click', () => {
         // מעבר לעמוד עריכת פרופיל
+        localStorage.setItem('returnPage', window.location.pathname);
         window.location.href = '/edit-profile';
       });
     }
