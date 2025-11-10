@@ -1,52 +1,3 @@
-// const activeProfileId = localStorage.getItem('activeProfileId');
-
-// document.addEventListener("DOMContentLoaded", async () => {
-//   const loader = document.getElementById("loader");
-//   const container = document.getElementById("container");
-//   // loader.style.display = "flex";
-//   // container.style.opacity = 1;
-
-
-//   if (!Boolean(localStorage.getItem("isAuthenticated"))) {
-//     window.location.href = "/login";
-//     return;
-//   }
-
-//   await Promise.all([
-//     waitForComponent('media-stream-navbar'),
-//     waitForComponent('media-stream-profiles-bar')
-//   ]);
-//   container.style.display = "block";
-//   loader.style.display = "none";
-
-//   try {
-//     const allContent = await fetch("http://localhost:3000/api/content/profile/" + activeProfileId, {
-//       method: "GET",
-//       headers: { "Content-Type": "application/json" },
-//     })
-//       .then(res => res.json())
-//       .catch(() => []);
-
-//     renderSection("continue-watching", getContinueWatching(allContent));
-//     renderSection("recommended", getRecommendations(allContent));
-//     renderSection("popular", getPopular(allContent));
-//     renderNewByGenre(allContent);
-//     // await customElements.whenDefined('media-stream-navbar');
-//     // await customElements.whenDefined('media-stream-profiles-bar');
-
-//     const navbar = document.querySelector('media-stream-navbar');
-//     const profilesBar = document.querySelector('media-stream-profiles-bar');
-//   }
-//   catch {
-//     //error
-//   }
-//   finally {
-//     loader.style.display = "none"
-//     // container.style.opacity = 1;
-//     container.style.display = "flex"
-//   }
-// });
-
 const activeProfileId = localStorage.getItem('activeProfileId');
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -108,50 +59,8 @@ function posterClick(id) {
   window.location.href = `/media-content/${id}`;
 }
 
-
-// Toggle לייק + פנייה לשרת
-// async function toggleLike(item, btnEl) {
-//   try {
-//     if (!item.hasLike) {
-//       const res = await fetch(`http://localhost:3000/api/likes`, {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
-//       }).then(
-//         res => res.json()).then(data => {
-//           const card = btnEl.closest(".card");
-//           card.querySelector(".count").textContent = item.likes + 1;
-//           btnEl.className = `btn btn-sm btn-danger like-btn`;
-//           btnEl.textContent = "אהבתי";
-//           item.hasLike = true;
-//           item.likes += 1;
-//         }).catch(err => {
-//         });
-//     } else {
-//       const res = await fetch(`http://localhost:3000/api/likes`, {
-//         method: "DELETE",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
-//       }).then(
-//         res => res.json()).then(data => {
-//           const card = btnEl.closest(".card");
-//           card.querySelector(".count").textContent = item.likes - 1;
-//           btnEl.className = `btn btn-sm btn-outline-primary like-btn`;
-//           btnEl.textContent = "סמן לייק";
-//           item.hasLike = false;
-//           item.likes -= 1;
-//         }).catch(err => {
-//         });
-//     }
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
-
 async function toggleLike(item, btnEl) {
   try {
-
-
     if (!item.hasLike) {
       await fetch(`http://localhost:3000/api/likes`, {
         method: "POST",
@@ -202,79 +111,6 @@ function escapeHtml(s) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 }
-
-// function renderSection(containerId, data) {
-//   if (!data || data.length === 0) return;
-
-//   const container = document.getElementById(containerId);
-//   container.innerHTML = "";
-//   data.forEach((item) => {
-//     container.appendChild(createCard(item));
-//   });
-// }
-
-// function createCard(item) {
-//   const count = item.likes || 0;
-
-//   const col = document.createElement("div");
-
-//   const card = document.createElement("div");
-//   card.className = "card mb-3";
-//   card.dataset.id = item._id;
-
-//   if (item.photo) {
-//     const posterContainer = document.createElement("div");
-//     posterContainer.className = "poster-container";
-//     const img = document.createElement("img");
-//     img.className = "poster";
-//     img.src = item.photo;
-//     posterContainer.appendChild(img);
-//     posterContainer.addEventListener("click", () => posterClick(item._id));
-//     card.appendChild(posterContainer);
-//   }
-
-//   const body = document.createElement("div");
-//   body.className = "card-body";
-
-//   const title = document.createElement("h5");
-//   title.className = "card-title";
-//   title.innerHTML = `${escapeHtml(item.name)} <small class="text-muted">(${item.year})</small>`;
-//   body.appendChild(title);
-
-//   const genre = document.createElement("p");
-//   genre.className = "card-text genre";
-//   genre.textContent = item.genres.join(" · ");
-//   body.appendChild(genre);
-
-//   const desc = document.createElement("p");
-//   desc.className = "card-text description";
-//   desc.textContent = item.description || "";
-//   body.appendChild(desc);
-
-//   const actions = document.createElement("div");
-//   actions.className = "d-flex align-items-center justify-content-between";
-//   actions.style.gap = "1em";
-
-//   const btn = document.createElement("button");
-//   btn.type = "button";
-//   btn.className = `btn btn-sm ${item.hasLike ? "btn-danger" : "btn-outline-primary"} like-btn`;
-//   btn.textContent = item.hasLike ? "אהבתי" : "סמן לייק";
-
-//   btn.addEventListener("click", () => toggleLike(item, btn));
-
-
-//   const span = document.createElement("span");
-//   span.innerHTML = `<span class="count">${count}</span> לייקים`;
-
-//   actions.appendChild(btn);
-//   actions.appendChild(span);
-//   body.appendChild(actions);
-
-//   card.appendChild(body);
-//   col.appendChild(card);
-
-//   return col;
-// }
 
 function renderSection(containerId, data) {
   if (!data || data.length === 0) return;

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="he">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,36 +13,45 @@
 </head>
 
 <body dir="rtl">
-  <div class="container py-4">
+  <div class="container">
 
     <!-- סינון ומיון -->
-    <div class="filters d-flex justify-content-center align-items-center flex-wrap gap-3">
-      <select id="genreSelect" class="form-select form-select-dark w-auto">
-        <option value="all">כל הז׳אנרים</option>
-        <option value="action">אקשן</option>
-        <option value="horror">אימה</option>
-        <option value="crime">פשע</option>
-        <option value="scifi">מדע בדיוני</option>
-        <option value="animation">אנימציה</option>
-        <option value="romance">רומנטיקה</option>
-        <option value="comedy">קומדיה</option>
-        <option value="documentary">דוקומנטרי</option>
-      </select>
+    <div class="filters">
+      <div class="filter-box">
+        <label for="genreSelect"><i class="bi bi-film"></i> ז׳אנר</label>
+        <select id="genreSelect" class="filter-select">
+          <option value="Action">אקשן</option>
+          <option value="Horror">אימה</option>
+          <option value="Crime">פשע</option>
+          <option value="SciFi">מדע בדיוני</option>
+          <option value="Animation">אנימציה</option>
+          <option value="Romance">רומנטיקה</option>
+          <option value="Comedy">קומדיה</option>
+          <option value="Documentary">דוקומנטרי</option>
+        </select>
+      </div>
 
-      <select id="sortSelect" class="form-select form-select-dark w-auto">
-        <option value="popularity">מיון לפי פופולריות</option>
-        <option value="rating">מיון לפי דירוג</option>
-      </select>
+      <div class="filter-box">
+        <label for="sortSelect"><i class="bi bi-stars"></i> מיון</label>
+        <select id="sortSelect" class="filter-select">
+          <option value="likes">לפי פופולריות</option>
+          <option value="rating">לפי דירוג</option>
+        </select>
+      </div>
 
-      <select id="watchedSelect" class="form-select form-select-dark w-auto">
-        <option value="all">הכל</option>
-        <option value="watched">נצפה</option>
-        <option value="unwatched">לא נצפה</option>
-      </select>
+      <div class="filter-box">
+        <label for="watchedSelect"><i class="bi bi-eye"></i> צפייה</label>
+        <select id="watchedSelect" class="filter-select">
+          <option value="all">הכל</option>
+          <option value="watched">נצפה</option>
+          <option value="unwatched">לא נצפה</option>
+        </select>
+      </div>
     </div>
 
+
     <!-- תוכן הסדרות -->
-    <div id="seriesContainer" class="series-container"></div>
+    <div id="mediaContainer" class="series-container"></div>
 
     <!-- אינדיקציה לטעינה -->
     <div class="text-center py-4" id="loadingIndicator" style="display:none;">
@@ -49,4 +59,5 @@
     </div>
   </div>
 </body>
+
 </html>
