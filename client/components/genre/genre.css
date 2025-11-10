@@ -3,12 +3,23 @@ body {
   background-color: #0f1014;
   color: #e1e6f0;
   font-family: "Noto Sans Hebrew", "Inter", sans-serif !important;
-  
+
   padding: 2em;
 
   --primary: #e1e6f0;
   --secondary: rgb(143, 152, 178);
   --search: #252833;
+}
+
+.disney-plus-btn {
+  width: 50px;
+  height: 30px;
+  cursor: pointer;
+  margin-left: 1.5em;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 }
 
 /* 
@@ -213,30 +224,14 @@ body {
   margin-top: 8px;
 }
 
-/*  */
-/* --- Filters (Disney+ style integration) --- */
-.filters {
+/* .filters {
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: center; */
   align-items: center;
   gap: 1em;
-  /* background-color: rgba(37, 40, 51, 0.7); */
   backdrop-filter: blur(8px);
-  /* border: 1px solid rgba(255, 255, 255, 0.08); */
-  /* border-radius: 16px; */
-  /* padding: 1em 1.5em; */
   margin-bottom: 4em;
-  /* box-shadow: 0 0 20px rgba(26, 117, 255, 0.05); */
-  /* transition: box-shadow 0.3s 
-ease, transform 0.3s 
-ease; */
 }
-
-/* .filters:hover {
-  box-shadow: 0 0 30px rgba(26, 117, 255, 0.12);
-  transform: translateY(-2px);
-} */
 
 .filter-box {
   display: flex;
@@ -279,7 +274,6 @@ ease; */
   box-shadow: 0 0 0 3px rgba(26, 117, 255, 0.3) !important;
 }
 
-/* רספונסיביות */
 @media (max-width: 768px) {
   .filters {
     flex-direction: column;
@@ -289,5 +283,145 @@ ease; */
 
   .filter-box {
     width: 100%;
+  }
+} */
+
+/* 🎬 Filters Section — Disney+ Modern Look */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.8em;
+  padding: 1.5em 2em;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+  margin-bottom: 3em;
+  transition: all 0.3s ease;
+}
+
+/* 
+.filters:hover {
+  box-shadow: 0 0 40px rgba(26, 117, 255, 0.15);
+  transform: translateY(-2px);
+} */
+
+/* תיבת פילטר */
+.filter-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 200px;
+  position: relative;
+}
+
+/* לייבל מעל הסלקט */
+.filter-box label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #9fcaff;
+  margin-bottom: 0.4em;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.3s ease;
+}
+
+/* עיצוב ה-select */
+.filter-select {
+  width: 100%;
+  background: linear-gradient(145deg, #1a1d26, #14161f);
+  color: #f2f4ff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 0.8em 1em;
+  font-size: 0.95rem;
+  font-weight: 500;
+  appearance: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25) inset;
+}
+
+/* חץ מותאם אישית */
+/* .filter-box::after {
+  content: "▾";
+  position: absolute;
+  left: 1rem;
+  top: 2.4em;
+  font-size: 1rem;
+  color: #7aaeff;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+} */
+
+/* אינטראקציות */
+.filter-select:hover {
+  border-color: #3e9eff;
+  box-shadow: 0 0 14px rgba(26, 117, 255, 0.25);
+  transform: scale(1.02);
+}
+
+.filter-select:focus {
+  outline: none;
+  background-color: var(--search);
+  border-color: #4ca8ff;
+  box-shadow: 0 0 0 3px rgba(26, 117, 255, 0.3);
+}
+
+.filter-box:focus-within label {
+  color: #53a6f2;
+}
+
+.filter-box:focus-within::after {
+  transform: rotate(180deg);
+}
+
+/* רספונסיביות */
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1em 1.5em;
+  }
+
+  .filter-box {
+    width: 100%;
+  }
+}
+
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 20, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.disney-loader {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top: 2px solid #a2c9d7;
+  animation: spin 1.2s linear infinite;
+  /* background: linear-gradient(45deg, #00bfff, #3030f9); */
+  /* background-clip: text; */
+  /* -webkit-background-clip: text; */
+  color: transparent;
+  box-shadow: 0 0 30px rgb(85 93 96 / 50%);
+
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

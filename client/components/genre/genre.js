@@ -1,62 +1,10 @@
-// const PAGE_SIZE = 8;
-// let currentPage = 1;
-// // let currentGenre = "all";
-// let sortBy = "popularity";
-// let filterWatched = "all";
-// let loading = false;
-
-// let contentData = null;
-// let currentGenre = null;
-
-// const mediaContainer = document.getElementById("mediaContainer");
-// const loadingIndicator = document.getElementById("loadingIndicator");
-
-// const activeProfileId = localStorage.getItem('activeProfileId');
-
-// document.addEventListener('DOMContentLoaded', async () => {
-//   const url = new URL(window.location.href);
-
-//   currentGenre = String(url.searchParams.get('genre'));
-
-//   if (!currentGenre) return;
-
-//   await fetchContentByGenre(currentGenre)
-
-//   renderItems(contentData);
-// })
-
-// document.getElementById("genreSelect").addEventListener("change", async e => {
-//   currentGenre = e.target.value;
-//   await fetchContentByGenre(currentGenre);
-//   renderItems(contentData);
-// });
-
-// document.getElementById("sortSelect").addEventListener("change", async e => {
-//   sortBy = e.target.value;
-//   fetchSeries();
-// });
-
-// document.getElementById("watchedSelect").addEventListener("change", async e => {
-//   filterWatched = e.target.value;
-//   if(filterWatched === 'all') return renderItems(contentData);
-
-//   let filterWatchedData;
-//   filterWatchedData = filterWatched === 'watched' ?
-//     contentData.filter(item => item.watch.status != 'unstarted') :
-//     contentData.filter(item => item.watch.status === 'unstarted');
-//   renderItems(filterWatchedData);
-// });
-
-const PAGE_SIZE = 8;
-let currentPage = 1;
-let currentGenre = "all";
 let sortBy = "likes";
 let filterWatched = "all";
-let loading = false;
+// let loading = false;
 
 let contentData = [];
 const mediaContainer = document.getElementById("mediaContainer");
-const loadingIndicator = document.getElementById("loadingIndicator");
+const loading =   document.getElementById('loadingOverlay')
 
 const activeProfileId = localStorage.getItem('activeProfileId');
 
@@ -73,31 +21,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   applyFiltersAndSort();
 });
 
-// שינוי ז׳אנר
 document.getElementById("genreSelect").addEventListener("change", async e => {
   currentGenre = e.target.value;
   await fetchContentByGenre(currentGenre);
   applyFiltersAndSort();
 });
 
-// שינוי מיון
 document.getElementById("sortSelect").addEventListener("change", e => {
   sortBy = e.target.value;
   applyFiltersAndSort();
 });
 
-// סינון צפייה
 document.getElementById("watchedSelect").addEventListener("change", e => {
   filterWatched = e.target.value;
   applyFiltersAndSort();
 });
 
 
-// 🧠 פונקציה מרכזית — מטפלת בכל הסינונים והמיון
 function applyFiltersAndSort() {
   let filtered = [...contentData];
 
-  // 🔹 סינון לפי צפייה
   if (filterWatched === "watched") {
     filtered = filtered.filter(item => item.watch?.status !== 'unstarted');
   } else if (filterWatched === "unwatched") {
@@ -116,29 +59,19 @@ function applyFiltersAndSort() {
 // 📦 שליפת תכנים לפי ז׳אנר
 async function fetchContentByGenre(genre, sortBy) {
   try {
+    loading.style.display = 'flex';
     const res = await fetch(`http://localhost:3000/api/content/profile/${activeProfileId}?genre=${genre}&mode=${sortBy}`);
     contentData = await res.json();
+    loading.style.display = 'none';
   } catch (err) {
     console.error(err);
+    loading.style.display = 'none';
   }
 }
 
-
-// 🎞️ רינדור כרטיסים
-// function renderItems(items) {
-//   mediaContainer.innerHTML = '';
-
-//   if (!items.length) {
-//     mediaContainer.innerHTML = `<div class="no-results">לא נמצאו תוצאות</div>`;
-//     return;
-//   }
-
-//   items.forEach(item => {
-//     mediaContainer.appendChild(createCard(item));
-//   });
-// }
-
-
+document.getElementById('disney-logo-btn').addEventListener('click', () => {
+  window.location.href = '/feed?profile=' + activeProfileId
+})
 
 function createCard(item) {
   const count = item.likes || 0;
@@ -258,16 +191,16 @@ function renderItems(items) {
   });
 }
 
-async function fetchContentByGenre(genre) {
-  await fetch(`http://localhost:3000/api/content/profile/${activeProfileId}?genre=` + genre, {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    method: 'GET'
-  }).then(res => res.json()).then(data => {
-    contentData = data;
-  })
-}
+// async function fetchContentByGenre(genre) {
+//   await fetch(`http://localhost:3000/api/content/profile/${activeProfileId}?genre=` + genre, {
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     method: 'GET'
+//   }).then(res => res.json()).then(data => {
+//     contentData = data;
+//   })
+// }
 
 function posterClick(id) {
   window.location.href = `/media-content/${id}`;
