@@ -58,7 +58,6 @@ async function renderProfiles() {
     container.appendChild(div);
   });
 
-  // כפתור הוספת פרופיל
   if (profiles.length < MAX_PROFILES) {
     const addDiv = document.createElement('div');
     addDiv.className = 'profile add-profile';

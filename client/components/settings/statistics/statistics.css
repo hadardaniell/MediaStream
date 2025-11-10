@@ -1,29 +1,33 @@
 :root {
   --primary: #e1e6f0;
-  --secondary: #8f98b2;
-  --accent: #53a6f2;
-  --card-bg: #1a1c29;
+  --secondary: #9da8c3;
+  --accent: #00aaff;
+  --card-bg: rgba(26, 28, 41, 0.8);
   --page-gap: 7rem;
   --side-padding: 3rem;
+  --glow: 0 0 15px rgba(0, 170, 255, 0.25);
 }
 
 body {
-  background-color: #0f1014;
+  background: radial-gradient(circle at 20% 20%, #101320 0%, #0b0c11 100%);
   color: var(--primary);
   direction: rtl;
   font-family: "Noto Sans Hebrew", "Inter", sans-serif;
   margin: 0;
   height: 100%;
+  overflow-x: hidden;
 }
 
+/* --- Sidebar --- */
 .sidebar {
   width: 240px;
-  background-color: #1a1c29;
+  background: linear-gradient(180deg, rgba(20, 22, 32, 0.95) 0%, rgba(10, 11, 18, 0.95) 100%);
+  backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
   padding-top: 2em;
   gap: 1.5em;
-  box-shadow: -2px 0 10px rgba(0,0,0,0.4);
+  box-shadow: -2px 0 20px rgba(0, 0, 0, 0.6);
   position: fixed;
   right: 0;
   top: 0;
@@ -37,23 +41,33 @@ body {
   gap: 0.8em;
   padding: 1em 1.5em;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  border-right: 3px solid transparent;
+  transition: all 0.25s ease;
 }
 
 .menu-item:hover {
-  background-color: #252833;
-  transform: translateX(-3px);
+  background-color: rgba(37, 40, 51, 0.5);
+  border-right: 3px solid var(--accent);
+  transform: translateX(-5px);
+  box-shadow: var(--glow);
 }
 
 .menu-item i {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   color: var(--accent);
+  transition: transform 0.3s ease;
+}
+
+.menu-item:hover i {
+  transform: scale(1.1);
 }
 
 .menu-item span {
   font-size: 1rem;
+  letter-spacing: 0.5px;
 }
 
+/* --- Main content --- */
 .stat-container {
   margin-right: 240px;
   padding: var(--page-gap) var(--side-padding);
@@ -62,10 +76,26 @@ body {
 
 .page-title {
   text-align: center;
-  font-size: 2rem;
+  font-size: 2.3rem;
+  font-weight: 700;
   margin-bottom: 2em;
+  color: var(--accent);
+  /* text-shadow: 0 0 20px rgba(0, 170, 255, 0.3); */
+  animation: fadeInDown 1s ease;
 }
 
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Cards --- */
 .stat-cards {
   display: flex;
   justify-content: center;
@@ -74,48 +104,100 @@ body {
 }
 
 .stat-card {
-  background-color: var(--card-bg);
-  padding: 1.5em 2em;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  padding: 1.8em 2.3em;
+  border-radius: 16px;
+  /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6); */
   text-align: center;
-  width: 200px;
-  transition: transform 0.2s ease;
+  width: 220px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .stat-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px) scale(1.03);
+  /* box-shadow: 0 0 25px rgba(0, 170, 255, 0.2); */
 }
 
 .stat-card h3 {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--secondary);
+  margin-bottom: 0.5em;
 }
 
 .stat-card p {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: var(--accent);
-  margin-top: 0.5em;
+  font-weight: 700;
+  margin: 0;
+  /* text-shadow: 0 0 10px rgba(0, 170, 255, 0.3); */
 }
 
+/* --- Charts --- */
 .charts {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2em;
-  margin-top: 3em;
+  gap: 2.5em;
+  margin-top: 4em;
 }
 
 .chart-box {
-  background-color: var(--card-bg);
-  border-radius: 12px;
-  padding: 2em;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  width: 400px;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2.2em;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+  width: 440px;
   text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chart-box:hover {
+  transform: translateY(-5px);
+  /* box-shadow: 0 0 30px rgba(0, 170, 255, 0.2); */
 }
 
 .chart-box h3 {
-  margin-bottom: 1em;
+  margin-bottom: 1.2em;
   color: var(--secondary);
+  font-weight: 600;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.chart-box i {
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    padding: 1em;
+  }
+
+  .stat-container {
+    margin-right: 0;
+    padding: 6rem 1.5rem 10rem;
+  }
+
+  .chart-box {
+    width: 100%;
+  }
+
+  .stat-card {
+    width: 160px;
+  }
 }

@@ -1,108 +1,30 @@
-:root{
+:root {
   --primary: #e1e6f0;
-  --secondary: rgb(143, 152, 178);
-  --page-gap: 7rem; 
-  --side-padding: 3rem; 
+  --secondary: #8f98b2;
+  --accent: #53a6f2;
+  --card-bg: #1a1c29;
+  --page-gap: 7rem;
+  --side-padding: 3rem;
 }
 
 body {
-    height: 100%;
-    width: 100%;
-    background-color: #0f1014;
-    direction: rtl;
+  background-color: #0f1014;
+  color: var(--primary);
+  direction: rtl;
     font-family: "Noto Sans Hebrew", "Inter", sans-serif;
-    margin: 0;
-    color: var(--primary);
+  margin: 0;
+  height: 100%;
 }
 
-.page-container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    gap: var(--page-gap); 
-    padding: var(--page-gap) var(--side-padding); 
-    box-sizing: border-box;
-}
-
-.header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    font-weight: bold;
-}
-
-.profiles-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1.5rem;    
-    justify-items: center;
-    align-items: start;
-    grid-auto-flow: dense;      
-    width: 100%;
-}
-
-.profile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
-    max-width: 180px;
-}
-
-.profile-img, .add-tab {
-    width: 120px;
-    height: 120px;
-    border-radius: 60px;
-    object-fit: cover;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-}
-
-
-.profile-img {
-    background-color: transparent;
-}
-
-.profile-img:hover, .add-tab:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
-}
-
-.add-tab {
-    background-color: #252833;
-    border: 2px solid transparent;
-}
-
-.add-icon {
-    font-size: 46px;
-    color: white;
-}
-
-.profile-name {
-    color: var(--primary);
-    margin-top: 0.6em;
-    font-size: 1rem;
-    text-align: center;
-}
-
-.add-edit-icon {
-    color: var(--secondary);
-}
-
+/* ---- Sidebar ---- */
 .sidebar {
   width: 240px;
-  background-color: #1a1c29;
+  background-color: var(--card-bg);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   padding-top: 2em;
   gap: 1.5em;
-  box-shadow: -2px 0 10px rgba(0,0,0,0.4);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.4);
   position: fixed;
   right: 0;
   top: 0;
@@ -126,20 +48,92 @@ body {
 
 .menu-item i {
   font-size: 1.4rem;
-  color: #53a6f2;
+  color: var(--accent);
 }
 
 .menu-item span {
   font-size: 1rem;
-  color: #e1e6f0;
+  color: var(--primary);
 }
 
+/* ---- Main Page ---- */
 .page-container {
-  margin-right: 240px; 
+  margin-right: 240px;
+  padding: var(--page-gap) var(--side-padding);
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  justify-content: center; 
+  align-items: center;
+  gap: 3rem;
   min-height: 100vh;
-  box-sizing: border-box;
+}
+
+
+h1 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  color: var(--primary);
+  margin: 0;
+
+  display: flex;
+  justify-content: center;
+}
+
+.header i {
+  color: var(--accent);
+  font-size: 2.2rem;
+}
+
+/* ---- Profiles ---- */
+.profiles-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+  width: 100%;
+  max-width: 900px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.profile:hover {
+  transform: translateY(-5px);
+}
+
+.profile-img,
+.add-tab {
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  background-color: #1f2230;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-img:hover,
+.add-tab:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
+}
+
+.profile-name {
+  margin-top: 0.8rem;
+  font-size: 1rem;
+  color: var(--primary);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.add-icon {
+  font-size: 48px;
+  color: var(--primary);
 }

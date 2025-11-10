@@ -2,15 +2,29 @@ activeProfileId = localStorage.getItem('activeProfileId');
 
 let userData = null;
 let watchData = null;
+let profilesCount = 0;
+
+const userId = localStorage.getItem('userId');
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-  userData = await fetchUserData(activeProfileId);
+ await fetchProfilesCount(userId);
+  document.getElementById('profilesCount').textContent = profilesCount;
   await Promise.all([
     fetchContentSortByLikes(),
-    fetchWatchDataByProfile(activeProfileId)
+    fetchWatchDataByProfile(activeProfileId),
   ]);
 })
+
+async function fetchProfilesCount(userId){
+    const res = await fetch(`http://localhost:3000/api/profiles?userId=${userId}`, {
+      method: "GET",
+      credentials: "include"
+    }).then(res => res.json()).then(results => {
+      profilesCount = results.length
+    })
+    
+}
 
 async function fetchContentSortByLikes() {
   const res = await fetch(`http://localhost:3000/api/content/?mode=likes`);
@@ -81,10 +95,10 @@ async function fetchWatchDataByProfile(profileId) {
 
 
 
-async function fetchUserData(profileId) {
-  await fetch('http://localhost:3000/api/auth/me').then(res =>
-    res.json())
-}
+// async function fetchUserData(profileId) {
+//   await fetch('http://localhost:3000/api/auth/me').then(res =>
+//     res.json())
+// }
 
 const disneyColors = [
   '#0A2540', // כחול כהה עמוק
