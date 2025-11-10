@@ -17,6 +17,9 @@
 
     <!-- סינון ומיון -->
     <div class="filters">
+      <div>
+        <img src="/client/assets/disney-plus-logo.webp" id="disney-logo-btn" class="disney-plus-btn" />
+      </div>
       <div class="filter-box">
         <label for="genreSelect"><i class="bi bi-film"></i> ז׳אנר</label>
         <select id="genreSelect" class="filter-select">
@@ -47,16 +50,17 @@
           <option value="unwatched">לא נצפה</option>
         </select>
       </div>
-    </div>
 
+    </div>
 
     <!-- תוכן הסדרות -->
     <div id="mediaContainer" class="series-container"></div>
 
     <!-- אינדיקציה לטעינה -->
-    <div class="text-center py-4" id="loadingIndicator" style="display:none;">
-      <div class="spinner-border text-light" role="status"></div>
+    <div class="loader-overlay" id="loadingOverlay" style="display: none;">
+      <div class="disney-loader"></div>
     </div>
+
   </div>
 </body>
 
