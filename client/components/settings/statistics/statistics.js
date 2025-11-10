@@ -3,27 +3,35 @@ activeProfileId = localStorage.getItem('activeProfileId');
 let userData = null;
 let watchData = null;
 let profilesCount = 0;
+let dailyAverages = 0;
+let watchedContentsCount = 0;
 
 const userId = localStorage.getItem('userId');
 
+const avgWatchTimeDay = document.getElementById('avgWatchTimeDay');
+const contentsCount = document.getElementById('contentsCount');
+
 
 document.addEventListener('DOMContentLoaded', async () => {
- await fetchProfilesCount(userId);
+  await fetchProfilesCount(userId);
   document.getElementById('profilesCount').textContent = profilesCount;
   await Promise.all([
     fetchContentSortByLikes(),
     fetchWatchDataByProfile(activeProfileId),
   ]);
+
+  avgWatchTimeDay.textContent = calculateOverallAverageWatchTimePerDay(watchData);
+  contentsCount.textContent = countUniqueWatchedContents(watchData);
 })
 
-async function fetchProfilesCount(userId){
-    const res = await fetch(`http://localhost:3000/api/profiles?userId=${userId}`, {
-      method: "GET",
-      credentials: "include"
-    }).then(res => res.json()).then(results => {
-      profilesCount = results.length
-    })
-    
+async function fetchProfilesCount(userId) {
+  const res = await fetch(`http://localhost:3000/api/profiles?userId=${userId}`, {
+    method: "GET",
+    credentials: "include"
+  }).then(res => res.json()).then(results => {
+    profilesCount = results.length
+  })
+
 }
 
 async function fetchContentSortByLikes() {
@@ -59,14 +67,14 @@ async function fetchContentSortByLikes() {
 
 async function fetchWatchDataByProfile(profileId) {
   const res = await fetch(`http://localhost:3000/api/watches/${profileId}`);
-  const watchData = await res.json();
+  watchData = await res.json();
 
   const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
   const dailyCounts = [0, 0, 0, 0, 0, 0, 0];
 
   watchData.forEach(watch => {
     const date = new Date(watch.updatedAt);
-    const dayIndex = date.getDay(); 
+    const dayIndex = date.getDay();
     dailyCounts[dayIndex] += 1;
   });
 
@@ -92,6 +100,44 @@ async function fetchWatchDataByProfile(profileId) {
     }
   });
 }
+
+function countUniqueWatchedContents(watchData) {
+  // אוסף את כל ה־contentId ל־Set כדי לקבל ייחודיים
+  const uniqueContentIds = new Set();
+
+  watchData.forEach(watch => {
+    if (watch.contentId) {
+      uniqueContentIds.add(watch.contentId);
+    }
+  });
+
+  return uniqueContentIds.size;
+}
+
+
+function calculateOverallAverageWatchTimePerDay(watchData) {
+  if (!watchData.length) return 0;
+
+  // אובייקט לשמירת סך שניות לכל יום
+  const dailyTotals = {};
+
+  watchData.forEach(watch => {
+    const date = new Date(watch.updatedAt);
+    const day = date.toISOString().split('T')[0]; // YYYY-MM-DD
+    if (!dailyTotals[day]) dailyTotals[day] = 0;
+    dailyTotals[day] += watch.progressSeconds || 0;
+  });
+
+  // סכום כל השניות
+  const totalSeconds = Object.values(dailyTotals).reduce((sum, sec) => sum + sec, 0);
+  const numberOfDays = Object.keys(dailyTotals).length;
+
+  // ממוצע שעות לכל יום
+  const avgHoursPerDay = (totalSeconds / numberOfDays) / 3600;
+
+  return parseFloat(avgHoursPerDay.toFixed(4));
+}
+
 
 
 
