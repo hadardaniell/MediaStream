@@ -12,6 +12,7 @@
     <div class="menu-item" onclick="goTo('manage-account')">
       <i class="bi bi-person-circle"></i>
       <span>ניהול חשבון</span>
+      <span id="admin" class="disney-gold">מנהל</span>
     </div>
     <div class="menu-item" onclick="goTo('manage-profiles')">
       <i class="bi bi-people"></i>
@@ -24,20 +25,20 @@
   </div>
 
   <div class="account-container">
-    <h1>פרטי החשבון</h1>
+    <h1 class="disney-plus">פרטי החשבון</h1>
 
     <div class="account-info">
       <div class="info-item">
         <span class="label">מייל:</span>
-        <span class="value" id="email">hadasalon@example.com</span>
+        <span class="value" id="email"></span>
       </div>
       <div class="info-item">
         <span class="label">שם משתמש:</span>
-        <span class="value" id="username">הדס אלון</span>
+        <span class="value" id="username"></span>
       </div>
     </div>
 
-    <button id="logoutBtn">
+    <button id="logoutBtn" class="logout-btn">
       <i class="bi bi-box-arrow-right"></i> התנתקות
     </button>
   </div>

@@ -1,9 +1,9 @@
 :root {
   --primary: #e1e6f0;
   --secondary: #8f98b2;
-  --accent: #53a6f2;
-  --bg-dark: #0f1014;
-  --card-bg: #1a1c29;
+  --accent: #4da3ff;
+  --bg-dark: #0a1124;
+  --card-bg: rgba(18, 22, 40, 0.85);
   --danger: #dc3545;
   --danger-hover: #b82d3a;
   --page-gap: 7rem;
@@ -11,27 +11,31 @@
 }
 
 body {
-  background-color: var(--bg-dark);
+  background: radial-gradient(circle at left top, #142047 0%, #0d162e 50%, #0a0d1b 100%);
   color: var(--primary);
   font-family: "Noto Sans Hebrew", "Inter", sans-serif;
   margin: 0;
   direction: rtl;
+  height: 100%;
+  overflow-x: hidden;
 }
 
+/* --- Sidebar --- */
 .sidebar {
   width: 240px;
-  background-color: #1a1c29;
+  background: rgba(17, 21, 40, 0.85);
+  backdrop-filter: blur(20px);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding-top: 2em;
   gap: 1.5em;
-  box-shadow: -2px 0 10px rgba(0,0,0,0.4);
   position: fixed;
   right: 0;
   top: 0;
   bottom: 0;
   z-index: 10;
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .menu-item {
@@ -40,12 +44,15 @@ body {
   gap: 0.8em;
   padding: 1em 1.5em;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  border-right: 3px solid transparent;
+  transition: background 0.25s ease, transform 0.25s ease;
+  border-radius: 8px 0 0 8px;
 }
 
 .menu-item:hover {
-  background-color: #252833;
-  transform: translateX(-3px);
+  background-color: rgba(37, 46, 78, 0.5);
+  border-right: 3px solid var(--accent);
+  transform: translateX(-4px);
 }
 
 .menu-item i {
@@ -58,6 +65,7 @@ body {
   color: var(--primary);
 }
 
+/* --- Main Section --- */
 .account-container {
   margin-right: 240px;
   display: flex;
@@ -65,31 +73,34 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: var(--bg-dark);
+  background: transparent;
 }
 
 .account-container h1 {
   font-size: 2rem;
   margin-bottom: 2rem;
+  color: var(--primary);
 }
 
+/* --- Info Card --- */
 .account-info {
-  background-color: var(--card-bg);
-  border-radius: 16px;
-  padding: 2rem 3rem;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 2.2rem 3rem;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .info-item {
   display: flex;
   justify-content: space-between;
-  font-size: 1.1rem;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  font-size: 1.05rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   padding-bottom: 0.5rem;
 }
 
@@ -99,11 +110,13 @@ body {
 
 .value {
   font-weight: bold;
+  color: var(--primary);
 }
 
+/* --- Buttons --- */
 button {
   margin-top: 2rem;
-  background-color: var(--danger);
+  /* background-color: var(--danger); */
   color: white;
   border: none;
   border-radius: 10px;
@@ -114,9 +127,65 @@ button {
   display: flex;
   align-items: center;
   gap: 0.5em;
+  background-color: rgb(35 38 48) !important;
+  /* border-radius: 5px !important; */
+  /* padding: 0.5em 1em !important; */
 }
 
 button:hover {
   background-color: var(--danger-hover);
   transform: scale(1.05);
 }
+
+/* --- Disney+ Gradient Text --- */
+.disney-plus {
+  font-weight: 600;
+  background: linear-gradient(90deg, #7ec9ff, #dbefff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.disney-gold {
+    width: fit-content;
+    font-weight: bold;
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FFF8DC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 17px !important;
+    font-weight: 600;
+    letter-spacing: -0.8px;
+    color: var(--primary);
+    margin: 0;
+    display: flex;
+}
+
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    padding: 1em;
+    backdrop-filter: blur(10px);
+  }
+
+  .account-container {
+    margin-right: 0;
+    padding: 6rem 1.5rem 10rem;
+  }
+
+  .account-info {
+    width: 100%;
+  }
+}
+

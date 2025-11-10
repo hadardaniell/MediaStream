@@ -52,7 +52,7 @@ class ProfilesBar extends HTMLElement {
         <img src="${profile.photo}" class="${activeProfileId == profile._id ? 'profile-img active-profile' : 'profile-img'}" 
         class="profile-img" id="${profile._id}">
         <div class="active-check"></div>
-        <input type="text" class="form-control input" value="${profile.name}">
+        <span>${profile.name}</span>
       </div>
     `).join('');
 
