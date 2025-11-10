@@ -65,7 +65,7 @@ class Navbar extends HTMLElement {
 
         dropdownToggle.addEventListener('click', (e) => {
             //e.preventDefault();
-            window.location.href = '/genre';
+            //window.location.href = '/genre';
             dropdownMenu.classList.toggle('show');
         });
 

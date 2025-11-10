@@ -2,7 +2,8 @@ body {
   direction: rtl;
   background-color: #0f1014;
   color: #e1e6f0;
-  font-family: "Noto Sans Hebrew", "Inter", sans-serif;
+  font-family: "Noto Sans Hebrew", "Inter", sans-serif !important;
+  
   padding: 2em;
 
   --primary: #e1e6f0;
@@ -10,9 +11,10 @@ body {
   --search: #252833;
 }
 
+/* 
 .filters {
   display: flex;
-  flex-direction: row; /* עכשיו בשורה אחת */
+  flex-direction: row; 
   justify-content: center;
   align-items: center;
   gap: 1em;
@@ -34,7 +36,7 @@ body {
   outline: none;
   border-color: #1a75ff;
   box-shadow: 0 0 0 3px rgba(26, 117, 255, 0.3);
-}
+} */
 
 .series-container {
   display: grid;
@@ -68,7 +70,7 @@ body {
 .card-body {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.92), rgba(0,0,0,0.4));
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.4));
   opacity: 0;
   display: flex;
   flex-direction: column;
@@ -162,4 +164,130 @@ body {
 .spinner-border {
   width: 2.5rem;
   height: 2.5rem;
+}
+
+
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.4));
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1rem;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover .card-overlay {
+  opacity: 1;
+}
+
+/* טקסטים */
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--primary);
+}
+
+.card-details {
+  font-size: 0.85rem;
+  color: #b8b8b8;
+  margin-bottom: 8px;
+}
+
+.description {
+  font-size: 0.8rem;
+  color: #aaa;
+  max-height: 3em;
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+/* אזור הכפתורים */
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+/*  */
+/* --- Filters (Disney+ style integration) --- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 1em;
+  /* background-color: rgba(37, 40, 51, 0.7); */
+  backdrop-filter: blur(8px);
+  /* border: 1px solid rgba(255, 255, 255, 0.08); */
+  /* border-radius: 16px; */
+  /* padding: 1em 1.5em; */
+  margin-bottom: 4em;
+  /* box-shadow: 0 0 20px rgba(26, 117, 255, 0.05); */
+  /* transition: box-shadow 0.3s 
+ease, transform 0.3s 
+ease; */
+}
+
+/* .filters:hover {
+  box-shadow: 0 0 30px rgba(26, 117, 255, 0.12);
+  transform: translateY(-2px);
+} */
+
+.filter-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: right;
+  min-width: 180px;
+}
+
+.filter-box label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #53a6f2;
+  margin-bottom: 0.4em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-select {
+  background-color: var(--search);
+  color: var(--primary);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 0.7em 1em;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+}
+
+.filter-select:hover {
+  border-color: #53a6f2;
+  box-shadow: 0 0 10px rgba(26, 117, 255, 0.25) !important;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #53a6f2;
+  box-shadow: 0 0 0 3px rgba(26, 117, 255, 0.3) !important;
+}
+
+/* רספונסיביות */
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1em;
+  }
+
+  .filter-box {
+    width: 100%;
+  }
 }
