@@ -69,14 +69,6 @@ class Navbar extends HTMLElement {
             dropdownMenu.classList.toggle('show');
         });
 
-        //Go to Settings
-        const disneyLogo = this.shadowRoot.querySelector('.disney-plus-logo');
-        if (disneyLogo) {
-            disneyLogo.addEventListener('click', () => {
-                window.location.href = '/manage-account';
-            });
-}
-
     }
 }
 

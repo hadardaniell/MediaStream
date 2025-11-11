@@ -8,7 +8,7 @@ let watchedContentsCount = 0;
 
 const userId = localStorage.getItem('userId');
 
-const avgWatchTimeDay = document.getElementById('avgWatchTimeDay');
+const watchTimeMinutes = document.getElementById('watchTimeMinutes');
 const contentsCount = document.getElementById('contentsCount');
 
 
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     fetchWatchDataByProfile(activeProfileId),
   ]);
 
-  avgWatchTimeDay.textContent = calculateOverallAverageWatchTimePerDay(watchData);
+  watchTimeMinutes.textContent = calculateTotalWatchTimeInMinutes(watchData);
   contentsCount.textContent = countUniqueWatchedContents(watchData);
 })
 
@@ -115,36 +115,17 @@ function countUniqueWatchedContents(watchData) {
 }
 
 
-function calculateOverallAverageWatchTimePerDay(watchData) {
+function calculateTotalWatchTimeInMinutes(watchData) {
   if (!watchData.length) return 0;
 
-  // אובייקט לשמירת סך שניות לכל יום
-  const dailyTotals = {};
+  // סכום כל השניות מכל הצפיות
+  const totalSeconds = watchData.reduce((sum, watch) => sum + (watch.progressSeconds || 0), 0);
 
-  watchData.forEach(watch => {
-    const date = new Date(watch.updatedAt);
-    const day = date.toISOString().split('T')[0]; // YYYY-MM-DD
-    if (!dailyTotals[day]) dailyTotals[day] = 0;
-    dailyTotals[day] += watch.progressSeconds || 0;
-  });
+  // המרה לדקות
+  const totalMinutes = totalSeconds / 60;
 
-  // סכום כל השניות
-  const totalSeconds = Object.values(dailyTotals).reduce((sum, sec) => sum + sec, 0);
-  const numberOfDays = Object.keys(dailyTotals).length;
-
-  // ממוצע שעות לכל יום
-  const avgHoursPerDay = (totalSeconds / numberOfDays) / 3600;
-
-  return parseFloat(avgHoursPerDay.toFixed(4));
+  return parseFloat(totalMinutes.toFixed(2)); // שתי ספרות אחרי הנקודה
 }
-
-
-
-
-// async function fetchUserData(profileId) {
-//   await fetch('http://localhost:3000/api/auth/me').then(res =>
-//     res.json())
-// }
 
 const disneyColors = [
   '#0A2540', // כחול כהה עמוק
@@ -160,6 +141,9 @@ const disneyColors = [
 
 function goTo(page) {
   switch (page) {
+    case "feed":
+      window.location.href = "/feed?profileId=" + activeProfileId;
+      break;
     case "manage-account":
       window.location.href = "/manage-account";
       break;

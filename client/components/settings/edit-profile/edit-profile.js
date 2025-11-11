@@ -67,7 +67,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           body: JSON.stringify(payload),
           credentials: 'include',
         });
-        successMessage = `הפרופיל "${name}" נערך בהצלחה!`;
       } else {
         payload = { name, photo, userId };
         res = await fetch('/api/profiles', {
@@ -76,18 +75,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           body: JSON.stringify(payload),
           credentials: 'include',
         });
-        successMessage = `הפרופיל "${name}" נוצר בהצלחה!`;
       }
 
       let data = {};
       try { data = await res.json(); } catch (e) {}
 
       if (!res.ok) throw new Error(data.error || 'שגיאה בשמירה');
-
-      alert(successMessage);
-
-      // const returnPage = localStorage.getItem('returnPage') || '/manage-profiles.html';
-      // window.location.href = returnPage;
       window.history.back();
 
     } catch (err) {
@@ -112,8 +105,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!res.ok) throw new Error(data.error || 'שגיאה במחיקה');
 
       alert('הפרופיל נמחק בהצלחה!');
-      const returnPage = localStorage.getItem('returnPage') || '/manage-profiles';
-      window.location.href = returnPage;
+      window.location.href = '/manage-profiles';
 
     } catch (err) {
       alert('שגיאה במחיקה: ' + err.message);

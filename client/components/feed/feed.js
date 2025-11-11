@@ -1,5 +1,11 @@
 const activeProfileId = localStorage.getItem('activeProfileId');
 
+window.addEventListener('pageshow', event => {
+  if (event.persisted) {
+    window.location.reload();
+  }
+});
+
 document.addEventListener("DOMContentLoaded", async () => {
   const loader = document.getElementById("loader");
   const container = document.getElementById("container");

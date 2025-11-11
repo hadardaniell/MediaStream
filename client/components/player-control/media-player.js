@@ -1,8 +1,6 @@
 let activeWatchData = null;
 let contentData = null;
 const activeProfileId = localStorage.getItem('activeProfileId');
-// let seasonNumber = 1;
-// let currentIndex = 0;
 
 let startFromBeginning = false;
 let progressSeconds = 0;
@@ -30,7 +28,6 @@ const seasonNumberDrawer = document.getElementById('seasonNumber');
 document.addEventListener('DOMContentLoaded', async () => {
   const url = new URL(window.location.href);
 
-  // קבלת הפרמטרים ב‑query string
   startFromBeginning = Boolean(url.searchParams.get('startFromBeginning'));
   progressSeconds = Number(url.searchParams.get('progressSeconds'));
   season = Number(url.searchParams.get('season'));
@@ -67,15 +64,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   function loadMovie(movieData, progressSeconds = 0, autoplay = false) {
     if (!movieData) return;
 
-    // עדכון UI
     titleEl.textContent = movieData.name || '';
-    video.src = movieData.video; // כאן ה-URL של הסרט
+    video.src = movieData.video;
     video.load();
 
     video.currentTime = progressSeconds;
-    if (autoplay) video.play();
-
-    // video.removeEventListener('loadedmetadata', startPosition);
+    if (autoplay) {
+      video.play();
+      playPauseBtn.innerHTML = '<i class="bi bi-pause-fill"></i>';
+    }
   }
 
 
@@ -92,7 +89,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     video.currentTime = progressSeconds;
 
-    if (autoplay) video.play();
+    if (autoplay) {
+      video.play();
+      playPauseBtn.innerHTML = '<i class="bi bi-pause-fill"></i>';
+    }
   }
 
   function renderEpisodes() {
@@ -115,12 +115,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  /* ---- אלמנטים ---- */
-
 
   let seekDrag = false;
 
-  /* ---- פונקציות עזר ---- */
   function formatTime(sec) {
     if (!sec || isNaN(sec)) return '0:00';
     const s = Math.floor(sec % 60);
@@ -129,7 +126,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
 
-  /* ---- אירועים בסיסיים ---- */
   playPauseBtn.addEventListener('click', () => {
     if (video.paused) {
       video.play();
@@ -148,11 +144,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // חזרה/קדימה 10 שניות
   back10Btn.addEventListener('click', () => { video.currentTime = Math.max(0, video.currentTime - 10); });
   forward10Btn.addEventListener('click', () => { video.currentTime = Math.min(video.duration || 0, video.currentTime + 10); });
 
-  // עדכון סטטוס של tqdm
   video.addEventListener('loadedmetadata', () => {
     durationEl.textContent = formatTime(video.duration);
     seekBar.max = video.duration || 0;
@@ -163,7 +157,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentTimeEl.textContent = formatTime(video.currentTime);
   });
 
-  // סרגל חיפוש (seek)
   seekBar.addEventListener('input', (e) => {
     currentTimeEl.textContent = formatTime(e.target.value);
   });
@@ -173,7 +166,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   seekBar.addEventListener('mousedown', () => seekDrag = true);
   seekBar.addEventListener('mouseup', () => seekDrag = false);
 
-  // כפתור מסך מלא
   fullscreenBtn.addEventListener('click', async () => {
     try {
       if (!document.fullscreenElement) {
@@ -184,7 +176,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (err) { console.warn('Fullscreen error', err); }
   });
 
-  // כפתור פרק הבא
   nextBtn.addEventListener('click', () => {
     const seasonIndex = contentData.episodes.filter(ep => ep.seasonNumber === season)
       .findIndex(ep => ep.episodeNumber === episode + 1);
@@ -198,7 +189,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderEpisodes();
   });
 
-  // סיום הפרק — עוברים אוטומטית לפרק הבא
   video.addEventListener('ended', async () => {
     if (contentData.type === 'movie') {
       await completed(contentId, activeProfileId);
