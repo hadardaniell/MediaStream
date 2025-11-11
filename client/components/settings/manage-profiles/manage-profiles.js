@@ -1,7 +1,14 @@
 const MAX_PROFILES = 5;
 const container = document.getElementById('profilesContainer');
 
-// Fetch profiles מה־backend
+const activeProfileId = localStorage.getItem('activeProfileId');
+
+window.addEventListener('pageshow', event => {
+  if (event.persisted) {
+    window.location.reload();
+  }
+});
+
 async function loadProfiles() {
   try {
     const meRes = await fetch("http://localhost:3000/api/auth/me", {
@@ -26,7 +33,6 @@ async function loadProfiles() {
   }
 }
 
-// Render profiles במסך
 async function renderProfiles() {
   const profiles = await loadProfiles();
   container.innerHTML = '';
@@ -41,14 +47,12 @@ async function renderProfiles() {
       <i class="bi bi-pencil edit-btn" style="font-size: 1.1rem; margin-top: 0.4em; cursor: pointer;"></i>
     `;
 
-    // בחירת פרופיל
     div.querySelector('.profile-img').addEventListener('click', () => {
       localStorage.setItem('selectedProfileId', profile._id);
       localStorage.setItem('selectedProfileName', profile.name);
       window.location.href = '/watch';
     });
 
-    // עריכת פרופיל
     div.querySelector('.edit-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       localStorage.setItem('editProfileId', profile._id);
@@ -77,9 +81,11 @@ async function renderProfiles() {
   }
 }
 
-// פונקציית ניווט
 function goTo(page) {
   switch (page) {
+    case "feed":
+      window.location.href = "/feed?profileId=" + activeProfileId;
+      break;
     case "manage-account":
       window.location.href = "/manage-account";
       break;
@@ -92,7 +98,6 @@ function goTo(page) {
   }
 }
 
-// קריאה ראשונית
 (async () => { 
   await renderProfiles(); 
 })();

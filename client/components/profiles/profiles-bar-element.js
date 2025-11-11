@@ -33,6 +33,7 @@ class ProfilesBar extends HTMLElement {
   }
 
   async initLogic() {
+    const MaxProfiles = 5;
     const userId = localStorage.getItem("userId");
     const activeProfileId = localStorage.getItem('activeProfileId');
     if (!userId) {
@@ -52,19 +53,21 @@ class ProfilesBar extends HTMLElement {
         <img src="${profile.photo}" class="${activeProfileId == profile._id ? 'profile-img active-profile' : 'profile-img'}" 
         class="profile-img" id="${profile._id}">
         <div class="active-check"></div>
-        <span>${profile.name}</span>
+        <span class="profile-name">${profile.name}</span>
       </div>
     `).join('');
 
-      const addContainer = document.createElement('div');
-      addContainer.className = 'add-container';
-      addContainer.innerHTML = `
+      if (allProfiles.length < 5) {
+        const addContainer = document.createElement('div');
+        addContainer.className = 'add-container';
+        addContainer.innerHTML = `
       <div class="add-tab">
         <i class="bi bi-plus add-icon"></i>
       </div>
       <span>הוספה</span>
       `;
-      container.appendChild(addContainer);
+        container.appendChild(addContainer);
+      }
 
       container.querySelectorAll('.input').forEach(input => {
         input.addEventListener('change', async (e) => {
@@ -100,14 +103,14 @@ class ProfilesBar extends HTMLElement {
         });
       });
 
-    const addBtn = this.shadowRoot.querySelector('.add-container');
-    if (addBtn) {
-      addBtn.addEventListener('click', () => {
-        // מעבר לעמוד עריכת פרופיל
-        localStorage.setItem('returnPage', window.location.pathname);
-        window.location.href = '/edit-profile';
-      });
-    }
+      const addBtn = this.shadowRoot.querySelector('.add-container');
+      if (addBtn) {
+        addBtn.addEventListener('click', () => {
+          // מעבר לעמוד עריכת פרופיל
+          localStorage.setItem('returnPage', window.location.pathname);
+          window.location.href = '/edit-profile';
+        });
+      }
 
     } catch (err) {
       console.error("Error loading profiles:", err);

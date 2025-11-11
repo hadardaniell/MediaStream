@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="he">
+
 <head>
   <meta charset="UTF-8">
   <title>ניהול חשבון</title>
@@ -7,8 +8,13 @@
   <link rel="stylesheet" href="/client/components/settings/manage-account/manage-account.css">
   <script defer src="/client/components/settings/manage-account/manage-account.js"></script>
 </head>
+
 <body>
   <div class="sidebar">
+    <div class="menu-item" onclick="goTo('feed')">
+      <i class="bi bi-house-door-fill"></i>
+      <span>חזרה למסך הבית</span>
+    </div>
     <div class="menu-item" onclick="goTo('manage-account')">
       <i class="bi bi-person-circle"></i>
       <span>ניהול חשבון</span>
@@ -29,12 +35,8 @@
 
     <div class="account-info">
       <div class="info-item">
-        <span class="label">מייל:</span>
+        <span class="label">מייל</span>
         <span class="value" id="email"></span>
-      </div>
-      <div class="info-item">
-        <span class="label">שם משתמש:</span>
-        <span class="value" id="username"></span>
       </div>
     </div>
 
@@ -43,4 +45,5 @@
     </button>
   </div>
 </body>
+
 </html>

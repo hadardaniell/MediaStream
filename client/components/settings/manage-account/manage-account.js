@@ -1,5 +1,7 @@
 let userData = null;
 
+const activeProfileId = localStorage.getItem('activeProfileId');
+
 async function loadUserData() {
   try {
     const res = await fetch("http://localhost:3000/api/auth/me", {
@@ -23,7 +25,7 @@ async function loadUserData() {
     }
 
     document.getElementById("email").textContent = userData.email;
-    document.getElementById("username").textContent = userData.name;
+    // document.getElementById("username").textContent = userData.name;
   } catch (err) {
     console.error(err);
     alert("לא ניתן לטעון את פרטי המשתמש");
@@ -49,6 +51,9 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 
 function goTo(page) {
   switch (page) {
+    case "feed":
+      window.location.href = "/feed?profileId=" + activeProfileId;
+      break;
     case "manage-account":
       window.location.href = "/manage-account";
       break;

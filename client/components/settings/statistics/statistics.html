@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="he">
+
 <head>
   <meta charset="UTF-8">
   <title>סטטיסטיקות צפייה</title>
@@ -8,22 +9,27 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script defer src="/client/components/settings/statistics/statistics.js"></script>
 </head>
+
 <body>
   <div class="sidebar">
-      <div class="menu-item" onclick="goTo('manage-account')">
-          <i class="bi bi-person-circle"></i>
-          <span>ניהול חשבון</span>
-      </div>
+    <div class="menu-item" onclick="goTo('feed')">
+      <i class="bi bi-house-door-fill"></i>
+      <span>חזרה למסך הבית</span>
+    </div>
+    <div class="menu-item" onclick="goTo('manage-account')">
+      <i class="bi bi-person-circle"></i>
+      <span>ניהול חשבון</span>
+    </div>
 
-      <div class="menu-item" onclick="goTo('manage-profiles')">
-          <i class="bi bi-people"></i>
-          <span>ניהול פרופילים</span>
-      </div>
+    <div class="menu-item" onclick="goTo('manage-profiles')">
+      <i class="bi bi-people"></i>
+      <span>ניהול פרופילים</span>
+    </div>
 
-      <div class="menu-item" onclick="goTo('statistics')">
-          <i class="bi bi-bar-chart"></i>
-          <span>סטטיסטיקות</span>
-      </div>
+    <div class="menu-item" onclick="goTo('statistics')">
+      <i class="bi bi-bar-chart"></i>
+      <span>סטטיסטיקות</span>
+    </div>
   </div>
 
   <div class="stat-container">
@@ -40,7 +46,7 @@
       </div>
       <div class="stat-card">
         <h3>ממוצע שעות צפייה ליום</h3>
-        <p id="avgWatchTimeDay"></p>
+        <p id="watchTimeMinutes"></p>
       </div>
     </div>
 
@@ -57,4 +63,5 @@
     </div>
   </div>
 </body>
+
 </html>

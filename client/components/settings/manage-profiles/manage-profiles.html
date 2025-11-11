@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="he">
+
 <head>
     <meta charset="UTF-8">
     <title>פרופילים</title>
@@ -8,8 +9,13 @@
     <link rel="stylesheet" href="/client/components/settings/manage-profiles/manage-profiles.css">
     <script defer src="/client/components/settings/manage-profiles/manage-profiles.js"></script>
 </head>
+
 <body>
     <div class="sidebar">
+        <div class="menu-item" onclick="goTo('feed')">
+            <i class="bi bi-house-door-fill"></i>
+            <span>חזרה למסך הבית</span>
+        </div>
         <div class="menu-item" onclick="goTo('manage-account')">
             <i class="bi bi-person-circle"></i>
             <span>ניהול חשבון</span>
@@ -34,4 +40,5 @@
         </div>
     </div>
 </body>
+
 </html>
