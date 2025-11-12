@@ -3,24 +3,12 @@
  }
 
  body {
-     padding: 0 !important;
-     /* padding: 1em;
+     padding: 2em;
+     background-color: #0f1014;
+     font-family: "Noto Sans Hebrew", "Inter", sans-serif !important;
+     color: #fff;
      direction: rtl;
-     letter-spacing: -0.4px;
-     font-weight: 600;
-     display: flex;
-     flex-direction: column;
-     gap: 1em;
-     height: 100vh;
-     width: 100% !important;
-     max-width: 100% !important;
-     padding-top: 0 !important;
-     background: linear-gradient(#091734, rgb(13 21 36), rgb(15 16 20));
-     background-attachment: fixed;
-     background-repeat: no-repeat;
-     background-size: cover;
-     font-family: "Noto Sans Hebrew", "Inter", sans-serif !important; */
-
+     padding: 0 !important;
      --primary: #e1e6f0;
      --secondary: rgb(143, 152, 178);
      --link: rgb(53, 134, 240);
@@ -43,254 +31,14 @@
      padding-right: 1em;
  }
 
- /*
-.container {
-    height: 100vh;
-}
-
-.card {
-    height: 400px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    width: 230px !important;
-    padding: 0 0.5em;
-    background-color: var(--search) !important;
-}
-
-.card-img-top {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-}
-
-.card-body {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1em !important;
-    justify-content: space-between !important;
-    color: var(--primary);
-}
-
-.card-title {
-    font-weight: 700;
-    margin: 0 !important;
-}
-
-.title {
-    font-weight: 600;
-}
-
-.meta {
-    font-size: 0.9rem;
-    opacity: 0.8;
-}
-
-.actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 8px;
-}
-
-.like-btn[aria-pressed="true"] {
-    background: #e91e63;
-    color: #fff;
-    border-color: #e91e63;
-}
-
-.like-btn[aria-pressed="false"] {
-    border: 1px solid var(--primary);
-    color: var(--primary);
-}
-
-.poster {
-    width: 160px;
-    height: 215px;
-}
-
-.poster-container {
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-    padding-top: 0.5em;
-}
-
-.row-flex {
-    display: flex;
-    align-items: flex-start;
-}
-
-.burst {
-    position: absolute;
-    pointer-events: none;
-    font-size: 22px;
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(.6);
-    animation: pop 500ms ease-out forwards;
-}
-
-@keyframes pop {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(.6);
-    }
-
-    50% {
-        opacity: 1;
-        transform: translate(-50%, -80%) scale(1.2);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate(-50%, -120%) scale(.9);
-    }
-}
-
-.prepend {
-    background-color: transparent !important;
-    border-color: transparent !important;
-}
-
-.search-wrapper,
-input {
-    background-color: var(--search) !important;
-    color: var(--secondary);
-    border-color: transparent !important;
-}
-
-.search-wrapper {
-    border-radius: 5px;
-}
-
-.search-icon {
-    color: var(--primary);
-    font-size: 22px;
-}
-
-.media-content {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: flex-start;
-}
-
-.btn-watch {
-    background: linear-gradient(to right, rgb(8 87 225), rgb(6 43 154));
-    color: rgb(255, 255, 255);
-    font-size: 14px;
-    cursor: pointer;
-    font-weight: 700 !important;
-}
-
-.btn-watch:hover {
-    background: linear-gradient(to right, rgb(6 43 154), rgb(8 87 225)) !important;
-}
-
-.sub-header-container {
-    gap: 0.5em;
-}
-
-.form-control:focus {
-    box-shadow: none !important;
-}
-
-.btn-sort {
-    border-radius: 5px !important;
-    font-size: 14px !important;
-    width: 76px !important;
-}
-
-.input-container {
-    display: flex;
-    gap: 0.5em;
-    align-items: center;
-}
-
-media-stream-profiles-bar {
-    max-width: 750px;
-}
-
-.content-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    direction: rtl !important;
-}
-
-.genre {
-    font-weight: 600;
-    font-size: 13px;
-    margin: 0;
-}
-
-.content-card {
-    height: 450px !important;
-    display: flex;
-    flex-direction: column;
-}
-
-h5 {
-    font-size: 15px !important;
-}
-
-.likes {
-    gap: 1em;
-}
-
-.description {
-    width: 100%;
-    font-size: 13px;
-    color: var(--secondary);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.section-title {
-    font-weight: 500;
-    color: var(--secondary);
-}
-
-section {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.row {
-    width: 100%;
-    gap: 1em;
-} */
-
- /* body {
-  padding: 2em;
-  background-color: #0f1014;
-  font-family: "Noto Sans Hebrew", "Inter", sans-serif !important;
-  color: #fff;
-  direction: rtl;
-} */
- body {
-     padding: 2em;
-     background-color: #0f1014;
-     font-family: "Noto Sans Hebrew", "Inter", sans-serif !important;
-     color: #fff;
-     direction: rtl;
- }
-
  .row {
      gap: 1em !important;
  }
 
- /* עטיפת הקרוסלה */
  .section-container {
      position: relative;
      overflow: hidden;
      padding: 1em 2em;
-     /* רווח לכפתורי הניווט */
  }
 
  .carousel {
@@ -299,14 +47,12 @@ section {
      overflow-x: auto;
      scroll-behavior: smooth;
      scrollbar-width: none;
-     /* הסתרת scrollbar */
  }
 
  .carousel::-webkit-scrollbar {
      display: none;
  }
 
- /* כפתורי ניווט */
  .nav-arrow {
      position: absolute;
      top: 50%;
@@ -335,7 +81,6 @@ section {
      right: 10px;
  }
 
- /* עיצוב הכרטיסים */
  .card {
      flex: 0 0 230px;
      height: 340px;
@@ -354,7 +99,6 @@ section {
      z-index: 5;
  }
 
- /* תמונה */
  .card img {
      width: 100%;
      height: 100%;
@@ -363,7 +107,6 @@ section {
      border: none;
  }
 
- /* שכבת hover */
  .card-overlay {
      position: absolute;
      inset: 0;
@@ -380,7 +123,6 @@ section {
      opacity: 1;
  }
 
- /* טקסטים */
  .card-title {
      font-size: 1rem;
      font-weight: 700;
@@ -402,7 +144,6 @@ section {
      line-height: 1.2;
  }
 
- /* אזור הכפתורים */
  .card-actions {
      display: flex;
      align-items: center;
@@ -410,49 +151,8 @@ section {
      margin-top: 8px;
  }
 
- /* 
-.like-btn {
-  border: none;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  font-size: 0.85rem;
-  padding: 0.4rem 0.7rem;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.like-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
-}
-
-.like-btn.active {
-  background: #e91e63;
-}
-
-.btn-watch {
-  background: linear-gradient(to right, #0857e1, #062b9a);
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.8rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  border: none;
-  transition: background 0.3s ease;
-}
-
-.btn-watch:hover {
-    transform: scale(1.05);
-} */
-
- /* כפתור צפייה */
  .btn-watch {
      background-color: #007bff;
-     /* כחול אותנטי בדיסני פלוס */
      color: #ffffff;
      font-weight: 700;
      font-size: 0.9rem;
@@ -465,11 +165,9 @@ section {
 
  .btn-watch:hover {
      background-color: #0056b3;
-     /* כחול כהה יותר בעת hover */
      transform: scale(1.03);
  }
 
- /* כפתור לייק */
  .like-btn {
      background-color: rgba(255, 255, 255, 0.2);
      color: #ffffff;
@@ -490,7 +188,6 @@ section {
 
  .like-btn.active {
      background-color: #ff2b6d;
-     /* צבע אדום‑ורוד כשנבחר לייק */
      color: #ffffff;
      box-shadow: 0 2px 8px rgba(255, 43, 109, 0.5);
  }
@@ -501,10 +198,8 @@ section {
      outline: none !important;
  }
 
- /* Loader overlay */
  .loader-overlay {
      position: fixed;
-     /* תמיד מעל כל הדף */
      inset: 0;
      background: rgba(0, 0, 0, 0.7);
      display: flex;
@@ -513,7 +208,6 @@ section {
      z-index: 9999;
  }
 
- /* Loader עגול דיסני פלוס */
  .loader {
      width: 60px;
      height: 60px;
@@ -524,7 +218,6 @@ section {
      box-shadow: 0 0 8px rgb(24 0 255 / 50%);
  }
 
- /* אנימציית סיבוב */
  @keyframes spin {
      0% {
          transform: rotate(0deg);
