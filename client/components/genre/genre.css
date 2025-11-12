@@ -22,33 +22,6 @@ body {
   }
 }
 
-/* 
-.filters {
-  display: flex;
-  flex-direction: row; 
-  justify-content: center;
-  align-items: center;
-  gap: 1em;
-  flex-wrap: wrap;
-  margin-bottom: 1.5em;
-}
-
-.filters select {
-  background-color: var(--search);
-  color: var(--primary);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  padding: 0.4em 0.8em;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-}
-
-.filters select:focus {
-  outline: none;
-  border-color: #1a75ff;
-  box-shadow: 0 0 0 3px rgba(26, 117, 255, 0.3);
-} */
-
 .series-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -194,7 +167,6 @@ body {
   opacity: 1;
 }
 
-/* טקסטים */
 .card-title {
   font-size: 1rem;
   font-weight: 700;
@@ -216,7 +188,6 @@ body {
   line-height: 1.2;
 }
 
-/* אזור הכפתורים */
 .card-actions {
   display: flex;
   align-items: center;
@@ -224,69 +195,6 @@ body {
   margin-top: 8px;
 }
 
-/* .filters {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1em;
-  backdrop-filter: blur(8px);
-  margin-bottom: 4em;
-}
-
-.filter-box {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: right;
-  min-width: 180px;
-}
-
-.filter-box label {
-  font-size: 15px;
-  font-weight: 600;
-  color: #53a6f2;
-  margin-bottom: 0.4em;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.filter-select {
-  background-color: var(--search);
-  color: var(--primary);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  padding: 0.7em 1em;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  width: 100%;
-}
-
-.filter-select:hover {
-  border-color: #53a6f2;
-  box-shadow: 0 0 10px rgba(26, 117, 255, 0.25) !important;
-}
-
-.filter-select:focus {
-  outline: none;
-  border-color: #53a6f2;
-  box-shadow: 0 0 0 3px rgba(26, 117, 255, 0.3) !important;
-}
-
-@media (max-width: 768px) {
-  .filters {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 1em;
-  }
-
-  .filter-box {
-    width: 100%;
-  }
-} */
-
-/* 🎬 Filters Section — Disney+ Modern Look */
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -303,13 +211,6 @@ body {
   transition: all 0.3s ease;
 }
 
-/* 
-.filters:hover {
-  box-shadow: 0 0 40px rgba(26, 117, 255, 0.15);
-  transform: translateY(-2px);
-} */
-
-/* תיבת פילטר */
 .filter-box {
   display: flex;
   flex-direction: column;
@@ -318,7 +219,6 @@ body {
   position: relative;
 }
 
-/* לייבל מעל הסלקט */
 .filter-box label {
   font-size: 0.9rem;
   font-weight: 600;
@@ -331,7 +231,6 @@ body {
   transition: color 0.3s ease;
 }
 
-/* עיצוב ה-select */
 .filter-select {
   width: 100%;
   background: linear-gradient(145deg, #1a1d26, #14161f);
@@ -347,19 +246,6 @@ body {
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.25) inset;
 }
 
-/* חץ מותאם אישית */
-/* .filter-box::after {
-  content: "▾";
-  position: absolute;
-  left: 1rem;
-  top: 2.4em;
-  font-size: 1rem;
-  color: #7aaeff;
-  pointer-events: none;
-  transition: transform 0.3s ease;
-} */
-
-/* אינטראקציות */
 .filter-select:hover {
   border-color: #3e9eff;
   box-shadow: 0 0 14px rgba(26, 117, 255, 0.25);
@@ -381,7 +267,6 @@ body {
   transform: rotate(180deg);
 }
 
-/* רספונסיביות */
 @media (max-width: 768px) {
   .filters {
     flex-direction: column;
@@ -412,9 +297,6 @@ body {
   border: 2px solid transparent;
   border-top: 2px solid #a2c9d7;
   animation: spin 1.2s linear infinite;
-  /* background: linear-gradient(45deg, #00bfff, #3030f9); */
-  /* background-clip: text; */
-  /* -webkit-background-clip: text; */
   color: transparent;
   box-shadow: 0 0 30px rgb(85 93 96 / 50%);
 

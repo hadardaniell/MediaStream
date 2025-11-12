@@ -252,12 +252,14 @@ document.addEventListener('DOMContentLoaded', () => {
             photoName = safeName(name) + "." + ext.toLowerCase();
         }
 
-        const videoFile = document.getElementById("videoFile").files[0];
-        const videoMatch = videoFile.name.match(/([^\\/]+)\.([^.]+)$/);
-
-        if (videoMatch) {
-            const [, name, ext] = videoMatch;
-            videoName = safeName(name) + "." + ext.toLowerCase();
+        if(type != 'series'){
+            const videoFile = document.getElementById("videoFile").files[0];
+            const videoMatch = videoFile.name.match(/([^\\/]+)\.([^.]+)$/);
+    
+            if (videoMatch) {
+                const [, name, ext] = videoMatch;
+                videoName = safeName(name) + "." + ext.toLowerCase();
+            }
         }
 
         const episodesValue = type === "series" ? episodes.map(ep => ({
@@ -367,6 +369,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
+function slugifyDir(name) {
+  return String(name)
+    .trim()
+    .toLowerCase()
+    .replace(/['"`]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'series';
+}
 
 function safeName(original) {
     return original.replace(/[^a-zA-Z0-9_\-]+/g, '_');

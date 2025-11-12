@@ -109,7 +109,6 @@ h2 {
 }
 
 .divider {
-    /* border-bottom: 1px solid var(--secondary); */
     border-bottom: 1px solid var(--secondary);
     width: 250px;
     opacity: 0.2;
