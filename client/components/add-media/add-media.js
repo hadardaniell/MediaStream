@@ -277,11 +277,6 @@ function renderCast() {
             if (!res.ok) throw new Error("שגיאה בבקשה");
 
             newMedia = await res.json();
-            // newMedia = result;
-            console.log("נשלח בהצלחה:", result);
-            alert("התוכן נוסף בהצלחה!");
-            return result;
-            //return newMedia;
         } catch (err) {
             console.error("שגיאה בשליחה:", err);
             alert("שגיאה בשליחה לשרת");
@@ -290,7 +285,7 @@ function renderCast() {
     }
 
     async function upload(file, type = 'poster' | 'movie') {
-        await fetch('http://localhost:3000/api/uploads/poster', {
+        await fetch('http://localhost:3000/api/uploads/' + type, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/octet-stream',
