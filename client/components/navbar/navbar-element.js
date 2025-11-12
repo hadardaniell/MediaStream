@@ -47,8 +47,9 @@ class Navbar extends HTMLElement {
                 }).then(res => {
                     if (!res.ok) throw new Error("Logout failed");
                     localStorage.removeItem("isAuthenticated");
-                    localStorage.removeItem("userRole");
                     localStorage.removeItem("userEmail");
+                    localStorage.removeItem("userId");
+                    localStorage.removeItem("activeProfileId");
                     window.location.href = '/login';
                 });
             });
