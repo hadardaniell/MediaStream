@@ -1,4 +1,5 @@
 let newMedia = null;
+let type = '';
 
 const isAuthenticated = localStorage.getItem('isAuthenticated');
 
@@ -238,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function buildJSON() {
-        const type = typeSelect.value;
+        type = typeSelect.value;
         const name = document.getElementById("name").value;
 
         const photoFile = document.getElementById("photoFile").files[0];
@@ -388,5 +389,6 @@ document.getElementById('addAnotherContent').addEventListener('click', () => {
 })
 
 document.getElementById('toMediaContent').addEventListener('click', () => {
-    window.location.href = '/media-content/' + newMedia._id //to check
+    id = type === 'series' ? newMedia.content._id : newMedia._id;
+    window.location.href = '/media-content/' + id; //to check
 })
