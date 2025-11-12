@@ -1,293 +1,3 @@
-/* body {
-    background-color: #0f1014 !important;
-    display: flex;
-    flex-direction: column;
-    padding: 1em;
-    letter-spacing: -0.4px;
-    font-family: "Noto-Sans-Hebrew-Fonts", "Inter", sans-serif !important;
-
-
-
-    --primary: #e1e6f0;
-    --secondary: rgb(143, 152, 178);
-    --link: rgb(53, 134, 240);
-}
-
-h1 {
-    font-size: 35px;
-    font-weight: 600;
-    letter-spacing: -0.8px !important;
-    color: var(--primary);
-    margin: 0;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-}
-
-h2 {
-    font-size: 22px !important;
-    font-weight: 600 !important;
-    letter-spacing: -0.4px !important;
-    color: var(--secondary) !important;
-    margin: 0;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-}
-
-h3 {
-    font-size: 18px !important;
-    font-weight: 500;
-    letter-spacing: -0.4px !important;
-    color: var(--secondary) !important;
-    margin: 0;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-}
-
-
-.poster {
-    height: 400px;
-    align-self: center;
-    border: 5px solid rgb(255 255 255 / 11%);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-}
-
-.content-details {
-    color: var(--primary);
-    text-align: center;
-    margin-top: 1em;
-    display: flex;
-    align-items: flex-start;
-    gap: 2em;
-    height: 100%;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0 2.5em;
-}
-
-.content-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    direction: rtl;
-    justify-content: space-between;
-}
-
-info-bar {
-    display: flex;
-}
-
-.watch-btn {
-    width: 352px !important;
-    border-radius: 7px !important;
-    background: linear-gradient(to right, rgb(8 87 225), rgb(6 43 154)) !important;
-    color: rgb(255, 255, 255) !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    border: none !important;
-    display: flex !important;
-    height: 52px !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 15px !important;
-    margin-bottom: 1em !important;
-}
-
-.like-btn {
-    height: 52px !important;
-    width: 52px !important;
-    border-radius: 7px !important;
-    background-color: rgb(34 36 38) !important;
-    color: var(--secondary) !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    border: none !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 20px !important;
-}
-
-.action-buttons {
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 1em;
-}
-
-.action-buttons>* {
-    border: none;
-}
-
-.info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 0.2em;
-    height: 100%;
-}
-
-.media-nav {
-    padding: 2em 0 1.5em 0;
-    display: flex;
-    gap: 2em;
-    border-bottom: 1px solid rgb(143 152 178 / 57%);
-    margin-bottom: 1em;
-}
-
-.extra-content-container {
-    display: flex;
-    flex-direction: column;
-    direction: rtl;
-    width: 100%;
-}
-
-.clickable {
-    cursor: pointer;
-}
-
-.episode-list {
-    display: flex;
-    flex-direction: column;
-    direction: rtl;
-    color: var(--secondary);
-    align-items: flex-start;
-    gap: 1.5em;
-}
-
-.episode {
-    display: flex;
-    gap: 1em;
-    align-items: center;
-
-}
-
-.episode-img {
-    height: 120px;
-    border-radius: 5px;
-}
-
-.episode-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3em;
-    align-items: flex-start;
-
-    h2 {
-        font-weight: 500;
-    }
-}
-
-.navbar-container {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-
-
-    .navbar-nav {
-        padding: 1em 0;
-        display: flex;
-        flex-direction: row;
-        gap: 2em;
-    }
-
-    .nav-item {
-        cursor: pointer;
-    }
-}
-
-.similar-list {
-    display: flex;
-    gap: 1em;
-}
-
-.similar-header {
-    font-size: 20px;
-}
-
-.similar-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-    margin-top: 1.5em;
-}
-
-.similar-img {
-    height: 200px;
-    border-radius: 5px;
-}
-
-.active {
-    font-weight: 700 !important;
-}
-
-.liked {
-    background-color: rgb(239, 65, 94) !important;
-    color: white !important;
-}
-
-.details-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.hovered {
-    &:hover {
-        color: var(--link) !important;
-    }
-}
-
-.start-btn {
-    font-size: 15px !important;
-    direction: ltr !important;
-    gap: 0.5em !important;
-    height: 52px !important;
-    border-radius: 7px !important;
-    background-color: rgb(34 36 38) !important;
-    color: var(--secondary) !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 20px !important;
-
-}
-
-.start-text {
-    font-size: 15px !important;
-}
-
-.actions-wrapper {
-    display: flex;
-    gap: 1em;
-}
-
-.similar-item {
-    max-width: 135px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-    align-items: center;
-}*/
-
-.close-icon {
-    color: var(--secondary);
-    font-size: 24px;
-    direction: rtl;
-    cursor: pointer;
-
-    &:hover {
-        color: var(--secondary);
-    }
-}
-
-/* === כללי === */
 body {
     background: radial-gradient(circle at 20% 20%, #0a0b0f, #090a0d 60%, #0b0c10 100%);
     display: flex;
@@ -301,7 +11,17 @@ body {
     --link: rgb(53, 134, 240);
 }
 
-/* === טקסטים === */
+.close-icon {
+    color: var(--secondary);
+    font-size: 24px;
+    direction: rtl;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--secondary);
+    }
+}
+
 h1 {
     font-size: 35px;
     font-weight: 600;
@@ -344,7 +64,6 @@ h3 {
     direction: rtl;
 }
 
-/* === אזור התוכן === */
 .content-details {
     display: flex;
     justify-content: space-between;
@@ -364,7 +83,6 @@ h3 {
     width: 100%;
 }
 
-/* === פוסטר === */
 .poster {
     width: 360px;
     height: auto;
@@ -380,7 +98,6 @@ h3 {
     box-shadow: 0 0 60px rgba(10, 108, 255, 0.3);
 }
 
-/* === פרטי מידע === */
 .info {
     display: flex;
     flex-direction: column;
@@ -403,33 +120,17 @@ h3 {
     font-size: 15px;
 }
 
-/* === כפתורים עיקריים === */
-/* === אזור כפתורים === */
 .actions-wrapper {
     display: flex;
     gap: 1em;
     align-items: center;
-    /* flex-wrap: wrap; */
-    /* margin-top: 1em; */
 }
 
-/* === כפתור צפייה (דיסני+ סטייל) === */
-/* === אזור הכפתורים הראשיים === */
-.actions-wrapper {
-    display: flex;
-    /* gap: 1.5em; */
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-/* === כפתור "צפו עכשיו" === */
 .watch-btn {
     width: 320px;
     height: 54px;
     border-radius: 8px;
     background: linear-gradient(to right, rgb(8 87 225), rgb(6 43 154)) !important;
-
-    /* background: linear-gradient(135deg, #0077ff, #0047ff); */
     color: #ffffff;
     font-weight: 700;
     font-size: 16px;
@@ -446,7 +147,6 @@ h3 {
     background: linear-gradient(135deg, #3399ff, #0055ff);
 }
 
-/* === כפתור "צפייה מהתחלה" === */
 .start-btn {
     width: 320px;
     height: 54px;
@@ -493,15 +193,10 @@ h3 {
     color: #ffffff;
 }
 
-/* === לייק פעיל === */
 .liked {
-    /*background: linear-gradient(135deg, #ff3366, #cc0033);
-    */
     background: #ff3366;
     color: #fff;
     border: none;
-    /* box-shadow: 0 0 25px rgba(255, 51, 102, 0.5); */
-    /* transform: scale(1.1); */
 }
 
 .liked:hover {
@@ -509,15 +204,6 @@ h3 {
     box-shadow: 0 0 35px rgba(255, 80, 120, 0.7);
 }
 
-/* === ריווח בין כל הכפתורים === */
-/* .actions-wrapper .watch-btn,
-.actions-wrapper .start-btn,
-.actions-wrapper .like-btn {
-    margin-bottom: 0.5em;
-} */
-
-
-/* === פרקים === */
 .episode-list {
     display: flex;
     flex-direction: column;
@@ -546,7 +232,6 @@ h3 {
     object-fit: cover;
 }
 
-/* === תוכן דומה === */
 .similar-content {
     margin-top: 3em;
     display: flex;
@@ -586,7 +271,6 @@ h3 {
     object-fit: cover;
 }
 
-/* === סרגל עונות === */
 .navbar-container {
     display: flex;
     align-items: center;
@@ -606,30 +290,6 @@ h3 {
     }
 }
 
-/* .navbar-container {
-    display: flex;
-    margin-top: 1em;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-.navbar-nav {
-    display: flex;
-    gap: 1.5em;
-    padding: 0.8em 0;
-}
-
-.nav-item h3 {
-    color: #b0b6c6;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.nav-item h3:hover,
-.nav-item h3.active {
-    color: #1d64f2;
-} */
-
-/* === אנימציות עדינות === */
 @keyframes fadeInUp {
     from {
         opacity: 0;

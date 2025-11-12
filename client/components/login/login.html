@@ -10,7 +10,6 @@
         rel="stylesheet">
     <link href="client/components/login/login.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- <script src="./login.js"></script> -->
 </head>
 
 <body class="page-container" id="body">
@@ -18,25 +17,21 @@
     <div class="page-wrapper">
         <div class="login-wrapper">
             <div class="header">
-                <h1 id="main-header" >התחברו כדי להמשיך</h1>
+                <h1 id="main-header">התחברו כדי להמשיך</h1>
                 <h2>הזינו מייל וסיסמה להתחברות</h2>
             </div>
 
             <form class="form-container" novalidate id="login-form">
                 <div class="form-group row">
                     <div>
-                        <input type="email" class="form-control input"
-                        id="email"
-                         placeholder="הכנס מייל" required>
-                         <div class="invalid-feedback">אנא הזן כתובת אימייל תקינה.</div>
+                        <input type="email" class="form-control input" id="email" placeholder="הכנס מייל" required>
+                        <div class="invalid-feedback">אנא הזן כתובת אימייל תקינה.</div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div>
-                        <input type="password" class="form-control input" 
-                        id="password"
-                        required minlength="6"
-                        placeholder="הכנס סיסמה">
+                        <input type="password" class="form-control input" id="password" required minlength="6"
+                            placeholder="הכנס סיסמה">
                         <div class="invalid-feedback">הסיסמה חייבת להכיל לפחות 6 תווים.</div>
                     </div>
                 </div>
@@ -52,51 +47,48 @@
 
             <!-- Modal שגיאה -->
             <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">שגיאה בהתחברות</h5>
-                </div>
-                <div class="modal-body" id="errorModalBody">
-                    שם המשתמש או הסיסמה שגויים.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">סגור</button>
-                </div>
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">שגיאה בהתחברות</h5>
+                        </div>
+                        <div class="modal-body" id="errorModalBody">
+                            שם המשתמש או הסיסמה שגויים.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">סגור</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            </div>
-
-
         </div>
-        
     </div>
 
-                <div class="page-footer">
-                <div class="options-list">
-                    <span class="sub-header">חברה</span>
-                    <span class="sub-option">מכשירים נתמכים</span>
-                </div>
+    <div class="page-footer">
+        <div class="options-list">
+            <span class="sub-header">חברה</span>
+            <span class="sub-option">מכשירים נתמכים</span>
+        </div>
 
-                <div class="options-list">
-                    <span class="sub-header">צפיה באתר ב-</span>
-                    <span class="sub-option">English</span>
-                    <span class="sub-option">עברית</span>
-                    
-                </div>
+        <div class="options-list">
+            <span class="sub-header">צפיה באתר ב-</span>
+            <span class="sub-option">English</span>
+            <span class="sub-option">עברית</span>
 
-                <div class="options-list">
-                    <span class="sub-header">זקוקים לעזרה</span>
-                    <span class="sub-option">תמיכה</span>
-                    <span class="sub-option">משוב</span>
-                </div>
+        </div>
 
-                <div class="options-list">
-                    <span class="sub-header">צרו איתנו קשר</span>
-                </div>
-            </div>
+        <div class="options-list">
+            <span class="sub-header">זקוקים לעזרה</span>
+            <span class="sub-option">תמיכה</span>
+            <span class="sub-option">משוב</span>
+        </div>
 
-    
+        <div class="options-list">
+            <span class="sub-header">צרו איתנו קשר</span>
+        </div>
+    </div>
+
+
     <script src="client/components/login/login.js"></script>
 </body>
 

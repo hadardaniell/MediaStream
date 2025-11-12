@@ -1,6 +1,5 @@
 let sortBy = "likes";
 let filterWatched = "all";
-// let loading = false;
 
 let contentData = [];
 const mediaContainer = document.getElementById("mediaContainer");
@@ -56,7 +55,6 @@ function applyFiltersAndSort() {
   renderItems(filtered);
 }
 
-// שליפת תכנים לפי ז׳אנר
 async function fetchContentByGenre(genre, sortBy) {
   try {
     loading.style.display = 'flex';
@@ -151,7 +149,6 @@ async function toggleLike(item, btnEl) {
       item.hasLike = true;
       item.likes += 1;
 
-      // עדכון כפתור ו‑count
       likeBtn.textContent = item.likes;
       btnEl.classList.add("active");
       btnEl.innerHTML = `<i class="bi bi-heart-fill"></i> ${item.likes}`;
@@ -166,7 +163,6 @@ async function toggleLike(item, btnEl) {
       item.hasLike = false;
       item.likes -= 1;
 
-      // עדכון כפתור ו‑count
       likeBtn.textContent = item.likes;
       btnEl.classList.remove("active");
       btnEl.innerHTML = `<i class="bi bi-heart"></i> ${item.likes}`;
@@ -190,17 +186,6 @@ function renderItems(items) {
     contentEl.appendChild(card);
   });
 }
-
-// async function fetchContentByGenre(genre) {
-//   await fetch(`http://localhost:3000/api/content/profile/${activeProfileId}?genre=` + genre, {
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     method: 'GET'
-//   }).then(res => res.json()).then(data => {
-//     contentData = data;
-//   })
-// }
 
 function posterClick(id) {
   window.location.href = `/media-content/${id}`;
