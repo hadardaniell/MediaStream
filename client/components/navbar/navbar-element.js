@@ -27,7 +27,8 @@ class Navbar extends HTMLElement {
                 this.shadowRoot.querySelector('.add-media-btn').style.display = 'none';
         }
         ).catch(err => {
-            console.error('Error fetching user data:', err);
+            //console.error('Error fetching user data:', err);
+            console.error('Error fetching user data');
         });
 
         const searchBtn = this.shadowRoot.querySelector('#search-btn');
