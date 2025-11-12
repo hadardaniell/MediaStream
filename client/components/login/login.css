@@ -175,3 +175,27 @@ h2 {
 .was-validated {
     margin-bottom: 0px;
 }
+
+.modal-content {
+    direction: rtl;       
+    text-align: center;   
+}
+
+.modal-header {
+    justify-content: center; 
+    border-bottom: none;    
+}
+
+.modal-header .close {
+    display: none;
+}
+
+.modal-body {
+    text-align: center; 
+}
+
+.modal-footer {
+    justify-content: center; 
+    border-top: none;        
+}
+

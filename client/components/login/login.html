@@ -2,12 +2,14 @@
 
 <head>
     <title>Disney</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" rel="stylesheet">
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+Hebrew:wght@400;700&display=swap"
         rel="stylesheet">
     <link href="client/components/login/login.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- <script src="./login.js"></script> -->
 </head>
 
@@ -48,6 +50,24 @@
                 </div>
             </form>
 
+            <!-- Modal שגיאה -->
+            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">שגיאה בהתחברות</h5>
+                </div>
+                <div class="modal-body" id="errorModalBody">
+                    שם המשתמש או הסיסמה שגויים.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">סגור</button>
+                </div>
+                </div>
+            </div>
+            </div>
+
+
         </div>
         
     </div>
@@ -76,6 +96,7 @@
                 </div>
             </div>
 
+    
     <script src="client/components/login/login.js"></script>
 </body>
 
