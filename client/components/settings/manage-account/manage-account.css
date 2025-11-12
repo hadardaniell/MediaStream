@@ -20,7 +20,6 @@ body {
   overflow-x: hidden;
 }
 
-/* --- Sidebar --- */
 .sidebar {
   width: 240px;
   background: rgba(17, 21, 40, 0.85);
@@ -65,7 +64,6 @@ body {
   color: var(--primary);
 }
 
-/* --- Main Section --- */
 .account-container {
   margin-right: 240px;
   display: flex;
@@ -82,7 +80,6 @@ body {
   color: var(--primary);
 }
 
-/* --- Info Card --- */
 .account-info {
   background: var(--card-bg);
   backdrop-filter: blur(12px);
@@ -113,10 +110,8 @@ body {
   color: var(--primary);
 }
 
-/* --- Buttons --- */
 button {
   margin-top: 2rem;
-  /* background-color: var(--danger); */
   color: white;
   border: none;
   border-radius: 10px;
@@ -128,8 +123,6 @@ button {
   align-items: center;
   gap: 0.5em;
   background-color: rgb(35 38 48) !important;
-  /* border-radius: 5px !important; */
-  /* padding: 0.5em 1em !important; */
 }
 
 button:hover {
@@ -137,7 +130,6 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* --- Disney+ Gradient Text --- */
 .disney-plus {
   font-weight: 600;
   background: linear-gradient(90deg, #7ec9ff, #dbefff);
@@ -166,7 +158,6 @@ button:hover {
 }
 
 
-/* --- Responsive --- */
 @media (max-width: 768px) {
   .sidebar {
     width: 100%;

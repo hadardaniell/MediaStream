@@ -4,21 +4,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("login-form");
 
   form.addEventListener("submit", async (event) => {
-    event.preventDefault(); // always stop native submit
+    event.preventDefault();
 
     if (!form.checkValidity()) {
-      form.classList.add("was-validated"); // show errors
-      return; // <-- do NOT continue to redirect
+      form.classList.add("was-validated");
+      return; 
     }
-
-    // const loginRequest = await fetch("http://localhost:3000/api/auth/login", {})
-    //   .then(res => res.json())
-    //   .catch(() => []);
-
-    // valid → mark auth and go to Feed
-    // localStorage.setItem("isAuthenticated", "true");
-    // localStorage.setItem('userRole', 'admin');
-    // window.location.href = '/profiles';
   });
 
 
@@ -56,11 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!res.ok) throw new Error("התחברות נכשלה");
         const data = await res.json();
         localStorage.setItem("isAuthenticated", true);
-        localStorage.setItem('userRole', 'user');
         localStorage.setItem('userEmail', document.getElementById("email").value);
         localStorage.setItem('userId', data._id);
         window.location.href = '/profiles';
-        return res.json();
       })
     }
     else {
@@ -74,10 +63,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }).then(res => {
         if (!res.ok) throw new Error("ההרשמה נכשלה");
         localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem('userRole', 'user');
         localStorage.setItem('userEmail', document.getElementById("email").value);
         window.location.href = '/profiles';
-        return res.json();
       }
       );
     }

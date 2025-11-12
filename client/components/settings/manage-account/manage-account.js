@@ -53,7 +53,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (!res.ok) throw new Error("Logout failed");
-
+      localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("activeProfileId");
+      window.location.href = "/login";
       window.location.href = "/login";
     } catch (err) {
       console.error(err);
@@ -61,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  window.goTo = function(page) {
+  window.goTo = function (page) {
     switch (page) {
       case "feed":
         window.location.href = "/feed?profileId=" + activeProfileId;
