@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="he">
 
 <head>
   <meta charset="UTF-8">
   <title>ניהול חשבון</title>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="/client/components/settings/manage-account/manage-account.css">
   <script defer src="/client/components/settings/manage-account/manage-account.js"></script>
@@ -44,6 +45,86 @@
       <i class="bi bi-box-arrow-right"></i> התנתקות
     </button>
   </div>
+
+  Info Modal -->
+  <!-- <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: var(--card-bg); color: var(--primary);">
+        <div class="modal-body" id="infoModalBody"> -->
+          <!-- הטקסט ימולא דינמית -->
+        <!-- </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="infoModalOkBtn">אישור</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="he">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ניהול חשבון</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/client/components/settings/manage-account/manage-account.css">
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="menu-item" onclick="goTo('feed')">
+      <i class="bi bi-house-door-fill"></i>
+      <span>חזרה למסך הבית</span>
+    </div>
+    <div class="menu-item" onclick="goTo('manage-account')">
+      <i class="bi bi-person-circle"></i>
+      <span>ניהול חשבון</span>
+      <span id="admin" class="disney-gold">מנהל</span>
+    </div>
+    <div class="menu-item" onclick="goTo('manage-profiles')">
+      <i class="bi bi-people"></i>
+      <span>ניהול פרופילים</span>
+    </div>
+    <div class="menu-item" onclick="goTo('statistics')">
+      <i class="bi bi-bar-chart"></i>
+      <span>סטטיסטיקות</span>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="account-container">
+    <h1 class="disney-plus">פרטי החשבון</h1>
+    <div class="account-info">
+      <div class="info-item">
+        <span class="label">מייל</span>
+        <span class="value" id="email"></span>
+      </div>
+    </div>
+    <button id="logoutBtn" class="logout-btn">
+      <i class="bi bi-box-arrow-right"></i> התנתקות
+    </button>
+  </div>
+
+  <!-- Info Modal -->
+  <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: var(--card-bg); color: var(--primary);">
+        <div class="modal-body" id="infoModalBody"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="infoModalOkBtn">אישור</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="/client/components/settings/manage-account/manage-account.js"></script>
 </body>
 
 </html>

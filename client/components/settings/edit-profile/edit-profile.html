@@ -1,40 +1,6 @@
 <!DOCTYPE html>
 <html lang="he">
 <head>
-    <meta charset="UTF-8">
-    <title>עריכת פרופיל</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="/client/components/settings/edit-profile/edit-profile.css" rel="stylesheet">
-    <script defer src="/client/components/settings/edit-profile/edit-profile.js"></script>
-</head>
-<body>
-    <div class="edit-container">
-        <h1>עריכת פרופיל</h1>
-
-        <img id="profileImg" class="profile-img" src="/client/assets/mini.png" alt="Profile">
-
-        <input type="text" id="profileName" placeholder="שם פרופיל">
-
-        <div class="avatars">
-            <img class="avatar-option" src="/client/assets/mini.png" alt="Avatar 1">
-            <img class="avatar-option" src="/client/assets/et.png" alt="Avatar 2">
-            <img class="avatar-option" src="/client/assets/moana.png" alt="Avatar 3">
-            <img class="avatar-option" src="/client/assets/spider.png" alt="Avatar 4">
-            <img class="avatar-option" src="/client/assets/panter.png" alt="Avatar 5">
-        </div>
-
-        <div class="buttons">
-            <button id="saveBtn">שמור</button>
-            <button id="deleteBtn">מחק פרופיל</button>
-        </div>
-    </div>
-</body>
-</html>
-
-<!-- 
-<!DOCTYPE html>
-<html lang="he">
-<head>
   <meta charset="UTF-8">
   <title>עריכת פרופיל</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -63,12 +29,12 @@
     </div>
   </div>
 
- Modal אישור מחיקה מעוצב
+  <!-- Modal -->
   <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content bg-dark text-light text-center p-4">
         <i class="bi bi-exclamation-triangle text-danger fs-1 mb-3"></i>
-        <h5 class="mb-3">האם אתה בטוח שברצונך למחוק את הפרופיל?</h5>
+        <h5 class="mb-3">?האם אתה בטוח שברצונך למחוק את הפרופיל</h5>
         <div class="d-flex justify-content-center gap-3 mt-3">
           <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">ביטול</button>
           <button type="button" id="confirmDeleteBtn" class="btn btn-danger px-4">מחק</button>
@@ -76,8 +42,9 @@
       </div>
     </div>
   </div>
- Modal הודעות כלליות -->
-  <!-- <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+
+  <!-- ✅ Modal הודעות כלליות -->
+  <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content bg-dark text-light text-center p-4">
         <div id="infoModalBody" class="fs-5 mb-3"></div>
@@ -88,4 +55,4 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> -->
+</html>
