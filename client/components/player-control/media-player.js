@@ -36,8 +36,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const pathParts = url.pathname.split('/');
   const contentId = pathParts[2];
 
-  console.log('ID:', contentId);
-  console.log('startFromBeginning:', startFromBeginning);
+  // console.log('ID:', contentId);
+  // console.log('startFromBeginning:', startFromBeginning);
 
   await fetch('http://localhost:3000/api/content/' + contentId + '?include=episodes').then(
     res => res.json()).then(data => {
