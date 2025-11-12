@@ -16,20 +16,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    // מחכים שה־custom elements יטענו
     await Promise.all([
       waitForComponentReady('media-stream-navbar'),
       waitForComponentReady('media-stream-profiles-bar')
     ]);
 
-    // Fetch תוכן
     const response = await fetch(`http://localhost:3000/api/content/profile/${activeProfileId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" }
     });
     const allContent = await response.json().catch(() => []);
 
-    // Render תוכן
     renderSection("continue-watching", getContinueWatching(allContent));
     renderSection("recommended", getRecommendations(allContent));
     renderSection("popular", getPopular(allContent));
@@ -37,23 +34,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   } catch (err) {
     console.error(err);
-    // במקרה של שגיאה, עדיין מוסירים את הלודר
     loader.style.display = "none";
     container.style.display = "flex";
   }
-  finally{
+  finally {
     loader.style.display = "none";
     container.style.display = "flex";
   }
 });
 
-// פונקציה שמחכה עד ש־custom element נטען
 function waitForComponentReady(selector) {
   return new Promise(resolve => {
     const el = document.querySelector(selector);
     if (!el) return resolve();
 
-    // אם כבר מוכן
     if (el.shadowRoot && el.shadowRoot.children.length > 0) return resolve();
 
     el.addEventListener('component-ready', () => resolve(), { once: true });
@@ -79,7 +73,6 @@ async function toggleLike(item, btnEl) {
       item.hasLike = true;
       item.likes += 1;
 
-      // עדכון כפתור ו‑count
       likeBtn.textContent = item.likes;
       btnEl.classList.add("active");
       btnEl.innerHTML = `<i class="bi bi-heart-fill"></i> ${item.likes}`;
@@ -94,7 +87,6 @@ async function toggleLike(item, btnEl) {
       item.hasLike = false;
       item.likes -= 1;
 
-      // עדכון כפתור ו‑count
       likeBtn.textContent = item.likes;
       btnEl.classList.remove("active");
       btnEl.innerHTML = `<i class="bi bi-heart"></i> ${item.likes}`;
@@ -220,9 +212,6 @@ function createCard(item) {
   return col;
 }
 
-/* --- Mock logic --- */
-
-// המשך צפייה (לשימוש בעתיד עם API אמיתי)
 function getContinueWatching(all) {
   const continueWatchingData = all.filter((content) => content.watch.status === "in_progress").slice(0, 6);
   if (continueWatchingData.length === 0) {
@@ -232,7 +221,6 @@ function getContinueWatching(all) {
   return continueWatchingData;
 }
 
-// המלצות לפי דירוג
 function getRecommendations(all) {
   const likedData = all.filter((x) => x.hasLike);
   if (likedData.length === 0) {
@@ -256,12 +244,10 @@ function getRecommendations(all) {
   return recommended;
 }
 
-// פופולריים
 function getPopular(all) {
   return all.sort((a, b) => b.rating - a.rating).slice(0, 6);
 }
 
-// חדשים לפי ז'אנר
 function renderNewByGenre(all) {
   const container = document.getElementById("newByGenre");
   container.innerHTML = "";
@@ -304,13 +290,10 @@ function setupCarouselArrows(sectionSelector) {
     rightArrow.style.display = hasOverflow ? "block" : "none";
   }
 
-  // בדיקה בהתחלה
   checkOverflow();
 
-  // בדיקה מחדש כשמשנים גודל חלון
   window.addEventListener("resize", checkOverflow);
 
-  // לחצנים לגלילה
   leftArrow.addEventListener("click", () => {
     carousel.scrollBy({ left: -carousel.clientWidth / 1.5, behavior: "smooth" });
   });

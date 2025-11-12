@@ -3,17 +3,30 @@ let newMedia = null;
 const isAuthenticated = localStorage.getItem('isAuthenticated');
 
 document.addEventListener('DOMContentLoaded', () => {
-    if(!isAuthenticated){
+    if (!isAuthenticated) {
         window.location.href = '/login';
     }
     let cast = [];
     let episodes = [];
 
-    // הוספת שחקן
     document.getElementById("addActor").onclick = () => {
-        const name = document.getElementById("actorName").value.trim();
-        const wiki = document.getElementById("actorWiki").value.trim();
-        if (!name) return alert("נא להזין שם שחקן");
+        const nameInput = document.getElementById("actorName");
+        const wikiInput = document.getElementById("actorWiki");
+        const name = nameInput.value.trim();
+        const wiki = wikiInput.value.trim();
+
+        if (!name) {
+            nameInput.classList.add("is-invalid");
+            return;
+        }
+
+        if (!wiki) {
+            wikiInput.classList.add("is-invalid");
+            return;
+        }
+
+        wikiInput.classList.remove("is-invalid");
+        nameInput.classList.remove("is-invalid");
 
         cast.push({ name, wikipedia: wiki || "" });
         document.getElementById("actorName").value = "";
@@ -22,14 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActorRequired();
     };
 
-function renderCast() {
-    const castList = document.getElementById("castList");
-    castList.innerHTML = "";
+    function renderCast() {
+        const castList = document.getElementById("castList");
+        castList.innerHTML = "";
 
-    cast.forEach((c, i) => {
-        const li = document.createElement("li");
-        li.className = "actor-item";
-        li.innerHTML = `
+        cast.forEach((c, i) => {
+            const li = document.createElement("li");
+            li.className = "actor-item";
+            li.innerHTML = `
             <div class="actor-info">
                 <span class="actor-name">${c.name}</span>
                 ${c.wikipedia ? `<a href="${c.wikipedia}" target="_blank" class="wiki-link">ויקיפדיה</a>` : ""}
@@ -39,16 +52,16 @@ function renderCast() {
             </button>
         `;
 
-        li.querySelector(".btn-delete").addEventListener("click", () => {
-            cast.splice(i, 1);
-            renderCast();
-            updateActorRequired();
-        });
+            li.querySelector(".btn-delete").addEventListener("click", () => {
+                cast.splice(i, 1);
+                renderCast();
+                updateActorRequired();
+            });
 
-        li.classList.add("fade-in");
-        castList.appendChild(li);
-    });
-}
+            li.classList.add("fade-in");
+            castList.appendChild(li);
+        });
+    }
 
 
     function updateActorRequired() {
@@ -82,7 +95,6 @@ function renderCast() {
         }
     }
 
-    // Dropdown Genres
     document.querySelectorAll('.dropdown-menu').forEach(cb => cb.addEventListener('click', e => e.stopPropagation()));
 
     function getSelectedGenres() {
@@ -119,7 +131,6 @@ function renderCast() {
             videoField.setAttribute('required', '');
             movie.style.display = "block";
 
-            // שדות פרקים לא חובה ומושבתים
             episodeNumberField.removeAttribute('required');
             seasonNumberField.removeAttribute('required');
             episodeVideoField.removeAttribute('required');
@@ -138,11 +149,33 @@ function renderCast() {
         const shortDescription = document.getElementById("shortDescription").value.trim();
         const videoFile = episodeVideoField.files[0];
 
-        if (!episodeNumber || !seasonNumber || !videoFile) return alert("נא למלא את כל פרטי הפרק");
+        episodeNumberField.classList.remove("is-invalid");
+        seasonNumberField.classList.remove("is-invalid");
+        episodeVideoField.classList.remove("is-invalid");
+        shortDescription.classList.remove("is-invalid");
+
+        let hasError = false;
+        if (!episodeNumber) {
+            episodeNumberField.classList.add("is-invalid");
+            hasError = true;
+        }
+        if (!seasonNumber) {
+            seasonNumberField.classList.add("is-invalid");
+            hasError = true;
+        }
+        if (!videoFile) {
+            episodeVideoField.classList.add("is-invalid");
+            hasError = true;
+        }
+        if (!shortDescription) {
+            shortDescription.classList.add("is-invalid");
+            hasError = true;
+        }
+
+        if (hasError) return;
 
         episodes.push({ episodeNumber, seasonNumber, shortDescription, video: videoFile });
 
-        // איפוס שדות
         episodeNumberField.value = "";
         seasonNumberField.value = "";
         document.getElementById("shortDescription").value = "";
@@ -153,13 +186,13 @@ function renderCast() {
     };
 
     function renderEpisodes() {
-    const list = document.getElementById("episodesList");
-    list.innerHTML = "";
+        const list = document.getElementById("episodesList");
+        list.innerHTML = "";
 
-    episodes.forEach((ep, i) => {
-        const li = document.createElement("li");
-        li.className = "episode-item";
-        li.innerHTML = `
+        episodes.forEach((ep, i) => {
+            const li = document.createElement("li");
+            li.className = "episode-item";
+            li.innerHTML = `
             <div class="episode-info">
                 <div class="episode-title">
                     <span class="episode-number">עונה ${ep.seasonNumber}, פרק ${ep.episodeNumber}</span>
@@ -171,25 +204,21 @@ function renderCast() {
             </button>
         `;
 
-        li.querySelector(".btn-delete").addEventListener("click", () => {
-            episodes.splice(i, 1);
-            renderEpisodes();
-            updateEpisodeRequired();
-        });
+            li.querySelector(".btn-delete").addEventListener("click", () => {
+                episodes.splice(i, 1);
+                renderEpisodes();
+                updateEpisodeRequired();
+            });
 
-        li.classList.add("fade-in");
-        list.appendChild(li);
-    });
-}
+            li.classList.add("fade-in");
+            list.appendChild(li);
+        });
+    }
 
     const form = document.getElementById("contentForm");
     form.addEventListener('submit', e => {
         e.preventDefault();
 
-        // const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-        // successModal.show();
-
-        // בדיקה שדות genres
         const checkedGenres = document.querySelectorAll(".dropdown-menu input[type='checkbox']:checked");
         const dropdown = document.querySelector(".btn-genres");
         if (checkedGenres.length === 0) {
@@ -198,7 +227,6 @@ function renderCast() {
             dropdown.classList.remove("is-invalid");
         }
 
-        // עדכון שדות שחקנים
         updateActorRequired();
 
         if (!form.checkValidity()) {
@@ -226,8 +254,8 @@ function renderCast() {
             year: Number(document.getElementById("year").value),
             genres: getSelectedGenres(),
             description: document.getElementById("description").value,
-            photo: '/client/assets/posters/' + document.getElementById("photoFile").files[0]?.name,
-            video: type === 'movie' ? '/client/assets/movies/' + document.getElementById("videoFile").files[0]?.name
+            photo: '/client/assets/posters/' + slugifyDir(document.getElementById("photoFile").files[0]?.name),
+            video: type === 'movie' ? '/client/assets/movies/' + slugifyDir(document.getElementById("videoFile").files[0]?.name)
                 : null,
             director: {
                 name: document.getElementById("directorName").value,
@@ -239,8 +267,6 @@ function renderCast() {
         const data = type === 'series' ? { content, episodes: episodesValue } : content;
 
         const mediaPhotoFile = document.getElementById("photoFile").files[0];
-
-        // document.getElementById("output").textContent = JSON.stringify(data, null, 2);
 
         const uploadedMedia = await addMedia(type, data);
         if (uploadedMedia) {
@@ -285,7 +311,6 @@ function renderCast() {
             return newMedia;
         } catch (err) {
             console.error("שגיאה בשליחה:", err);
-            alert("שגיאה בשליחה לשרת");
             return null;
         }
     }
