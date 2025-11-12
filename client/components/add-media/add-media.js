@@ -1,6 +1,11 @@
 let newMedia = null;
 
+const isAuthenticated = localStorage.getItem('isAuthenticated');
+
 document.addEventListener('DOMContentLoaded', () => {
+    if(isAuthenticated){
+        window.location.href = '/login';
+    }
     let cast = [];
     let episodes = [];
 
@@ -277,6 +282,7 @@ function renderCast() {
             if (!res.ok) throw new Error("שגיאה בבקשה");
 
             newMedia = await res.json();
+            return newMedia;
         } catch (err) {
             console.error("שגיאה בשליחה:", err);
             alert("שגיאה בשליחה לשרת");
