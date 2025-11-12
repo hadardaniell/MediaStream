@@ -49,7 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }),
       }).then( async res => {
         if(res.status === 401) {
-          alert("אימייל או סיסמה שגויים");
+          $('#errorModalBody').text("אימייל או סיסמה שגויים");
+          $('#errorModal').modal('show');
           return;
         }
         if (!res.ok) throw new Error("התחברות נכשלה");

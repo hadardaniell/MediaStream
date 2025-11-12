@@ -56,7 +56,7 @@ function applyFiltersAndSort() {
   renderItems(filtered);
 }
 
-// 📦 שליפת תכנים לפי ז׳אנר
+// שליפת תכנים לפי ז׳אנר
 async function fetchContentByGenre(genre, sortBy) {
   try {
     loading.style.display = 'flex';

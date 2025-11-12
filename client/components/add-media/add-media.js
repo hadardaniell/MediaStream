@@ -281,6 +281,7 @@ function renderCast() {
             console.log("נשלח בהצלחה:", result);
             alert("התוכן נוסף בהצלחה!");
             return result;
+            //return newMedia;
         } catch (err) {
             console.error("שגיאה בשליחה:", err);
             alert("שגיאה בשליחה לשרת");
