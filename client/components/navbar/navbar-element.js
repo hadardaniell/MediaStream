@@ -17,7 +17,7 @@ class Navbar extends HTMLElement {
     async initLogic() {
         this.shadowRoot.querySelector('.add-media-btn').style.display = 'none';
         let userData = null;
-        await fetch("http://localhost:3000/api/aut/me", {
+        await fetch("http://localhost:3000/api/auth/me", {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         }).then(res => res.json()).then(data => {
