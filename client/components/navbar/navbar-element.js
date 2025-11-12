@@ -26,10 +26,7 @@ class Navbar extends HTMLElement {
                 this.shadowRoot.querySelector('.add-media-btn').style.display = 'flex' :
                 this.shadowRoot.querySelector('.add-media-btn').style.display = 'none';
         }
-        ).catch(err => {
-            //console.error('Error fetching user data:', err);
-            console.error('Error fetching user data');
-        });
+        )
 
         const searchBtn = this.shadowRoot.querySelector('#search-btn');
         if (searchBtn) {
@@ -66,8 +63,6 @@ class Navbar extends HTMLElement {
         const dropdownMenu = this.shadowRoot.querySelector('.dropdown-menu');
 
         dropdownToggle.addEventListener('click', (e) => {
-            //e.preventDefault();
-            //window.location.href = '/genre';
             dropdownMenu.classList.toggle('show');
         });
 

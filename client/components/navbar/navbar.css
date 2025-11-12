@@ -12,8 +12,6 @@ nav {
     gap: 1em;
     direction: rtl;
     justify-content: flex-start !important;
-    /* background: linear-gradient(#091734, rgb(13 21 36), rgb(15 16 20)); */
-
     background: inherit;
 
     .navbar-nav {
