@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         episodeNumberField.classList.remove("is-invalid");
         seasonNumberField.classList.remove("is-invalid");
         episodeVideoField.classList.remove("is-invalid");
-        shortDescription.classList.remove("is-invalid");
+        shortDescriptionField.classList.remove("is-invalid");
 
         let hasError = false;
         if (!episodeNumber) {
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             hasError = true;
         }
         if (!shortDescription) {
-            shortDescription.classList.add("is-invalid");
+            shortDescriptionField.classList.add("is-invalid");
             hasError = true;
         }
 
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         episodeNumberField.value = "";
         seasonNumberField.value = "";
-        document.getElementById("shortDescription").value = "";
+        shortDescriptionField.value = "";
         episodeVideoField.value = "";
 
         renderEpisodes();
@@ -241,6 +241,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const type = typeSelect.value;
         const name = document.getElementById("name").value;
 
+        const photoFile = document.getElementById("photoFile").files[0];
+        const photoMatch = photoFile.name.match(/([^\\/]+)\.([^.]+)$/);
+
+        let photoName = '';
+        let videoName = '';
+
+        if (photoMatch) {
+            const [, name, ext] = photoMatch;
+            photoName = safeName(name) + "." + ext.toLowerCase();
+        }
+
+        const videoFile = document.getElementById("videoFile").files[0];
+        const videoMatch = videoFile.name.match(/([^\\/]+)\.([^.]+)$/);
+
+        if (videoMatch) {
+            const [, name, ext] = videoMatch;
+            videoName = safeName(name) + "." + ext.toLowerCase();
+        }
+
         const episodesValue = type === "series" ? episodes.map(ep => ({
             episodeNumber: ep.episodeNumber,
             seasonNumber: ep.seasonNumber,
@@ -254,8 +273,8 @@ document.addEventListener('DOMContentLoaded', () => {
             year: Number(document.getElementById("year").value),
             genres: getSelectedGenres(),
             description: document.getElementById("description").value,
-            photo: '/client/assets/posters/' + slugifyDir(document.getElementById("photoFile").files[0]?.name),
-            video: type === 'movie' ? '/client/assets/movies/' + slugifyDir(document.getElementById("videoFile").files[0]?.name)
+            photo: '/client/assets/posters/' + photoName,
+            video: type === 'movie' ? '/client/assets/movies/' + videoName
                 : null,
             director: {
                 name: document.getElementById("directorName").value,
@@ -349,13 +368,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-function slugifyDir(name) {
-    return String(name)
-        .trim()
-        .toLowerCase()
-        .replace(/['"`]/g, '')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '') || 'series';
+function safeName(original) {
+    return original.replace(/[^a-zA-Z0-9_\-]+/g, '_');
 }
 
 document.getElementById('addAnotherContent').addEventListener('click', () => {
