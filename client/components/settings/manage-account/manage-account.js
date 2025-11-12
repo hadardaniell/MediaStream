@@ -1,67 +1,80 @@
-let userData = null;
+document.addEventListener("DOMContentLoaded", () => {
+  const infoModalEl = document.getElementById('infoModal');
+  const infoModalBody = document.getElementById('infoModalBody');
+  const infoModalOkBtn = document.getElementById('infoModalOkBtn');
+  const infoModal = new bootstrap.Modal(infoModalEl);
 
-const activeProfileId = localStorage.getItem('activeProfileId');
-
-async function loadUserData() {
-  try {
-    const res = await fetch("http://localhost:3000/api/auth/me", {
-      method: "GET",
-      credentials: "include"
-    });
-
-    if (!res.ok) throw new Error("Failed to fetch user data");
-
-    userData = await res.json();
-
-
-    if (!userData) {
-      window.location.href = "/login";
-      return;
-    }
-
-
-    if (userData.roles === "admin") {
-      document.getElementById('admin').style.display = 'flex';
-    }
-
-    document.getElementById("email").textContent = userData.email;
-    // document.getElementById("username").textContent = userData.name;
-  } catch (err) {
-    console.error(err);
-    alert("לא ניתן לטעון את פרטי המשתמש");
+  function showMessage(text, callback = null) {
+    infoModalBody.textContent = text;
+    infoModal.show();
+    infoModalOkBtn.onclick = () => {
+      infoModal.hide();
+      if (callback) callback();
+    };
   }
-}
 
-loadUserData();
+  const activeProfileId = localStorage.getItem('activeProfileId');
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  try {
-    const res = await fetch("http://localhost:3000/api/auth/logout", {
-      method: "POST",
-      credentials: "include"
-    });
+  async function loadUserData() {
+    try {
+      const res = await fetch("http://localhost:3000/api/auth/me", {
+        method: "GET",
+        credentials: "include"
+      });
 
-    if (!res.ok) throw new Error("Logout failed");
+      if (!res.ok) throw new Error("Failed to fetch user data");
 
-    window.location.href = "/login";
-  } catch (err) {
-    console.error(err);
+      const userData = await res.json();
+
+      if (!userData) {
+        showMessage('לא ניתן לטעון את פרטי המשתמש', () => window.location.href = "/feed");
+        return;
+      }
+
+      if (userData.roles === "admin") {
+        document.getElementById('admin').style.display = 'flex';
+      }
+
+      document.getElementById("email").textContent = userData.email;
+
+    } catch (err) {
+      console.error(err);
+      showMessage('לא ניתן לטעון את פרטי המשתמש', () => window.location.href = "/feed");
+    }
+  }
+
+  loadUserData();
+
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/auth/logout", {
+        method: "POST",
+        credentials: "include"
+      });
+
+      if (!res.ok) throw new Error("Logout failed");
+
+      window.location.href = "/login";
+    } catch (err) {
+      console.error(err);
+      showMessage('שגיאה ביציאה מהמערכת', () => window.location.href = "/feed");
+    }
+  });
+
+  window.goTo = function(page) {
+    switch (page) {
+      case "feed":
+        window.location.href = "/feed?profileId=" + activeProfileId;
+        break;
+      case "manage-account":
+        window.location.href = "/manage-account";
+        break;
+      case "manage-profiles":
+        window.location.href = "/manage-profiles";
+        break;
+      case "statistics":
+        window.location.href = "/statistics";
+        break;
+    }
   }
 });
-
-function goTo(page) {
-  switch (page) {
-    case "feed":
-      window.location.href = "/feed?profileId=" + activeProfileId;
-      break;
-    case "manage-account":
-      window.location.href = "/manage-account";
-      break;
-    case "manage-profiles":
-      window.location.href = "/manage-profiles";
-      break;
-    case "statistics":
-      window.location.href = "/statistics";
-      break;
-  }
-}

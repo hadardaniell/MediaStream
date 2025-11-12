@@ -1,3 +1,4 @@
+// manage-profiles.js
 const MAX_PROFILES = 5;
 const container = document.getElementById('profilesContainer');
 
@@ -9,6 +10,23 @@ window.addEventListener('pageshow', event => {
   }
 });
 
+//Modal
+function showMessage(message, onClose) {
+  const modalEl = document.getElementById('infoModal');
+  const modalBody = document.getElementById('infoModalBody');
+  const okBtn = document.getElementById('infoModalOkBtn');
+
+  modalBody.textContent = message;
+  const bsModal = new bootstrap.Modal(modalEl);
+  bsModal.show();
+  okBtn.onclick = null;
+
+  okBtn.onclick = () => {
+    bsModal.hide();
+    if (typeof onClose === 'function') onClose();
+  };
+}
+
 async function loadProfiles() {
   try {
     const meRes = await fetch("http://localhost:3000/api/auth/me", {
@@ -16,7 +34,7 @@ async function loadProfiles() {
       credentials: "include"
     });
     if (!meRes.ok) throw new Error("Failed to fetch current user");
-    const user = await meRes.json(); // מחזיר object עם user._id וכו'
+    const user = await meRes.json();
 
     const res = await fetch(`http://localhost:3000/api/profiles?userId=${user._id}`, {
       method: "GET",
@@ -27,8 +45,10 @@ async function loadProfiles() {
     const profiles = await res.json();
     return profiles;
   } catch (err) {
-    console.error(err);
-    alert("לא ניתן לטעון את הפרופילים");
+    console.error('loadProfiles error');
+    showMessage('לא ניתן לטעון את הפרופילים', () => {
+      window.location.href = "/feed";
+    });
     return [];
   }
 }
@@ -98,6 +118,6 @@ function goTo(page) {
   }
 }
 
-(async () => { 
-  await renderProfiles(); 
+(async () => {
+  await renderProfiles();
 })();

@@ -189,3 +189,27 @@ button:hover {
   }
 }
 
+/* modal */
+#infoModalBody {
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+#infoModal .modal-content {
+  background: rgba(18, 22, 40, 0.95); 
+  color: var(--primary);
+  border-radius: 16px; 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); 
+  padding: 1.5rem;
+  text-align: center; 
+}
+
+#infoModal .modal-dialog {
+  position: fixed;
+  top: 50%;
+  left: calc(50% - 120px); 
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+
