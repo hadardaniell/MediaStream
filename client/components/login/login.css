@@ -199,3 +199,9 @@ h2 {
     border-top: none;        
 }
 
+#errorModal .modal-content {
+    background-color: rgba(18, 22, 40, 0.95); 
+    color: var(--primary); 
+    text-align: center;
+    border-radius: 16px;
+}
