@@ -3,7 +3,7 @@ let newMedia = null;
 const isAuthenticated = localStorage.getItem('isAuthenticated');
 
 document.addEventListener('DOMContentLoaded', () => {
-    if(isAuthenticated){
+    if(!isAuthenticated){
         window.location.href = '/login';
     }
     let cast = [];
