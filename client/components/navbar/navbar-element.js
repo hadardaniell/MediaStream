@@ -17,7 +17,7 @@ class Navbar extends HTMLElement {
     async initLogic() {
         this.shadowRoot.querySelector('.add-media-btn').style.display = 'none';
         let userData = null;
-        await fetch("http://localhost:3000/api/auth/me", {
+        await fetch("http://localhost:3000/api/aut/me", {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         }).then(res => res.json()).then(data => {
@@ -27,7 +27,8 @@ class Navbar extends HTMLElement {
                 this.shadowRoot.querySelector('.add-media-btn').style.display = 'none';
         }
         ).catch(err => {
-            console.error('Error fetching user data:', err);
+            //console.error('Error fetching user data:', err);
+            console.error('Error fetching user data');
         });
 
         const searchBtn = this.shadowRoot.querySelector('#search-btn');
