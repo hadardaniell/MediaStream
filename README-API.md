@@ -119,15 +119,6 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 | **POST** | `/api/uploads/episode` | Upload an episode file for a specific series and season/episode number, 
 
 
-### Example cURL for Uploads
-```bash
-curl -i -X POST http://localhost:3000/api/uploads/poster \
-  -H "Content-Type: application/octet-stream" \
-  -H "X-Filename: test-poster.jpg" \
-  --data-binary @/Users/asaf/Desktop/test-poster.jpg
-
-'''
-
 ### Manual Sync Rating
 
 | Method | Path | Description |
@@ -144,7 +135,13 @@ curl -i -X POST http://localhost:3000/api/uploads/poster \
 
 
 
-
+### Example cURL for Uploads
+```bash
+curl -i -X POST http://localhost:3000/api/uploads/poster \
+  -H "Content-Type: application/octet-stream" \
+  -H "X-Filename: test-poster.jpg" \
+  --data-binary @/Users/asaf/Desktop/test-poster.jpg
+```
 
 ---
 
