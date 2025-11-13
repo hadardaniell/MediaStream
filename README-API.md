@@ -40,9 +40,14 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 |  | └ `?genre=[Action,Comedy]` – Filter by one or more genres (OR condition) |
 |  | └ `?minRating=3.5` – Minimum rating threshold |
 |  | └ `?wLikes=1&wRating=2` – Weights for likes/rating when `mode=mixed` |
+| **GET** | `/api/content/popular/:profileId` | Get **popular content enriched with a specific profile’s likes & watches** |
+|  | └ Same query params as `/popular` (mode, type, limit, genre, minRating, wLikes, wRating) |
+|  | └ Adds `hasLike` → personalized like state |
+|  | └ Adds `watch` → last watch progress & status (`completed`, `in-progress`, `unstarted`) |
+|  | └ Ranking is identical to `/popular` but includes personal overlay |
 | **POST** | `/api/content` | Create new content *(admin only)* |
-| **POST** | `/api/content/series-with-episodes` | Create a **series** and its **episodes** in one call.
-|          |Body: `{ content: { ...series fields... }, episodes: [{ seasonNumber, episodeNumber, shortDescription, video }, ...] }`
+| **POST** | `/api/content/series-with-episodes` | Create a **series** and its **episodes** in one call. |
+|  | Body: `{ content: { ...series fields... }, episodes: [{ seasonNumber, episodeNumber, shortDescription, video }, ...] }` |
 | **PATCH** | `/api/content/:id` | Update content *(admin only)* |
 | **DELETE** | `/api/content/:id` | Delete content *(admin only)* |
 
