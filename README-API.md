@@ -40,9 +40,14 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 |  | └ `?genre=[Action,Comedy]` – Filter by one or more genres (OR condition) |
 |  | └ `?minRating=3.5` – Minimum rating threshold |
 |  | └ `?wLikes=1&wRating=2` – Weights for likes/rating when `mode=mixed` |
+| **GET** | `/api/content/popular/:profileId` | Get **popular content enriched with a specific profile’s likes & watches** |
+|  | └ Same query params as `/popular` (mode, type, limit, genre, minRating, wLikes, wRating) |
+|  | └ Adds `hasLike` → personalized like state |
+|  | └ Adds `watch` → last watch progress & status (`completed`, `in-progress`, `unstarted`) |
+|  | └ Ranking is identical to `/popular` but includes personal overlay |
 | **POST** | `/api/content` | Create new content *(admin only)* |
-| **POST** | `/api/content/series-with-episodes` | Create a **series** and its **episodes** in one call.
-|          |Body: `{ content: { ...series fields... }, episodes: [{ seasonNumber, episodeNumber, shortDescription, video }, ...] }`
+| **POST** | `/api/content/series-with-episodes` | Create a **series** and its **episodes** in one call. |
+|  | Body: `{ content: { ...series fields... }, episodes: [{ seasonNumber, episodeNumber, shortDescription, video }, ...] }` |
 | **PATCH** | `/api/content/:id` | Update content *(admin only)* |
 | **DELETE** | `/api/content/:id` | Delete content *(admin only)* |
 
@@ -119,14 +124,9 @@ Authentication is via a **session cookie (`sid`)** — always send requests with
 | **POST** | `/api/uploads/episode` | Upload an episode file for a specific series and season/episode number, 
 
 
-### Example cURL for Uploads
-```bash
-curl -i -X POST http://localhost:3000/api/uploads/poster \
-  -H "Content-Type: application/octet-stream" \
-  -H "X-Filename: test-poster.jpg" \
-  --data-binary @/Users/asaf/Desktop/test-poster.jpg
+### Manual Sync Rating
 
-  | Method | Path | Description |
+| Method | Path | Description |
 |--------|------|-------------|
 | **POST** | `/api/content/:id/sync-rating` | **Admin:** Sync rating for a single content item from OMDb (IMDb data). Updates `rating` (0–10) and `ratings.imdb` metadata. |
 |  | └ `?source=imdb` – Data source (currently only `imdb`) |
@@ -140,7 +140,13 @@ curl -i -X POST http://localhost:3000/api/uploads/poster \
 
 
 
-
+### Example cURL for Uploads
+```bash
+curl -i -X POST http://localhost:3000/api/uploads/poster \
+  -H "Content-Type: application/octet-stream" \
+  -H "X-Filename: test-poster.jpg" \
+  --data-binary @/Users/asaf/Desktop/test-poster.jpg
+```
 
 ---
 
