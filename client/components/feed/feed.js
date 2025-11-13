@@ -213,7 +213,10 @@ function createCard(item) {
 }
 
 function getContinueWatching(all) {
-  const continueWatchingData = all.filter((content) => content.watch.status === "in_progress").slice(0, 6);
+  const continueWatchingData = all
+    .filter((content) => content.watch.status === "in_progress")
+    .sort((a, b) => new Date(b.watch.updatedAt) - new Date(a.watch.updatedAt))
+    .slice(0, 9);
   if (continueWatchingData.length === 0) {
     document.getElementById("continue-watching-container").style.display = "none";
     return [];
@@ -224,7 +227,7 @@ function getContinueWatching(all) {
 function getRecommendations(all) {
   const likedData = all.filter((x) => x.hasLike);
   if (likedData.length === 0) {
-    return all.slice(0, 6);
+    return all.slice(0, 9);
   }
   const favGenres = all.filter((x) => x.hasLike).map(likedContent => likedContent.genres).flat();
 
@@ -236,7 +239,7 @@ function getRecommendations(all) {
   const sortedByFrequency = [...favGenres].sort((a, b) => {
     const diff = freqMap[b] - freqMap[a];
     if (diff !== 0) return diff;
-    return a.localeCompare(b, 'he'); // במקרה של שוויון — לפי אלפבית
+    return a.localeCompare(b, 'he');
   });
   const recommended = all.filter((content) => {
     return content.hasLike === false && content.genres.some(g => sortedByFrequency.includes(g));
@@ -245,7 +248,7 @@ function getRecommendations(all) {
 }
 
 function getPopular(all) {
-  return all.sort((a, b) => b.rating - a.rating).slice(0, 6);
+  return all.sort((a, b) => b.rating - a.rating).slice(0, 9);
 }
 
 function renderNewByGenre(all) {
@@ -268,7 +271,7 @@ function renderNewByGenre(all) {
     row.className = "row g-3";
     items
       .sort((a, b) => b.year - a.year)
-      .slice(0, 10)
+      .slice(0, 9)
       .forEach((i) => row.appendChild(createCard(i)));
     section.appendChild(row);
     container.appendChild(section);

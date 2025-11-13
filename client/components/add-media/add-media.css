@@ -457,7 +457,7 @@ input::placeholder {
     color: #fff;
     border-radius: 14px;
     padding: 14px 18px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(8px);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     animation: fadeIn 0.4s ease;
@@ -465,7 +465,7 @@ input::placeholder {
 
 .actor-item:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 18px rgba(0,0,0,0.5);
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.5);
 }
 
 .actor-info {
@@ -511,11 +511,13 @@ input::placeholder {
         opacity: 0;
         transform: translateY(6px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
+
 #episodesList {
     list-style: none;
     padding: 0;
@@ -533,7 +535,7 @@ input::placeholder {
     color: #fff;
     border-radius: 14px;
     padding: 16px 20px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(8px);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     animation: fadeIn 0.4s ease;
@@ -541,7 +543,7 @@ input::placeholder {
 
 .episode-item:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 18px rgba(0,0,0,0.5);
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.5);
 }
 
 .episode-info {
@@ -588,8 +590,15 @@ input::placeholder {
         opacity: 0;
         transform: translateY(6px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.is-invalid-genere-field {
+    background-color: transparent !important;
+    border-color: #ff4d4d !important;
+    box-shadow: 0 0 6px #ff4d4d66;
 }

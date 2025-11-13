@@ -221,16 +221,18 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
 
         const checkedGenres = document.querySelectorAll(".dropdown-menu input[type='checkbox']:checked");
-        const dropdown = document.querySelector(".btn-genres");
+        const dropdown = document.getElementById("genresDropdown");
         if (checkedGenres.length === 0) {
+            dropdown.classList.add("is-invalid-genere-field");
             dropdown.classList.add("is-invalid");
         } else {
+            dropdown.classList.remove("is-invalid-genere-field");
             dropdown.classList.remove("is-invalid");
         }
 
         updateActorRequired();
 
-        if (!form.checkValidity()) {
+        if (!form.checkValidity() && checkedGenres.length === 0) {
             form.classList.add('was-validated');
             return;
         }
@@ -312,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.getElementById("disney-logo-btn").addEventListener("click", () => {
-        window.location.href = "/feed?profileId=" + localStorage.getItem("activeProfileId");
+        window.location.href = "/feed?profile=" + localStorage.getItem("activeProfileId");
     });
 
 
