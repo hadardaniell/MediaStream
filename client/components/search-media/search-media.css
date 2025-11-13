@@ -100,203 +100,6 @@
      gap: 0.5em;
  }
 
- /*
-.poster {
-    width: 160px;
-    height: 215px;
-}
-
-.row-flex {
-    display: flex;
-    align-items: flex-start;
-}
-
-.burst {
-    position: absolute;
-    pointer-events: none;
-    font-size: 22px;
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(.6);
-    animation: pop 500ms ease-out forwards;
-}
-
-@keyframes pop {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(.6)
-    }
-
-    50% {
-        opacity: 1;
-        transform: translate(-50%, -80%) scale(1.2)
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate(-50%, -120%) scale(.9)
-    }
-}
-
-.prepend {
-    background-color: transparent !important;
-    border-color: transparent !important;
-}
-
-.search-wrapper,
-input {
-    background-color: var(--search) !important;
-    color: var(--secondary);
-    border-color: transparent !important;
-}
-
-.search-wrapper {
-    border-radius: 5px;
-}
-
-.search-icon {
-    color: var(--primary);
-    font-size: 22px;
-}
-
-.media-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
-}
-
-.btn-watch {
-    background: linear-gradient(to right, rgb(8 87 225), rgb(6 43 154));
-    color: rgb(255, 255, 255);
-    font-size: 14px;
-    font-weight: 700 !important;
-    cursor: pointer;
-}
-
-.btn-watch:hover {
-    background: linear-gradient(to right, rgb(6 43 154), rgb(8 87 225)) !important;
-}
-
-.sub-header-container {
-    gap: 0.5em;
-}
-
-.form-control:focus {
-    box-shadow: none !important;
-}
-
-.btn-sort {
-    border-radius: 5px !important;
-    font-size: 14px !important;
-    width: 76px !important;
-}
-
-.input-container {
-    display: flex;
-    gap: 0.5em;
-    align-items: center;
-}
-
-.card {
-    height: 400px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    width: 230px !important;
-    padding: 0 0.5em;
-    background-color: var(--search) !important;
-}
-
-.card-img-top {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-}
-
-.card-body {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1em !important;
-    justify-content: space-between !important;
-    color: var(--primary);
-}
-
-.card-title {
-    font-weight: 700;
-    margin: 0 !important;
-}
-
-.title {
-    font-weight: 600;
-}
-
-.meta {
-    font-size: .9rem;
-    opacity: .8;
-}
-
-.actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 8px;
-}
-
-.like-btn[aria-pressed="true"] {
-    background: #e91e63;
-    color: #fff;
-    border-color: #e91e63;
-}
-
-.like-btn[aria-pressed="false"] {
-    border: 1px solid var(--primary);
-    color: var(--primary);
-}
-
-.poster-container {
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-    padding-top: 0.5em;
-}
-
-.content-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    direction: rtl !important;
-}
-
-.genre {
-    font-weight: 600;
-    font-size: 13px;
-}
-
-.content-card {
-    height: 270px;
-    display: flex;
-    flex-direction: column;
-}
-
-.likes {
-    gap: 1em;
-}
-
-.description {
-    width: 100%;
-    font-size: 13px;
-    color: var(--secondary);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.section-title {
-    font-weight: 500;
-    color: var(--secondary);
-} */
  .media-content {
      display: grid;
      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -307,12 +110,10 @@ input {
      gap: 1em !important;
  }
 
- /* עטיפת הקרוסלה */
  .section-container {
      position: relative;
      overflow: hidden;
      padding: 1em 2em;
-     /* רווח לכפתורי הניווט */
  }
 
  .carousel {
@@ -321,14 +122,12 @@ input {
      overflow-x: auto;
      scroll-behavior: smooth;
      scrollbar-width: none;
-     /* הסתרת scrollbar */
  }
 
  .carousel::-webkit-scrollbar {
      display: none;
  }
 
- /* כפתורי ניווט */
  .nav-arrow {
      position: absolute;
      top: 50%;
@@ -357,7 +156,6 @@ input {
      right: 10px;
  }
 
- /* עיצוב הכרטיסים */
  .card {
      flex: 0 0 230px;
      height: 340px;
@@ -376,7 +174,6 @@ input {
      z-index: 5;
  }
 
- /* תמונה */
  .card img {
      width: 100%;
      height: 100%;
@@ -385,7 +182,6 @@ input {
      border: none;
  }
 
- /* שכבת hover */
  .card-overlay {
      position: absolute;
      inset: 0;
@@ -402,7 +198,6 @@ input {
      opacity: 1;
  }
 
- /* טקסטים */
  .card-title {
      font-size: 1rem;
      font-weight: 700;
@@ -424,7 +219,6 @@ input {
      line-height: 1.2;
  }
 
- /* אזור הכפתורים */
  .card-actions {
      display: flex;
      align-items: center;
@@ -442,47 +236,6 @@ input {
      outline: none !important;
  }
 
- /* 
-.like-btn {
-  border: none;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  font-size: 0.85rem;
-  padding: 0.4rem 0.7rem;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.like-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
-}
-
-.like-btn.active {
-  background: #e91e63;
-}
-
-.btn-watch {
-  background: linear-gradient(to right, #0857e1, #062b9a);
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.8rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  border: none;
-  transition: background 0.3s ease;
-}
-
-.btn-watch:hover {
-    transform: scale(1.05);
-} */
-
- /* כפתור צפייה */
- /* === 🎬 כפתור צפייה (btn-watch) === */
  .btn-watch {
      background: linear-gradient(to right, #1a75ff, #0040ff);
      color: #fff;
@@ -500,11 +253,9 @@ input {
 
  .btn-watch:hover {
      background-color: #0056b3;
-     /* כחול כהה יותר בעת hover */
      transform: scale(1.03);
  }
 
- /* כפתור לייק */
  .like-btn {
      background-color: rgba(255, 255, 255, 0.2);
      color: #ffffff;

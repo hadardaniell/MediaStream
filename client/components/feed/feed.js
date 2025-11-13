@@ -1,4 +1,4 @@
-const activeProfileId = localStorage.getItem('activeProfileId');
+let profileId = '';
 
 window.addEventListener('pageshow', event => {
   if (event.persisted) {
@@ -9,6 +9,9 @@ window.addEventListener('pageshow', event => {
 document.addEventListener("DOMContentLoaded", async () => {
   const loader = document.getElementById("loader");
   const container = document.getElementById("container");
+
+  const url = new URL(window.location.href);
+  profileId = url.searchParams.get('profile');
 
   if (!Boolean(localStorage.getItem("isAuthenticated"))) {
     window.location.href = "/login";
@@ -21,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       waitForComponentReady('media-stream-profiles-bar')
     ]);
 
-    const response = await fetch(`http://localhost:3000/api/content/profile/${activeProfileId}`, {
+    const response = await fetch(`http://localhost:3000/api/content/profile/${profileId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" }
     });
@@ -65,7 +68,7 @@ async function toggleLike(item, btnEl) {
       await fetch(`http://localhost:3000/api/likes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
+        body: JSON.stringify({ profileId: profileId, contentId: item._id }),
       });
 
       const likeBtn = document.getElementById("likeBtn");
@@ -80,7 +83,7 @@ async function toggleLike(item, btnEl) {
       await fetch(`http://localhost:3000/api/likes`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profileId: activeProfileId, contentId: item._id }),
+        body: JSON.stringify({ profileId: profileId, contentId: item._id }),
       });
       const likeBtn = document.getElementById("likeBtn");
 
@@ -100,7 +103,6 @@ async function toggleLike(item, btnEl) {
 document.getElementById('.card')
 
 
-// --- פונקציות כלליות ---
 function escapeHtml(s) {
   return String(s)
     .replaceAll("&", "&amp;")
@@ -116,7 +118,6 @@ function renderSection(containerId, data) {
   const container = document.getElementById(containerId);
   container.innerHTML = "";
 
-  // עטיפה חיצונית
   const section = document.createElement("div");
   section.className = "section-container";
 
@@ -125,7 +126,6 @@ function renderSection(containerId, data) {
 
   data.forEach((item) => carousel.appendChild(createCard(item)));
 
-  // חצים
   const leftArrow = document.createElement("button");
   leftArrow.className = "nav-arrow right";
   leftArrow.innerHTML = "&#10094;";
