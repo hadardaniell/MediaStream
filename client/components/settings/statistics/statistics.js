@@ -139,7 +139,7 @@ const disneyColors = [
 function goTo(page) {
   switch (page) {
     case "feed":
-      window.location.href = "/feed?profileId=" + activeProfileId;
+      window.location.href = "/feed?profile=" + activeProfileId;
       break;
     case "manage-account":
       window.location.href = "/manage-account";
