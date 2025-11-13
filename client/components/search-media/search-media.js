@@ -181,6 +181,8 @@ btnSort.addEventListener('click', () => {
   filterAndRender(sortAsc);
 });
 
+document.getElementById('btnFeed').addEventListener('click', () => { window.location  = '/feed?profile=' + activeProfileId; }); 
+
 function filterAndRender(sortAsc = true) {
   const term = document.getElementById('search').value.trim().toLowerCase();
   let filtered = contentsData.filter(it =>
