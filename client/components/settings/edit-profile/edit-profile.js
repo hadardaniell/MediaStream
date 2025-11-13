@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const infoModal = new bootstrap.Modal(infoModalEl);
   const confirmDeleteModal = new bootstrap.Modal(confirmDeleteModalEl);
 
-  // modal
   const showMessage = (text, callback = null) => {
     infoModalBody.textContent = text;
     infoModal.show();
@@ -39,7 +38,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const res = await fetch(`/api/profiles?userId=${userId}`, { credentials: 'include' });
     if (res.ok) userProfiles = await res.json();
   } catch (err) {
-    //console.error('שגיאה בטעינת פרופילים:', err);
     console.error('שגיאה בטעינת פרופילים');
   }
 
@@ -67,7 +65,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
   });
 
-  //  save
   saveBtn.addEventListener('click', async () => {
     const name = profileName.value.trim();
     const photo = profileImg.getAttribute('src');
@@ -98,22 +95,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         successMessage = `!הפרופיל "${name}" נוצר בהצלחה`;
       }
 
-      // const data = await res.json();
-      // if (!res.ok) throw new Error(data.error || 'שגיאה בשמירה');
-      // showMessage(successMessage, () => window.history.back());
       let data;
       try {
         data = await res.json();
       } catch {
-        data = {}; // אם אין תוכן, לא ניפול
+        data = {};
       }
 
       if (!res.ok) {
-        if (data.error === 'duplicate_profile_name_for_user') {
-          showMessage('קיים כבר פרופיל בשם זה');
-        } else {
-          showMessage('שגיאה בשמירה');
-        }
+        showMessage('שגיאה בשמירה');
         return;
       }
 
@@ -124,7 +114,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  //  delete
   deleteBtn.addEventListener('click', () => {
     if (!activeProfileId) return showMessage('אין פרופיל למחיקה');
     confirmDeleteModal.show();

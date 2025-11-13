@@ -33,7 +33,6 @@ class ProfilesBar extends HTMLElement {
   }
 
   async initLogic() {
-    const MaxProfiles = 5;
     const userId = localStorage.getItem("userId");
     const activeProfileId = localStorage.getItem('activeProfileId');
     if (!userId) {
@@ -50,7 +49,7 @@ class ProfilesBar extends HTMLElement {
 
       container.innerHTML = allProfiles.map(profile => `
       <div class="profile" data-id="${profile._id}">
-        <img src="${profile.photo}" class="${activeProfileId == profile._id ? 'profile-img active-profile' : 'profile-img'}" 
+        <img src="${profile.photo}" class="${ profile._id == activeProfileId ? 'profile-img active-profile' : 'profile-img'}" 
         class="profile-img" id="${profile._id}">
         <div class="active-check"></div>
         <span class="profile-name">${profile.name}</span>
@@ -74,7 +73,7 @@ class ProfilesBar extends HTMLElement {
           const newName = e.target.value.trim();
           const profileId = e.target.closest('.profile').dataset.id;
 
-          if (!newName) return; // לא שולחים אם ריק
+          if (!newName) return;
 
           try {
             const response = await fetch(`http://localhost:3000/api/profiles/${profileId}`, {
@@ -83,17 +82,12 @@ class ProfilesBar extends HTMLElement {
               body: JSON.stringify({ name: newName })
             });
             if (!response.ok) throw new Error('Failed to update name');
-            console.log('Name updated successfully');
           } catch (err) {
             console.error(err);
-            alert('שגיאה בעדכון השם');
           }
         });
       });
 
-
-
-      // מוסיפים מאזינים אחרי שהכנסנו את ה־HTML
       const profiles = this.shadowRoot.querySelectorAll('.profile-img');
       profiles.forEach(profile => {
         profile.addEventListener('click', () => {
@@ -106,7 +100,6 @@ class ProfilesBar extends HTMLElement {
       const addBtn = this.shadowRoot.querySelector('.add-container');
       if (addBtn) {
         addBtn.addEventListener('click', () => {
-          // מעבר לעמוד עריכת פרופיל
           localStorage.setItem('returnPage', window.location.pathname);
           window.location.href = '/edit-profile';
         });

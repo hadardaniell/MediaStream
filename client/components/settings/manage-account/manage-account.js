@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.removeItem("userId");
       localStorage.removeItem("activeProfileId");
       window.location.href = "/login";
-      window.location.href = "/login";
     } catch (err) {
       console.error(err);
       showMessage('שגיאה ביציאה מהמערכת', () => window.location.href = "/feed");
