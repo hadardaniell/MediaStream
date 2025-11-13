@@ -126,7 +126,7 @@ curl -i -X POST http://localhost:3000/api/uploads/poster \
   -H "X-Filename: test-poster.jpg" \
   --data-binary @/Users/asaf/Desktop/test-poster.jpg
 
-  | Method | Path | Description |
+| Method | Path | Description |
 |--------|------|-------------|
 | **POST** | `/api/content/:id/sync-rating` | **Admin:** Sync rating for a single content item from OMDb (IMDb data). Updates `rating` (0–10) and `ratings.imdb` metadata. |
 |  | └ `?source=imdb` – Data source (currently only `imdb`) |
