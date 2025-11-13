@@ -7,8 +7,6 @@ Environment variables (create a .env file in the project root):
 
 MONGO_URI – MongoDB connection string
 
-SESSION_SECRET – secret key for session cookies (recommended to set explicitly)
-
 OMDB_API_KEY – optional key used by parts of the content flow (if applicable)
 
 Install dependencies in the repository root using your package manager (for example, npm install).
