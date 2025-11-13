@@ -1,7 +1,5 @@
-// manage-profiles.js
 const MAX_PROFILES = 5;
 const container = document.getElementById('profilesContainer');
-
 const activeProfileId = localStorage.getItem('activeProfileId');
 
 window.addEventListener('pageshow', event => {
@@ -10,7 +8,6 @@ window.addEventListener('pageshow', event => {
   }
 });
 
-//Modal
 function showMessage(message, onClose) {
   const modalEl = document.getElementById('infoModal');
   const modalBody = document.getElementById('infoModalBody');
@@ -68,9 +65,8 @@ async function renderProfiles() {
     `;
 
     div.querySelector('.profile-img').addEventListener('click', () => {
-      localStorage.setItem('selectedProfileId', profile._id);
-      localStorage.setItem('selectedProfileName', profile.name);
-      window.location.href = '/watch';
+      localStorage.setItem('activeProfileId', profile._id);
+      window.location.href = '/feed?profile=' + profile._id;
     });
 
     div.querySelector('.edit-btn').addEventListener('click', (e) => {

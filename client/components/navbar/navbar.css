@@ -66,9 +66,7 @@ nav {
 }
 
 .plus-icon {
-    /* display: inline-block; */
     transition: transform 0.5s ease-in-out;
-    /* מהירות הסיבוב */
 }
 
 .plus-icon:hover {

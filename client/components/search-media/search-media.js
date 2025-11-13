@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
       .then(res => res.json()).then(data => {
         contentsData = data;
-        // contentsData = data.filter(item => item.type === (mediaType === 'movies' ? 'movie' : 'series'));
         renderItems(contentsData);
       }
       )
@@ -74,7 +73,6 @@ async function toggleLike(item, btnEl) {
       item.hasLike = true;
       item.likes += 1;
 
-      // עדכון כפתור ו‑count
       likeBtn.textContent = item.likes;
       btnEl.classList.add("active");
       btnEl.innerHTML = `<i class="bi bi-heart-fill"></i> ${item.likes}`;
@@ -89,7 +87,6 @@ async function toggleLike(item, btnEl) {
       item.hasLike = false;
       item.likes -= 1;
 
-      // עדכון כפתור ו‑count
       likeBtn.textContent = item.likes;
       btnEl.classList.remove("active");
       btnEl.innerHTML = `<i class="bi bi-heart"></i> ${item.likes}`;
@@ -163,23 +160,6 @@ function createCard(item) {
   return col;
 }
 
-
-
-
-function burstAt(el, glyph = '❤️') {
-  const fxLayer = document.getElementById('fx-layer');
-  const rect = el.getBoundingClientRect();
-  const x = rect.left + rect.width / 2;
-  const y = rect.top;
-  const span = document.createElement('span');
-  span.className = 'burst';
-  span.textContent = glyph;
-  span.style.left = `${x}px`;
-  span.style.top = `${y}px`;
-  fxLayer.appendChild(span);
-  span.addEventListener('animationend', () => span.remove());
-}
-
 function escapeHtml(s) {
   return String(s)
     .replaceAll('&', '&amp;').replaceAll('<', '&lt;')
@@ -188,15 +168,13 @@ function escapeHtml(s) {
 }
 
 
-// חיפוש
 const searchInput = document.getElementById('search');
 searchInput.addEventListener('input', () => {
   searchInput.value?.length > 0 ? filterAndRender() : renderItems(contentsData);
 });
 
-// מיון אלפביתי
 const btnSort = document.getElementById('btnSort');
-let sortAsc = true; // מתחלף בין א->ת לת->א
+let sortAsc = true; 
 btnSort.addEventListener('click', () => {
   sortAsc = !sortAsc;
   btnSort.textContent = sortAsc ? 'מיין א-ת' : 'מיין ת-א';
@@ -211,7 +189,6 @@ function filterAndRender(sortAsc = true) {
     String(it.year).includes(term)
   );
 
-  // מיון אלפביתי לפי שם
   filtered.sort((a, b) => {
     return sortAsc
       ? a.name.localeCompare(b.name, ['he', 'en'], { sensitivity: 'base' })

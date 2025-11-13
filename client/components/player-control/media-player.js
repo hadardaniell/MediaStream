@@ -36,9 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const pathParts = url.pathname.split('/');
   const contentId = pathParts[2];
 
-  // console.log('ID:', contentId);
-  // console.log('startFromBeginning:', startFromBeginning);
-
   await fetch('http://localhost:3000/api/content/' + contentId + '?include=episodes').then(
     res => res.json()).then(data => {
       contentData = data;
@@ -80,7 +77,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const ep = episodes.find(ep => ep.seasonNumber === season && ep.episodeNumber === episode);
     if (!ep) return;
     currentIndex = episodes.findIndex((_ep) => _ep === ep);
-    // עדכון UI
     titleEl.textContent = ep.shortDescription;
     subtitleEl.textContent = 'S' + ep.seasonNumber.toString() + ' ' + 'E' + ep.episodeNumber.toString();
     video.src = ep.video;
@@ -237,9 +233,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     toggleDrawer(!drawer.classList.contains('open'));
   });
 
-  /* ---- קיצורי מקלדת יעילים ---- */
   document.addEventListener('keydown', (e) => {
-    // F - fullscreen, Space - play/pause, ArrowLeft/Right - jump 10s
     if (e.code === 'Space') {
       e.preventDefault();
       if (video.paused) video.play(); else video.pause();

@@ -16,7 +16,6 @@ body {
   height: 100%;
 }
 
-/* ---- Sidebar ---- */
 .sidebar {
   width: 240px;
   background-color: var(--card-bg);
@@ -56,7 +55,6 @@ body {
   color: var(--primary);
 }
 
-/* ---- Main Page ---- */
 .page-container {
   margin-right: 240px;
   padding: var(--page-gap) var(--side-padding);
@@ -84,7 +82,6 @@ h1 {
   font-size: 2.2rem;
 }
 
-/* ---- Profiles ---- */
 .profiles-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -138,7 +135,6 @@ h1 {
   color: var(--primary);
 }
 
-/* ---- Info Modal ---- */
 #infoModalBody {
   text-align: center;
   font-size: 1.2rem;

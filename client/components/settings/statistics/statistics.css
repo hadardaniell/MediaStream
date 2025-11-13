@@ -157,7 +157,6 @@ body {
 
 .chart-box:hover {
   transform: translateY(-5px);
-  /* box-shadow: 0 0 30px rgba(0, 170, 255, 0.2); */
 }
 
 .chart-box h3 {
@@ -176,7 +175,6 @@ body {
   font-size: 1.2rem;
 }
 
-/* --- Responsive --- */
 @media (max-width: 768px) {
   .sidebar {
     width: 100%;

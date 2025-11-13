@@ -102,7 +102,6 @@ async function fetchWatchDataByProfile(profileId) {
 }
 
 function countUniqueWatchedContents(watchData) {
-  // אוסף את כל ה־contentId ל־Set כדי לקבל ייחודיים
   const uniqueContentIds = new Set();
 
   watchData.forEach(watch => {
@@ -118,25 +117,23 @@ function countUniqueWatchedContents(watchData) {
 function calculateTotalWatchTimeInMinutes(watchData) {
   if (!watchData.length) return 0;
 
-  // סכום כל השניות מכל הצפיות
   const totalSeconds = watchData.reduce((sum, watch) => sum + (watch.progressSeconds || 0), 0);
 
-  // המרה לדקות
   const totalMinutes = totalSeconds / 60;
 
   return parseFloat(totalMinutes.toFixed(2)); // שתי ספרות אחרי הנקודה
 }
 
 const disneyColors = [
-  '#0A2540', // כחול כהה עמוק
-  '#1E3A8A', // כחול דיסני קלאסי
-  '#2563EB', // כחול בוהק
-  '#38BDF8', // טורקיז-בהיר
-  '#60A5FA', // כחול תכלת רך
-  '#6366F1', // כחול-סגול
-  '#A78BFA', // סגול לילך
-  '#7DD3FC', // תכלת עדין
-  '#1E40AF'  // כחול כהה נוסף לקונטרסט
+  '#0A2540', 
+  '#1E3A8A', 
+  '#2563EB', 
+  '#38BDF8', 
+  '#60A5FA',
+  '#6366F1',
+  '#A78BFA',
+  '#7DD3FC',
+  '#1E40AF' 
 ];
 
 function goTo(page) {
