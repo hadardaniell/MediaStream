@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.getElementById("disney-logo-btn").addEventListener("click", () => {
-        window.location.href = "/feed?profileId=" + localStorage.getItem("activeProfileId");
+        window.location.href = "/feed?profile=" + localStorage.getItem("activeProfileId");
     });
 
 
